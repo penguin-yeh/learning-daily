@@ -16,50 +16,70 @@ JSON 格式（欄位說明）：
 {
   "date": "2026-08-18",
   "is_review": false,              // true 則內文會標注「複習」
-  "algo": {
-    "topic": "Sliding Window",
-    "explanation_html": "<p>...核心概念說明（可含 <b>、<code>、<ul> 等基本標籤）...</p>",
-    "problems": [
-      {"id": "3", "title": "Longest Substring Without Repeating Characters",
-       "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
-       "note": "經典模板題，練習雙指針 + hashset"}
-    ]
-  },
-  "csapp": {
-    "chapter": "Ch.6",
-    "section": "6.3 快取記憶體的組織方式",
-    "explanation_html": "<p>...章節科普...</p>",
-    "tip_html": "<p>（選填）額外補充，例如常考陷阱、與其他章節的關聯...</p>"
-  },
-  "linux": {
-    "topic": "Process Scheduling（CFS）",
-    "explanation_html": "<p>...Linux Kernel 主題科普，強調是 CS:APP 概念的具體實作...</p>",
-    "tip_html": "<p>（選填）額外補充...</p>"
-  },
+  "theme": "今天圍繞「記憶體區域性」展開：從演算法的快取友善存取模式，到 CS:APP 的快取記憶體原理，再到 Linux 如何在排程與資料結構設計上實際運用這個原理。",
+  "algo": [
+    {
+      "topic": "Sliding Window",
+      "explanation_html": "<p>...核心概念說明（可含 <b>、<code>、<ul>、<pre> 等基本標籤）...</p>",
+      "problems": [
+        {"id": "3", "title": "Longest Substring Without Repeating Characters",
+         "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+         "note": "經典模板題，練習雙指針 + hashset，時間 O(n) 空間 O(min(n,charset))"}
+      ],
+      "tip_html": ""
+    },
+    { "...第二個演算法主題，結構同上..." },
+    { "...第三個演算法主題，結構同上..." }
+  ],
+  "csapp": [
+    {
+      "chapter": "Ch.6",
+      "section": "6.3 快取記憶體的組織方式",
+      "explanation_html": "<p>...章節科普...</p>",
+      "tip_html": "<p>（選填）額外補充，例如常考陷阱、與其他章節的關聯...</p>"
+    },
+    { "...第二個 CS:APP 章節，結構同上..." },
+    { "...第三個 CS:APP 章節，結構同上..." }
+  ],
+  "linux": [
+    {
+      "topic": "Process Scheduling（CFS）",
+      "explanation_html": "<p>...Linux Kernel 主題科普，強調是 CS:APP 概念的具體實作...</p>",
+      "tip_html": "<p>（選填）額外補充...</p>"
+    },
+    { "...第二個 Linux Kernel 主題，結構同上..." },
+    { "...第三個 Linux Kernel 主題，結構同上..." }
+  ],
   "sources": [
     {"label": "LeetCode 題目彙整", "url": "https://github.com/wisdompeak/LeetCode"},
     {"label": "CS:APP 筆記", "url": "https://hackmd.io/@sysprog/CSAPP"}
   ]
 }
 
-`algo`/`linux` 的 `tip_html` 用法與 `csapp.tip_html` 相同（選填欄位，沒有就不放這個 key，不會渲染補充框）。
+`algo`/`csapp`/`linux` 現在都是**長度為 3 的陣列**（每個領域當天教三個子主題），
+陣列裡第 i 個 algo 項目、第 i 個 csapp 項目、第 i 個 linux 項目建議彼此有關聯
+（例如同一個底層概念的三種呈現方式），讓當天內容前後呼應而非互不相干。
+`theme` 欄位（選填）用一句話點出貫穿當天三個領域的主題，會顯示在信件最上方。
 
-進階名詞小框框：三個區塊的 `explanation_html` 內文裡，若提到需要額外解釋的進階概念，
-直接在該處內文插入以下固定樣式的行內框（依所在區塊套對應強調色，不要用其他顔色），
-不要全部塞進 tip_html —— tip_html 只留給段落結尾的單一整體補充：
+每個項目的 `tip_html` 都是選填欄位（沒有內容就給空字串或不放這個 key，不會渲染補充框）。
+
+進階名詞小框框：三個領域每個子項目的 `explanation_html` 內文裡，若提到需要額外解釋的
+進階概念，直接在該處內文插入以下固定樣式的行內框（依所在領域套對應強調色，不要用其他顏色），
+不要全部塞進 tip_html —— tip_html 只留給該子項目結尾的單一整體補充：
 
     <div style="margin:10px 0;padding:10px 14px;border:1px dashed #e7e4dd;border-radius:6px;font-size:13px;line-height:1.6;color:#918e85;">
       <b style="color:{ACCENT};">名詞</b>　解釋文字...
     </div>
 
-其中 {ACCENT} 依區塊代入：algo → #7089a0，csapp → #c98a4b，linux → #5f8575。
+其中 {ACCENT} 依領域代入：algo → #7089a0，csapp → #c98a4b，linux → #5f8575。
 
 輸出：完整 <html>...</html> 字串（inline CSS，Gmail 相容），並在 stderr 印出建議的 email 主旨。
 
 設計方向：北歐極簡風 —— 單一無襯線字體、大量留白、克制但不失溫度的用色。
 不設大標題，日期後直接接內容；小標題與段落左側重點線用同一個強調色標記，
 段落之間靠留白與極細分隔線區隔；有補充內容時，用一個虛線圍住的區域呈現。
-三個領域（演算法／CS:APP／Linux Kernel）各自狜立分色，依序排列。
+三個領域（演算法／CS:APP／Linux Kernel）各自狜立分色，依序排列，
+每個領域內的三個子項目用小號編號（01/02/03）標示，弱化但可辨識。
 """
 
 import json
@@ -85,7 +105,7 @@ def esc(s: str) -> str:
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-def render_problem(p: dict) -> str:
+def render_problem(p: dict, accent: str) -> str:
     pid = esc(str(p.get("id", "")))
     title = esc(p.get("title", ""))
     url = p.get("url", "#")
@@ -95,8 +115,8 @@ def render_problem(p: dict) -> str:
         if note else ""
     )
     return f"""
-    <div style="margin-top:12px;">
-      <span style="color:{COLORS['algo']};font-size:13px;">{pid}　</span>
+    <div style="margin-top:10px;">
+      <span style="color:{accent};font-size:13px;">{pid}　</span>
       <a href="{url}" style="color:{COLORS['ink']};font-size:15px;text-decoration:none;border-bottom:1px solid {COLORS['rule']};">{title}</a>
       {note_html}
     </div>"""
@@ -106,7 +126,7 @@ def render_tip(accent: str, tip_html: str) -> str:
     if not tip_html:
         return ""
     return f"""
-    <div style="margin-top:14px;border:1px dashed {COLORS['rule']};border-radius:6px;padding:12px 16px;">
+    <div style="margin-top:12px;border:1px dashed {COLORS['rule']};border-radius:6px;padding:12px 16px;">
       <div style="font-size:11px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">補充</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.7;color:{COLORS['muted']};">
         {tip_html}
@@ -114,59 +134,79 @@ def render_tip(accent: str, tip_html: str) -> str:
     </div>"""
 
 
-def render_section(accent: str, eyebrow: str, heading: str, body_html: str, tip_html: str = "", extra_html: str = "") -> str:
+def render_item(accent: str, index: int, heading: str, body_html: str, tip_html: str = "", extra_html: str = "") -> str:
+    top_margin = "0" if index == 0 else "26px"
+    return f"""
+    <div style="margin-top:{top_margin};">
+      <div style="font-size:11px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.04em;color:{accent};opacity:.7;">
+        {index + 1:02d}
+      </div>
+      <div style="margin-top:4px;font-size:17px;font-weight:600;color:{accent};">
+        {esc(heading)}
+      </div>
+      <div style="margin-top:10px;border-left:3px solid {accent};padding-left:14px;font-size:14px;line-height:1.8;color:{COLORS['ink']};">
+        {body_html}
+      </div>
+      {render_tip(accent, tip_html)}
+      {extra_html}
+    </div>"""
+
+
+def render_domain(accent: str, eyebrow: str, items: list, item_heading_fn, extra_fn=None) -> str:
+    body = "".join(
+        render_item(
+            accent, i,
+            item_heading_fn(item),
+            item.get("explanation_html", ""),
+            item.get("tip_html", ""),
+            extra_fn(item, accent) if extra_fn else "",
+        )
+        for i, item in enumerate(items)
+    )
     return f"""
     <tr><td style="padding-top:36px;">
       <div style="font-size:12px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">
         {esc(eyebrow)}
       </div>
-      <div style="margin-top:8px;font-size:19px;font-weight:600;color:{accent};">
-        {esc(heading)}
+      <div style="margin-top:14px;">
+        {body}
       </div>
-      <div style="margin-top:12px;border-left:3px solid {accent};padding-left:14px;font-size:14.5px;line-height:1.8;color:{COLORS['ink']};">
-        {body_html}
-      </div>
-      {render_tip(accent, tip_html)}
-      {extra_html}
     </td></tr>"""
 
 
 def render(data: dict) -> str:
     date = data.get("date", "")
     is_review = bool(data.get("is_review"))
-    algo = data.get("algo", {}) or {}
-    csapp = data.get("csapp", {}) or {}
-    linux = data.get("linux", {}) or {}
+    theme = data.get("theme", "")
+    algo = data.get("algo", []) or []
+    csapp = data.get("csapp", []) or []
+    linux = data.get("linux", []) or []
     sources = data.get("sources", []) or []
 
     review_tag = (
         f'<span style="color:{COLORS["review"]};margin-left:8px;">複習</span>' if is_review else ""
     )
 
-    problems_html = "".join(render_problem(p) for p in algo.get("problems", []))
-
-    algo_section = render_section(
-        COLORS["algo"], "演算法 · LeetCode",
-        algo.get("topic", ""),
-        algo.get("explanation_html", ""),
-        algo.get("tip_html", ""),
-        problems_html,
+    theme_html = (
+        f'<div style="margin-top:10px;font-size:13.5px;line-height:1.7;color:{COLORS["muted"]};font-style:italic;">{esc(theme)}</div>'
+        if theme else ""
     )
 
-    csapp_chapter = f'{csapp.get("chapter", "")}　{csapp.get("section", "")}'.strip("　 ")
-    csapp_section = render_section(
-        COLORS["csapp"], "CS:APP",
-        csapp_chapter,
-        csapp.get("explanation_html", ""),
-        csapp.get("tip_html", ""),
+    algo_section = render_domain(
+        COLORS["algo"], "演算法 · LeetCode", algo,
+        lambda item: item.get("topic", ""),
+        lambda item, accent: "".join(render_problem(p, accent) for p in item.get("problems", [])),
     )
 
-    linux_section = render_section(
-        COLORS["linux"], "Linux Kernel",
-        linux.get("topic", ""),
-        linux.get("explanation_html", ""),
-        linux.get("tip_html", ""),
-    ) if linux else ""
+    csapp_section = render_domain(
+        COLORS["csapp"], "CS:APP", csapp,
+        lambda item: f'{item.get("chapter", "")}　{item.get("section", "")}'.strip("　 "),
+    )
+
+    linux_section = render_domain(
+        COLORS["linux"], "Linux Kernel", linux,
+        lambda item: item.get("topic", ""),
+    )
 
     sources_links = "　　".join(
         f'<a href="{s.get("url", "#")}" style="color:{COLORS["accent"]};text-decoration:none;">{esc(s.get("label", ""))}</a>'
@@ -190,6 +230,7 @@ def render(data: dict) -> str:
               <div style="font-size:12px;color:{COLORS['muted']};">
                 {esc(date)}　每日東東{review_tag}
               </div>
+              {theme_html}
               <div style="margin-top:16px;border-bottom:1px solid {COLORS['rule']};"></div>
             </td>
           </tr>
@@ -214,10 +255,9 @@ def main():
     print(render(data))
 
     date = data.get("date", "")
-    topic = data.get("algo", {}).get("topic", "")
-    chapter = data.get("csapp", {}).get("chapter", "")
+    algo_topics = "、".join(i.get("topic", "") for i in data.get("algo", []))
     review_tag = "（複習）" if data.get("is_review") else ""
-    print(f"SUBJECT: 今日學習：{topic} + CS:APP {chapter}{review_tag}", file=sys.stderr)
+    print(f"SUBJECT: 今日學習：{algo_topics}{review_tag}", file=sys.stderr)
 
 
 if __name__ == "__main__":
