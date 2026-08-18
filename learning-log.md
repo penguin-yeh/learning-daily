@@ -6,4 +6,5 @@
 
 <!-- LOG START -->
 2026-08-18 | 演算法: Two Pointers（雙指針） | 題目: 11, 15 | CS:APP: Ch.1.1-1.7 電腦系統漫遊
+2026-08-18 | 演算法: Sliding Window（滑動視窗）（複習） | 題目: 3, 76 | CS:APP: Ch.6.4 Cache Memories（複習） | Linux: CPU Cache 感知設計：False Sharing 與 CFS 的 Cache Affinity（複習）
 <!-- LOG END -->
