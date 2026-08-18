@@ -31,19 +31,35 @@ JSON 格式（欄位說明）：
     "explanation_html": "<p>...章節科普...</p>",
     "tip_html": "<p>（選填）額外補充，例如常考陷阱、與其他章節的關聯...</p>"
   },
+  "linux": {
+    "topic": "Process Scheduling（CFS）",
+    "explanation_html": "<p>...Linux Kernel 主題科普，強調是 CS:APP 概念的具體實作...</p>",
+    "tip_html": "<p>（選填）額外補充...</p>"
+  },
   "sources": [
     {"label": "LeetCode 題目彙整", "url": "https://github.com/wisdompeak/LeetCode"},
     {"label": "CS:APP 筆記", "url": "https://hackmd.io/@sysprog/CSAPP"}
   ]
 }
 
-`algo.tip_html` 同樣是選填欄位，用法與 `csapp.tip_html` 相同（沒有就不放這個 key，不會渲染補充框）。
+`algo`/`linux` 的 `tip_html` 用法與 `csapp.tip_html` 相同（選填欄位，沒有就不放這個 key，不會渲染補充框）。
+
+進階名詞小框框：三個區塊的 `explanation_html` 內文裡，若提到需要額外解釋的進階概念，
+直接在該處內文插入以下固定樣式的行內框（依所在區塊套對應強調色，不要用其他顔色），
+不要全部塞進 tip_html —— tip_html 只留給段落結尾的單一整體補充：
+
+    <div style="margin:10px 0;padding:10px 14px;border:1px dashed #e7e4dd;border-radius:6px;font-size:13px;line-height:1.6;color:#918e85;">
+      <b style="color:{ACCENT};">名詞</b>　解釋文字...
+    </div>
+
+其中 {ACCENT} 依區塊代入：algo → #7089a0，csapp → #c98a4b，linux → #5f8575。
 
 輸出：完整 <html>...</html> 字串（inline CSS，Gmail 相容），並在 stderr 印出建議的 email 主旨。
 
 設計方向：北歐極簡風 —— 單一無襯線字體、大量留白、克制但不失溫度的用色。
-標題純文字，不加框、不加底色；小標題與段落左側重點線用同一個強調色標記，
+不設大標題，日期後直接接內容；小標題與段落左側重點線用同一個強調色標記，
 段落之間靠留白與極細分隔線區隔；有補充內容時，用一個虛線圍住的區域呈現。
+三個領域（演算法／CS:APP／Linux Kernel）各自狜立分色，依序排列。
 """
 
 import json
@@ -58,6 +74,7 @@ COLORS = {
     "accent": "#7089a0",    # 灰藍：連結、頁首等全篇通用元素
     "algo": "#7089a0",      # 灰藍：演算法區塊小標題／重點線
     "csapp": "#c98a4b",     # 淺橘：CS:APP 區塊小標題／重點線
+    "linux": "#5f8575",     # 灰綠：Linux Kernel 區塊小標題／重點線
     "review": "#a8875b",    # 複習標記專用，極少量使用
 }
 
@@ -119,6 +136,7 @@ def render(data: dict) -> str:
     is_review = bool(data.get("is_review"))
     algo = data.get("algo", {}) or {}
     csapp = data.get("csapp", {}) or {}
+    linux = data.get("linux", {}) or {}
     sources = data.get("sources", []) or []
 
     review_tag = (
@@ -143,6 +161,13 @@ def render(data: dict) -> str:
         csapp.get("tip_html", ""),
     )
 
+    linux_section = render_section(
+        COLORS["linux"], "Linux Kernel",
+        linux.get("topic", ""),
+        linux.get("explanation_html", ""),
+        linux.get("tip_html", ""),
+    ) if linux else ""
+
     sources_links = "　　".join(
         f'<a href="{s.get("url", "#")}" style="color:{COLORS["accent"]};text-decoration:none;">{esc(s.get("label", ""))}</a>'
         for s in sources
@@ -165,15 +190,14 @@ def render(data: dict) -> str:
               <div style="font-size:12px;color:{COLORS['muted']};">
                 {esc(date)}　每日東東{review_tag}
               </div>
-              <div style="margin-top:10px;font-size:26px;font-weight:300;color:{COLORS['ink']};">
-                {esc(algo.get('topic',''))}　／　{esc(csapp_chapter)}
-              </div>
-              <div style="margin-top:24px;border-bottom:1px solid {COLORS['rule']};"></div>
+              <div style="margin-top:16px;border-bottom:1px solid {COLORS['rule']};"></div>
             </td>
           </tr>
           {algo_section}
           <tr><td style="padding-top:32px;border-bottom:1px solid {COLORS['rule']};"></td></tr>
           {csapp_section}
+          <tr><td style="padding-top:32px;border-bottom:1px solid {COLORS['rule']};"></td></tr>
+          {linux_section}
           <tr><td>{sources_html}</td></tr>
         </table>
       </td>
