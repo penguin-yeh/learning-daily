@@ -8,4 +8,5 @@
 2026-08-18 | 演算法: Two Pointers（雙指針） | 題目: 11, 15 | CS:APP: Ch.1.1-1.7 電腦系統漫遊
 2026-08-18 | 演算法: Sliding Window（滑動視窗）（複習） | 題目: 3, 76 | CS:APP: Ch.6.4 Cache Memories（複習） | Linux: CPU Cache 感知設計：False Sharing 與 CFS 的 Cache Affinity（複習）
 2026-08-18 | 演算法: Two Pointers（雙指針）（複習） | 題目: 11, 15 | CS:APP: Ch.1.1-1.7 電腦系統漫遊（複習） | Linux: Process 抽象的核心實作：fork() / execve() / wait()（複習）
+2026-08-18 | 主線: 位元表示 → 記憶體快取 → 並行同步（複習） | 演算法: 位元操作（XOR／狀態計數）／LRU Cache 設計／並行控制模式（複習） | 題目: [136, 146, 1114] | CS:APP: Ch.2／Ch.6／Ch.12（複習） | Linux: Kernel 位元操作 API／Page Cache 與 LRU 回收機制／核心同步原語（複習）
 <!-- LOG END -->
