@@ -3,9 +3,9 @@
 render_email.py — 產生「每日學習信」的固定風格 HTML 內容。
 
 用途：
-    每天的 Routine 只需要把當天的教學內容整理成一份 JSON（結構見下方 SAMPLE），
-    餵給這支 script，就能得到一份排版、配色都固定一致的 HTML email 內容，
-    直接丟給 Gmail 的 send_message(htmlBody=...) 使用。
+每天的 Routine 只需要把當天的教學內容整理成一份 JSON（結構見下方 SAMPLE），
+餵給這支 script，就能得到一份排版、配色都固定一致的 HTML email 內容，
+直接丟給 Gmail 的 send_message(htmlBody=...) 使用。
 
 用法：
     python3 scripts/render_email.py input.json > output.html
@@ -15,7 +15,7 @@ render_email.py — 產生「每日學習信」的固定風格 HTML 內容。
 JSON 格式（欄位說明）：
 {
   "date": "2026-08-18",
-  "is_review": false,                 // true 則主旨/內文會標注「複習」
+  "is_review": false,              // true 則內文會標注「複習」
   "algo": {
     "topic": "Sliding Window",
     "explanation_html": "<p>...核心概念說明（可含 <b>、<code>、<ul> 等基本標籤）...</p>",
@@ -28,7 +28,8 @@ JSON 格式（欄位說明）：
   "csapp": {
     "chapter": "Ch.6",
     "section": "6.3 快取記憶體的組織方式",
-    "explanation_html": "<p>...章節科普...</p>"
+    "explanation_html": "<p>...章節科普...</p>",
+    "tip_html": "<p>（選填）額外補充，例如常考陷阱、與其他章節的關聯...</p>"
   },
   "sources": [
     {"label": "LeetCode 題目彙整", "url": "https://github.com/wisdompeak/LeetCode"},
@@ -36,27 +37,28 @@ JSON 格式（欄位說明）：
   ]
 }
 
+`algo.tip_html` 同樣是選填欄位，用法與 `csapp.tip_html` 相同（沒有就不放這個 key，不會渲染補充框）。
+
 輸出：完整 <html>...</html> 字串（inline CSS，Gmail 相容），並在 stderr 印出建議的 email 主旨。
+
+設計方向：北歐極簡風 —— 單一無襯線字體、大量留白、克制但不失溫度的用色。
+標題純文字，不加框、不加底色；小標題與段落左側重點線用同一個強調色標記，
+段落之間靠留白與極細分隔線區隔；有補充內容時，用一個虛線圍住的區域呈現。
 """
 
 import json
 import sys
 
-
 # ---- 固定視覺風格（所有顏色/字體都集中在這裡，確保每天輸出風格一致）----
 COLORS = {
-    "bg": "#f4f5f7",
-    "card_bg": "#ffffff",
-    "text": "#1f2430",
-    "muted": "#6b7280",
-    "algo_accent": "#2563eb",   # 藍：演算法區塊
-    "algo_accent_bg": "#eff6ff",
-    "csapp_accent": "#059669",  # 綠：CS:APP 區塊
-    "csapp_accent_bg": "#ecfdf5",
-    "badge_review_bg": "#fef3c7",
-    "badge_review_text": "#92400e",
-    "border": "#e5e7eb",
-    "link": "#2563eb",
+    "paper": "#faf9f7",
+    "ink": "#2a2a27",
+    "muted": "#918e85",
+    "rule": "#e7e4dd",
+    "accent": "#7089a0",    # 灰藍：連結、頁首等全篇通用元素
+    "algo": "#7089a0",      # 灰藍：演算法區塊小標題／重點線
+    "csapp": "#c98a4b",     # 淺橘：CS:APP 區塊小標題／重點線
+    "review": "#a8875b",    # 複習標記專用，極少量使用
 }
 
 FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif"
@@ -71,134 +73,127 @@ def render_problem(p: dict) -> str:
     title = esc(p.get("title", ""))
     url = p.get("url", "#")
     note = esc(p.get("note", ""))
+    note_html = (
+        f'<div style="margin-top:2px;color:{COLORS["muted"]};font-size:13px;line-height:1.6;">{note}</div>'
+        if note else ""
+    )
     return f"""
-    <tr>
-      <td style="padding:10px 14px;border:1px solid {COLORS['border']};border-radius:8px;display:block;margin-bottom:8px;">
-        <div style="font-size:14px;color:{COLORS['muted']};">#{pid}</div>
-        <a href="{url}" style="font-size:16px;font-weight:600;color:{COLORS['link']};text-decoration:none;">{title}</a>
-        <div style="font-size:13px;color:{COLORS['muted']};margin-top:4px;">{note}</div>
-      </td>
-    </tr>
-    """
+    <div style="margin-top:12px;">
+      <span style="color:{COLORS['algo']};font-size:13px;">{pid}　</span>
+      <a href="{url}" style="color:{COLORS['ink']};font-size:15px;text-decoration:none;border-bottom:1px solid {COLORS['rule']};">{title}</a>
+      {note_html}
+    </div>"""
+
+
+def render_tip(accent: str, tip_html: str) -> str:
+    if not tip_html:
+        return ""
+    return f"""
+    <div style="margin-top:14px;border:1px dashed {COLORS['rule']};border-radius:6px;padding:12px 16px;">
+      <div style="font-size:11px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">補充</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.7;color:{COLORS['muted']};">
+        {tip_html}
+      </div>
+    </div>"""
+
+
+def render_section(accent: str, eyebrow: str, heading: str, body_html: str, tip_html: str = "", extra_html: str = "") -> str:
+    return f"""
+    <tr><td style="padding-top:36px;">
+      <div style="font-size:12px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">
+        {esc(eyebrow)}
+      </div>
+      <div style="margin-top:8px;font-size:19px;font-weight:600;color:{accent};">
+        {esc(heading)}
+      </div>
+      <div style="margin-top:12px;border-left:3px solid {accent};padding-left:14px;font-size:14.5px;line-height:1.8;color:{COLORS['ink']};">
+        {body_html}
+      </div>
+      {render_tip(accent, tip_html)}
+      {extra_html}
+    </td></tr>"""
 
 
 def render(data: dict) -> str:
-    date = esc(data.get("date", ""))
-    is_review = bool(data.get("is_review", False))
-    algo = data.get("algo", {})
-    csapp = data.get("csapp", {})
-    sources = data.get("sources", [])
+    date = data.get("date", "")
+    is_review = bool(data.get("is_review"))
+    algo = data.get("algo", {}) or {}
+    csapp = data.get("csapp", {}) or {}
+    sources = data.get("sources", []) or []
 
-    review_badge = ""
-    if is_review:
-        review_badge = f"""<span style="display:inline-block;background:{COLORS['badge_review_bg']};color:{COLORS['badge_review_text']};font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;margin-left:8px;">複習</span>"""
+    review_tag = (
+        f'<span style="color:{COLORS["review"]};margin-left:8px;">複習</span>' if is_review else ""
+    )
 
-    problems_html = "\n".join(render_problem(p) for p in algo.get("problems", []))
+    problems_html = "".join(render_problem(p) for p in algo.get("problems", []))
 
-    sources_html = ""
-    if sources:
-        items = "".join(
-            f'<li style="margin-bottom:4px;"><a href="{s.get("url","#")}" style="color:{COLORS["link"]};text-decoration:none;">{esc(s.get("label",""))}</a></li>'
-            for s in sources
-        )
-        sources_html = f"""
-        <div style="margin-top:24px;padding-top:16px;border-top:1px solid {COLORS['border']};">
-          <div style="font-size:12px;color:{COLORS['muted']};margin-bottom:6px;">參考來源</div>
-          <ul style="margin:0;padding-left:18px;font-size:13px;color:{COLORS['muted']};">{items}</ul>
-        </div>
-        """
+    algo_section = render_section(
+        COLORS["algo"], "演算法 · LeetCode",
+        algo.get("topic", ""),
+        algo.get("explanation_html", ""),
+        algo.get("tip_html", ""),
+        problems_html,
+    )
 
-    html = f"""<!DOCTYPE html>
+    csapp_chapter = f'{csapp.get("chapter", "")}　{csapp.get("section", "")}'.strip("　 ")
+    csapp_section = render_section(
+        COLORS["csapp"], "CS:APP",
+        csapp_chapter,
+        csapp.get("explanation_html", ""),
+        csapp.get("tip_html", ""),
+    )
+
+    sources_links = "　　".join(
+        f'<a href="{s.get("url", "#")}" style="color:{COLORS["accent"]};text-decoration:none;">{esc(s.get("label", ""))}</a>'
+        for s in sources
+    )
+    sources_html = (
+        f'<div style="margin-top:24px;font-size:12px;color:{COLORS["muted"]};">{sources_links}</div>'
+        if sources_links else ""
+    )
+
+    return f"""<!DOCTYPE html>
 <html lang="zh-Hant">
 <head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:{COLORS['bg']};font-family:{FONT};">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{COLORS['bg']};padding:24px 0;">
+<body style="margin:0;padding:0;background:{COLORS['paper']};font-family:{FONT};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{COLORS['paper']};padding:40px 0;">
     <tr>
       <td align="center">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background:{COLORS['card_bg']};border-radius:12px;overflow:hidden;max-width:600px;width:100%;">
-
-          <!-- Header -->
+        <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:560px;max-width:90vw;">
           <tr>
-            <td style="padding:24px 28px 16px 28px;border-bottom:1px solid {COLORS['border']};">
-              <div style="font-size:13px;color:{COLORS['muted']};">{date} ・ 每日學習信</div>
-              <div style="font-size:20px;font-weight:700;color:{COLORS['text']};margin-top:4px;">
-                {esc(algo.get('topic',''))} + CS:APP {esc(csapp.get('chapter',''))}{review_badge}
+            <td>
+              <div style="font-size:12px;color:{COLORS['muted']};">
+                {esc(date)}　每日東東{review_tag}
               </div>
+              <div style="margin-top:10px;font-size:26px;font-weight:300;color:{COLORS['ink']};">
+                {esc(algo.get('topic',''))}　／　{esc(csapp_chapter)}
+              </div>
+              <div style="margin-top:24px;border-bottom:1px solid {COLORS['rule']};"></div>
             </td>
           </tr>
-
-          <!-- Algo Section -->
-          <tr>
-            <td style="padding:24px 28px;">
-              <div style="display:inline-block;background:{COLORS['algo_accent_bg']};color:{COLORS['algo_accent']};font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:0.5px;">
-                演算法主題
-              </div>
-              <div style="font-size:18px;font-weight:700;color:{COLORS['text']};margin-top:10px;">
-                {esc(algo.get('topic',''))}
-              </div>
-              <div style="font-size:14px;line-height:1.7;color:{COLORS['text']};margin-top:8px;">
-                {algo.get('explanation_html','')}
-              </div>
-
-              <div style="font-size:13px;font-weight:700;color:{COLORS['muted']};margin-top:18px;margin-bottom:8px;">
-                對應 LeetCode 題目
-              </div>
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                {problems_html}
-              </table>
-            </td>
-          </tr>
-
-          <!-- CSAPP Section -->
-          <tr>
-            <td style="padding:0 28px 24px 28px;">
-              <div style="display:inline-block;background:{COLORS['csapp_accent_bg']};color:{COLORS['csapp_accent']};font-size:12px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:0.5px;">
-                CS:APP {esc(csapp.get('chapter',''))}
-              </div>
-              <div style="font-size:18px;font-weight:700;color:{COLORS['text']};margin-top:10px;">
-                {esc(csapp.get('section',''))}
-              </div>
-              <div style="font-size:14px;line-height:1.7;color:{COLORS['text']};margin-top:8px;">
-                {csapp.get('explanation_html','')}
-              </div>
-              {sources_html}
-            </td>
-          </tr>
-
-          <!-- Footer -->
-          <tr>
-            <td style="padding:16px 28px;background:{COLORS['bg']};text-align:center;">
-              <div style="font-size:12px;color:{COLORS['muted']};">持續累積，面試等級的理解就是這樣一天一天堆出來的 💪</div>
-            </td>
-          </tr>
-
+          {algo_section}
+          <tr><td style="padding-top:32px;border-bottom:1px solid {COLORS['rule']};"></td></tr>
+          {csapp_section}
+          <tr><td>{sources_html}</td></tr>
         </table>
       </td>
     </tr>
   </table>
 </body>
 </html>"""
-    return html
-
-
-def suggested_subject(data: dict) -> str:
-    algo_topic = data.get("algo", {}).get("topic", "")
-    chapter = data.get("csapp", {}).get("chapter", "")
-    subject = f"今日學習：{algo_topic} + CS:APP {chapter}"
-    if data.get("is_review"):
-        subject += "（複習）"
-    return subject
 
 
 def main():
-    if len(sys.argv) > 1:
-        with open(sys.argv[1], "r", encoding="utf-8") as f:
-            data = json.load(f)
-    else:
-        data = json.load(sys.stdin)
+    raw = sys.stdin.read() if len(sys.argv) < 2 else open(sys.argv[1], encoding="utf-8").read()
+    data = json.loads(raw)
 
     print(render(data))
-    print(f"SUBJECT: {suggested_subject(data)}", file=sys.stderr)
+
+    date = data.get("date", "")
+    topic = data.get("algo", {}).get("topic", "")
+    chapter = data.get("csapp", {}).get("chapter", "")
+    review_tag = "（複習）" if data.get("is_review") else ""
+    print(f"SUBJECT: 今日學習：{topic} + CS:APP {chapter}{review_tag}", file=sys.stderr)
 
 
 if __name__ == "__main__":
