@@ -6,4 +6,5 @@
 > 註：CS:APP／Linux ／演算法（LeetCode）教學進度已於 2026-08-19 重置，下次執行視為從頭開始（CS:APP 從 Ch.1、Linux 從課程進度表第一週開始）。
 
 <!-- LOG START -->
+2026-08-19 | 演算法: Binary Search 二分搜尋（704, 34, 33） | CS:APP: Ch.1 1.1–1.9 A Tour of Computer Systems（電腦系統漫遊） | Linux: 侵入式鏈結串列 struct list_head 與 container_of／offsetof
 <!-- LOG END -->
