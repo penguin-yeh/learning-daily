@@ -14,41 +14,38 @@ render_email.py — 產生「每日學習信」的固定風格 HTML 內容。
 
 JSON 格式（欄位說明）：
 {
-  "date": "2026-08-18",
+  "date": "2026-08-19",
   "is_review": false,              // true 則內文會標注「複習」
-  "theme": "今天圍繞「記憶體區域性」展開：從演算法的快取友善存取模式，到 CS:APP 的快取記憶體原理，再到 Linux 如何在排程與資料結構設計上實際運用這個原理。",
+  "theme": "（選填）三個領域今天若剛好有自然關聯，一句話帶過；沒有就省略，不要硬拗。",
   "algo": [
     {
-      "topic": "Sliding Window",
+      "topic": "Graph Traversal：BFS／DFS 與拓樸排序",
       "explanation_html": "<p>...核心概念說明（可含 <b>、<code>、<ul>、<pre> 等基本標籤）...</p>",
+      "derivation_html": "<p>（選填）時間/空間複雜度或某個數字上限是怎麼推導出來的...</p>",
       "problems": [
-        {"id": "3", "title": "Longest Substring Without Repeating Characters",
-         "url": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
-         "note": "經典模板題，練習雙指針 + hashset，時間 O(n) 空間 O(min(n,charset))"}
+        {"id": "200", "title": "Number of Islands",
+         "url": "https://leetcode.com/problems/number-of-islands/",
+         "note": "經典 grid BFS/DFS 連通分量題，時間 O(rows*cols) 空間 O(rows*cols)"}
       ],
       "tip_html": ""
-    },
-    { "...第二個演算法主題，結構同上..." },
-    { "...第三個演算法主題，結構同上..." }
+    }
   ],
   "csapp": [
     {
-      "chapter": "Ch.6",
-      "section": "6.3 快取記憶體的組織方式",
+      "chapter": "Ch.9",
+      "section": "9.10 Garbage Collection",
       "explanation_html": "<p>...章節科普...</p>",
+      "derivation_html": "<p>（選填）例如某個公式/常數/門檻值是怎麼推導出來的...</p>",
       "tip_html": "<p>（選填）額外補充，例如常考陷阱、與其他章節的關聯...</p>"
-    },
-    { "...第二個 CS:APP 章節，結構同上..." },
-    { "...第三個 CS:APP 章節，結構同上..." }
+    }
   ],
   "linux": [
     {
-      "topic": "Process Scheduling（CFS）",
+      "topic": "Memory Barriers（記憶體屏障）",
       "explanation_html": "<p>...Linux Kernel 主題科普，強調是 CS:APP 概念的具體實作...</p>",
+      "derivation_html": "<p>（選填）...</p>",
       "tip_html": "<p>（選填）額外補充...</p>"
-    },
-    { "...第二個 Linux Kernel 主題，結構同上..." },
-    { "...第三個 Linux Kernel 主題，結構同上..." }
+    }
   ],
   "sources": [
     {"label": "LeetCode 題目彙整", "url": "https://github.com/wisdompeak/LeetCode"},
@@ -56,12 +53,19 @@ JSON 格式（欄位說明）：
   ]
 }
 
-`algo`/`csapp`/`linux` 現在都是**長度為 3 的陣列**（每個領域當天教三個子主題），
-陣列裡第 i 個 algo 項目、第 i 個 csapp 項目、第 i 個 linux 項目建議彼此有關聯
-（例如同一個底層概念的三種呈現方式），讓當天內容前後呼應而非互不相干。
-`theme` 欄位（選填）用一句話點出貫穿當天三個領域的主題，會顯示在信件最上方。
+`algo`/`csapp`/`linux` 現在都是**長度為 1 的陣列**（每個領域當天只講一個主題，但講得更深、
+更完整）。腳本本身不限制陣列長度，若未來需求改變也能容納多個子主題，但目前的 Routine 規則是
+每天每個領域固定只放 1 個項目。`theme` 欄位（選填）用一句話點出貫穿當天三個領域的關聯，
+會顯示在信件最上方；沒有自然關聯就整個省略這個 key，不要硬湊。
 
-每個項目的 `tip_html` 都是選填欄位（沒有內容就給空字串或不放這個 key，不會渲染補充框）。
+每個項目的 `tip_html`、`derivation_html` 都是選填欄位（沒有內容就給空字串或不放這個 key，
+不會渲染對應框）。
+
+`derivation_html`（🔢 數學推導區塊）：只要內容涉及公式、複雜度、常數、門檻值、位元寬度等
+「數字」，且有「為什麼是這樣」值得講的地方，就填入這個欄位，會渲染成一個用固定紫色
+（跨三個領域都一樣，不隨 accent 變色，方便一眼認出這是「數學推導」區塊）標示的獨立框，
+和 `tip_html` 的補充框並列但視覺上可區分。若該主題今天沒有明顯的數字/公式成分，就不要
+硬湊，留空或不放這個 key 即可。
 
 進階名詞小框框：三個領域每個子項目的 `explanation_html` 內文裡，若提到需要額外解釋的
 進階概念，直接在該處內文插入以下固定樣式的行內框（依所在領域套對應強調色，不要用其他顏色），
@@ -96,6 +100,8 @@ COLORS = {
     "csapp": "#c98a4b",     # 淺橘：CS:APP 區塊小標題／重點線
     "linux": "#5f8575",     # 灰綠：Linux Kernel 區塊小標題／重點線
     "review": "#a8875b",    # 複習標記專用，極少量使用
+    "derivation": "#7d5ba6", # 紫：數學推導／為什麼區塊專用，跨領域固定同一色，方便一眼辨識
+    "derivation_bg": "#f7f4fb",
 }
 
 FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif"
@@ -134,7 +140,20 @@ def render_tip(accent: str, tip_html: str) -> str:
     </div>"""
 
 
-def render_item(accent: str, index: int, heading: str, body_html: str, tip_html: str = "", extra_html: str = "") -> str:
+def render_derivation(derivation_html: str) -> str:
+    if not derivation_html:
+        return ""
+    accent = COLORS["derivation"]
+    return f"""
+    <div style="margin-top:12px;border:1px solid {accent};background:{COLORS['derivation_bg']};border-radius:6px;padding:12px 16px;">
+      <div style="font-size:11px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">🔢 數學推導</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.7;color:{COLORS['ink']};">
+        {derivation_html}
+      </div>
+    </div>"""
+
+
+def render_item(accent: str, index: int, heading: str, body_html: str, tip_html: str = "", extra_html: str = "", derivation_html: str = "") -> str:
     top_margin = "0" if index == 0 else "26px"
     return f"""
     <div style="margin-top:{top_margin};">
@@ -147,6 +166,7 @@ def render_item(accent: str, index: int, heading: str, body_html: str, tip_html:
       <div style="margin-top:10px;border-left:3px solid {accent};padding-left:14px;font-size:14px;line-height:1.8;color:{COLORS['ink']};">
         {body_html}
       </div>
+      {render_derivation(derivation_html)}
       {render_tip(accent, tip_html)}
       {extra_html}
     </div>"""
@@ -160,6 +180,7 @@ def render_domain(accent: str, eyebrow: str, items: list, item_heading_fn, extra
             item.get("explanation_html", ""),
             item.get("tip_html", ""),
             extra_fn(item, accent) if extra_fn else "",
+            item.get("derivation_html", ""),
         )
         for i, item in enumerate(items)
     )
