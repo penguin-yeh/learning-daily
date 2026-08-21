@@ -8,4 +8,5 @@
 <!-- LOG START -->
 2026-08-19 | 演算法: Binary Search 二分搜尋（704, 34, 33） | CS:APP: Ch.1 1.1–1.9 A Tour of Computer Systems（電腦系統漫遊） | Linux: 侵入式鏈結串列 struct list_head 與 container_of／offsetof
 2026-08-20 | 主線: CS:APP 位元表示法 × Linux 數值系統/bitwise 操作，同一組位元概念 | 演算法: Dynamic Programming + 二分搜尋 LIS 最長遞增子序列（300, 354, 673） | CS:APP: Ch.2 2.1–2.3 Information Storage, Integer Representations, Integer Arithmetic | Linux: 數值系統與 Bitwise 操作（C 語言位元技巧 + kernel bitops API：BIT/GENMASK/set_bit/test_and_set_bit）
+2026-08-21 | 主線: CS:APP 2.4 IEEE 754 浮點數表示法 × Linux kernel_fpu_begin/end 浮點運算限制，同一顆 FPU 硬體資源的一體兩面 | 演算法: Union-Find 併查集（547, 684, 990） | CS:APP: Ch.2 2.4 Floating Point | Linux: Kernel 浮點運算限制（kernel_fpu_begin/end 與 FPU Context 管理）
 <!-- LOG END -->
