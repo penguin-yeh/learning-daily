@@ -11,4 +11,5 @@
 2026-08-21 | 主線: CS:APP 2.4 IEEE 754 浮點數表示法 × Linux kernel_fpu_begin/end 浮點運算限制，同一顆 FPU 硬體資源的一體兩面 | 演算法: Union-Find 併查集（547, 684, 990） | CS:APP: Ch.2 2.4 Floating Point | Linux: Kernel 浮點運算限制（kernel_fpu_begin/end 與 FPU Context 管理）
 2026-08-22 | 演算法: Monotonic Stack 單調堆疊（739, 84, 42） | CS:APP: Ch.3 3.1–3.4 x86-64 組合語言基礎（History, Program Encodings, Data Formats, Accessing Information） | Linux: Kernel Hashtable API（linux/hashtable.h：DECLARE_HASHTABLE／hash_min／hash_32／黃金比例乘法雜湊）
 2026-08-23 | 演算法: Trie 前綴樹（208, 211, 212） | CS:APP: Ch.3 3.5 Arithmetic and Logical Operations | Linux: 核心紅黑樹實作（linux/rbtree.h：rb_link_node／rb_insert_color／rb_parent_color 位元打包／Augmented rbtree）
+2026-08-24 | 主線: 讀懂編譯器實際產生了什麼——CS:APP 條件碼／跳躍指令的機器碼層級 × Linux pointer provenance／gcc 編譯旗標 | 演算法: Heap／Priority Queue Top-K 與資料流中位數（215, 347, 295） | CS:APP: Ch.3 3.6 Control（第一部分）條件碼、跳躍指令與其編碼（3.6.1–3.6.4） | Linux: 核心開發者的編譯器素養（Pointer Provenance／Undefined Behavior／-fno-strict-aliasing／-fno-delete-null-pointer-checks）
 <!-- LOG END -->
