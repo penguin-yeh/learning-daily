@@ -22,6 +22,9 @@ JSON 格式（欄位說明）：
       "topic": "Graph Traversal：BFS／DFS 與拓樸排序",
       "explanation_html": "<p>...核心概念說明（可含 <b>、<code>、<ul>、<pre> 等基本標籤）...</p>",
       "derivation_html": "<p>（選填）時間/空間複雜度或某個數字上限是怎麼推導出來的...</p>",
+      "source_label": "（選填）真實原始碼的來源標示，例如 \"leetcode.com 官方題解 / C++\" 或某個真實 repo 的檔案路徑",
+      "source_url": "（選填）對應的真實連結，讓讀者可以自己點進去核對",
+      "source_code": "（選填）真實、逐字抄錄自來源的程式碼純文字（不要加 HTML tag，腳本會自動 escape 並排版成等寬字體區塊）",
       "problems": [
         {"id": "200", "title": "Number of Islands",
          "url": "https://leetcode.com/problems/number-of-islands/",
@@ -36,6 +39,9 @@ JSON 格式（欄位說明）：
       "section": "9.10 Garbage Collection",
       "explanation_html": "<p>...章節科普...</p>",
       "derivation_html": "<p>（選填）例如某個公式/常數/門檻值是怎麼推導出來的...</p>",
+      "source_label": "（選填）例如 \"gcc -S 對應輸出\" 或某個真實檔案路徑＋行號",
+      "source_url": "（選填）",
+      "source_code": "（選填）真實的組語/程式碼/指令輸出純文字",
       "tip_html": "<p>（選填）額外補充，例如常考陷阱、與其他章節的關聯...</p>"
     }
   ],
@@ -44,6 +50,9 @@ JSON 格式（欄位說明）：
       "topic": "Memory Barriers（記憶體屏障）",
       "explanation_html": "<p>...Linux Kernel 主題科普，強調是 CS:APP 概念的具體實作...</p>",
       "derivation_html": "<p>（選填）...</p>",
+      "source_label": "（選填，Linux Kernel 領域強烈建議每天都要有）例如 \"kernel.org cgit · include/linux/list.h#L54-L61\"",
+      "source_url": "（選填）對應的真實 cgit / GitHub 連結，含行號錨點",
+      "source_code": "（選填）逐字抄錄自真實核心原始碼的純文字片段",
       "tip_html": "<p>（選填）額外補充...</p>"
     }
   ],
@@ -58,14 +67,21 @@ JSON 格式（欄位說明）：
 每天每個領域固定只放 1 個項目。`theme` 欄位（選填）用一句話點出貫穿當天三個領域的關聯，
 會顯示在信件最上方；沒有自然關聯就整個省略這個 key，不要硬湊。
 
-每個項目的 `tip_html`、`derivation_html` 都是選填欄位（沒有內容就給空字串或不放這個 key，
-不會渲染對應框）。
+每個項目的 `tip_html`、`derivation_html`、`source_label`／`source_url`／`source_code` 都是
+選填欄位（沒有內容就給空字串或不放這個 key，不會渲染對應框）。
 
 `derivation_html`（🔢 數學推導區塊）：只要內容涉及公式、複雜度、常數、門檻值、位元寬度等
 「數字」，且有「為什麼是這樣」值得講的地方，就填入這個欄位，會渲染成一個用固定紫色
 （跨三個領域都一樣，不隨 accent 變色，方便一眼認出這是「數學推導」區塊）標示的獨立框，
 和 `tip_html` 的補充框並列但視覺上可區分。若該主題今天沒有明顯的數字/公式成分，就不要
 硬湊，留空或不放這個 key 即可。
+
+`source_code`（📄 原始碼區塊）：放**真實存在、逐字抄錄**的原始碼／組語／指令輸出，會渲染成
+深色等寬字體的程式碼框，跟用白話描述的 `explanation_html` 視覺上明顯區隔開來，讓讀者一眼
+就知道「這段是真的抄自原始出處，不是我用文字重述的」。`source_label` 是這段程式碼的出處
+標示（檔案路徑＋行號、或指令名稱），會顯示在程式碼框上方；`source_url` 是可點擊核對的真實
+連結。三個欄位要嘛一起出現、要嘛都不放——**絕對不要編造看起來像真的、但其實是憑空想像的
+路徑／行號／程式碼**，找不到可信原始碼來源時就整個省略這一組欄位，寧可沒有也不要造假。
 
 進階名詞小框框：三個領域每個子項目的 `explanation_html` 內文裡，若提到需要額外解釋的
 進階概念，直接在該處內文插入以下固定樣式的行內框（依所在領域套對應強調色，不要用其他顏色），
@@ -102,7 +118,12 @@ COLORS = {
     "review": "#a8875b",    # 複習標記專用，極少量使用
     "derivation": "#7d5ba6", # 紫：數學推導／為什麼區塊專用，跨領域固定同一色，方便一眼辨識
     "derivation_bg": "#f7f4fb",
+    "code_bg": "#2a2824",    # 深色：真實原始碼區塊背景，跟白話說明的淺色底明顯區隔
+    "code_text": "#e8e5de",
+    "code_muted": "#a39d90",
 }
+
+CODE_FONT = "ui-monospace,'SF Mono',Menlo,Consolas,monospace"
 
 FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif"
 
@@ -153,7 +174,27 @@ def render_derivation(derivation_html: str) -> str:
     </div>"""
 
 
-def render_item(accent: str, index: int, heading: str, body_html: str, tip_html: str = "", extra_html: str = "", derivation_html: str = "") -> str:
+def render_source(label: str, url: str, code: str) -> str:
+    if not code:
+        return ""
+    label_html = ""
+    if label or url:
+        label_text = esc(label)
+        label_inner = (
+            f'<a href="{url}" style="color:{COLORS["code_muted"]};text-decoration:underline;">{label_text}</a>'
+            if url else label_text
+        )
+        label_html = f'<div style="font-size:12px;color:{COLORS["code_muted"]};margin-bottom:8px;">{label_inner}</div>'
+    return f"""
+    <div style="margin-top:12px;border-radius:6px;padding:14px 16px;background:{COLORS['code_bg']};">
+      <div style="font-size:11px;letter-spacing:.08em;color:{COLORS['code_muted']};text-transform:uppercase;">📄 原始碼</div>
+      <div style="margin-top:8px;">
+        {label_html}<pre style="margin:0;font-family:{CODE_FONT};font-size:12.5px;line-height:1.6;color:{COLORS['code_text']};white-space:pre-wrap;word-break:break-word;">{esc(code)}</pre>
+      </div>
+    </div>"""
+
+
+def render_item(accent: str, index: int, heading: str, body_html: str, tip_html: str = "", extra_html: str = "", derivation_html: str = "", source_label: str = "", source_url: str = "", source_code: str = "") -> str:
     top_margin = "0" if index == 0 else "26px"
     return f"""
     <div style="margin-top:{top_margin};">
@@ -167,6 +208,7 @@ def render_item(accent: str, index: int, heading: str, body_html: str, tip_html:
         {body_html}
       </div>
       {render_derivation(derivation_html)}
+      {render_source(source_label, source_url, source_code)}
       {render_tip(accent, tip_html)}
       {extra_html}
     </div>"""
@@ -181,6 +223,9 @@ def render_domain(accent: str, eyebrow: str, items: list, item_heading_fn, extra
             item.get("tip_html", ""),
             extra_fn(item, accent) if extra_fn else "",
             item.get("derivation_html", ""),
+            item.get("source_label", ""),
+            item.get("source_url", ""),
+            item.get("source_code", ""),
         )
         for i, item in enumerate(items)
     )
