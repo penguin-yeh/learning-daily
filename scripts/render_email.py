@@ -83,6 +83,13 @@ JSON 格式（欄位說明）：
 連結。三個欄位要嘛一起出現、要嘛都不放——**絕對不要編造看起來像真的、但其實是憑空想像的
 路徑／行號／程式碼**，找不到可信原始碼來源時就整個省略這一組欄位，寧可沒有也不要造假。
 
+行內 `<code>`／`<pre>` 的樣式**固定由這支腳本統一決定，內容 JSON 完全不需要、也不應該自己
+加 style**：`explanation_html`／`tip_html`／`derivation_html` 裡只要寫最單純的
+`<code>0x1234</code>` 或 `<pre>...</pre>`，腳本會自動幫它們套上跟 `source_code` 大區塊
+同一套深色底樣式（見 `autostyle_code()`），確保每天輸出的視覺風格完全一致，不會因為當天
+內容有沒有手動加樣式而有落差。如果 HTML 裡的 `<code>`／`<pre>` 已經自帶 `style=`，腳本不會
+覆蓋它——但正常情況下不需要自己加。
+
 進階名詞小框框：三個領域每個子項目的 `explanation_html` 內文裡，若提到需要額外解釋的
 進階概念，直接在該處內文插入以下固定樣式的行內框（依所在領域套對應強調色，不要用其他顏色），
 不要全部塞進 tip_html —— tip_html 只留給該子項目結尾的單一整體補充：
@@ -103,6 +110,7 @@ JSON 格式（欄位說明）：
 """
 
 import json
+import re
 import sys
 
 # ---- 固定視覺風格（所有顏色/字體都集中在這裡，確保每天輸出風格一致）----
@@ -132,6 +140,34 @@ def esc(s: str) -> str:
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
+# 內文裡隨手寫的 <code>...</code>／<pre>...</pre>（例如 explanation_html／tip_html／
+# derivation_html 裡穿插的行內程式碼），固定套上深色底、跟 render_source() 的原始碼
+# 大區塊同一套配色，不管當天內容產生時有沒有手動加 style，樣式都由這支腳本統一決定，
+# 不會每天長得不一樣。已經自帶 style 屬性的 <code>/<pre> 不會被覆蓋。
+def _code_css() -> str:
+    return (
+        f"background:{COLORS['code_bg']};color:{COLORS['code_text']};"
+        f"padding:1px 6px;border-radius:4px;font-family:{CODE_FONT};font-size:0.92em;"
+    )
+
+
+def _pre_css() -> str:
+    return (
+        f"display:block;margin:10px 0;background:{COLORS['code_bg']};color:{COLORS['code_text']};"
+        f"padding:12px 14px;border-radius:6px;font-family:{CODE_FONT};font-size:12.5px;"
+        f"line-height:1.6;white-space:pre-wrap;word-break:break-word;overflow-x:auto;"
+    )
+
+
+def autostyle_code(html: str) -> str:
+    """幫內文裡沒有自帶 style 的 <code>/<pre> 標籤補上固定的深色底樣式。"""
+    if not html:
+        return html
+    html = re.sub(r"<code(?![^>]*\bstyle=)>", f'<code style="{_code_css()}">', html)
+    html = re.sub(r"<pre(?![^>]*\bstyle=)>", f'<pre style="{_pre_css()}">', html)
+    return html
+
+
 def render_problem(p: dict, accent: str) -> str:
     pid = esc(str(p.get("id", "")))
     title = esc(p.get("title", ""))
@@ -156,7 +192,7 @@ def render_tip(accent: str, tip_html: str) -> str:
     <div style="margin-top:12px;border:1px dashed {COLORS['rule']};border-radius:6px;padding:12px 16px;">
       <div style="font-size:11px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">補充</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.7;color:{COLORS['muted']};">
-        {tip_html}
+        {autostyle_code(tip_html)}
       </div>
     </div>"""
 
@@ -169,7 +205,7 @@ def render_derivation(derivation_html: str) -> str:
     <div style="margin-top:12px;border:1px solid {accent};background:{COLORS['derivation_bg']};border-radius:6px;padding:12px 16px;">
       <div style="font-size:11px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">🔢 數學推導</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.7;color:{COLORS['ink']};">
-        {derivation_html}
+        {autostyle_code(derivation_html)}
       </div>
     </div>"""
 
@@ -205,7 +241,7 @@ def render_item(accent: str, index: int, heading: str, body_html: str, tip_html:
         {esc(heading)}
       </div>
       <div style="margin-top:10px;border-left:3px solid {accent};padding-left:14px;font-size:14px;line-height:1.8;color:{COLORS['ink']};">
-        {body_html}
+        {autostyle_code(body_html)}
       </div>
       {render_derivation(derivation_html)}
       {render_source(source_label, source_url, source_code)}
