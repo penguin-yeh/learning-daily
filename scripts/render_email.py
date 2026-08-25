@@ -145,15 +145,17 @@ def esc(s: str) -> str:
 # 大區塊同一套配色，不管當天內容產生時有沒有手動加 style，樣式都由這支腳本統一決定，
 # 不會每天長得不一樣。已經自帶 style 屬性的 <code>/<pre> 不會被覆蓋。
 def _code_css() -> str:
+    # 用 background-color（而非 background 簡寫）：Gmail 對 inline style 裡的
+    # background 簡寫支援不穩定，常常整條被拿掉，只有 background-color 能穩定生效。
     return (
-        f"background:{COLORS['code_bg']};color:{COLORS['code_text']};"
+        f"background-color:{COLORS['code_bg']};color:{COLORS['code_text']};"
         f"padding:1px 6px;border-radius:4px;font-family:{CODE_FONT};font-size:0.92em;"
     )
 
 
 def _pre_css() -> str:
     return (
-        f"display:block;margin:10px 0;background:{COLORS['code_bg']};color:{COLORS['code_text']};"
+        f"display:block;margin:10px 0;background-color:{COLORS['code_bg']};color:{COLORS['code_text']};"
         f"padding:12px 14px;border-radius:6px;font-family:{CODE_FONT};font-size:12.5px;"
         f"line-height:1.6;white-space:pre-wrap;word-break:break-word;overflow-x:auto;"
     )
@@ -202,7 +204,7 @@ def render_derivation(derivation_html: str) -> str:
         return ""
     accent = COLORS["derivation"]
     return f"""
-    <div style="margin-top:12px;border:1px solid {accent};background:{COLORS['derivation_bg']};border-radius:6px;padding:12px 16px;">
+    <div style="margin-top:12px;border:1px solid {accent};background-color:{COLORS['derivation_bg']};border-radius:6px;padding:12px 16px;">
       <div style="font-size:11px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">🔢 數學推導</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.7;color:{COLORS['ink']};">
         {autostyle_code(derivation_html)}
@@ -222,10 +224,10 @@ def render_source(label: str, url: str, code: str) -> str:
         )
         label_html = f'<div style="font-size:12px;color:{COLORS["code_muted"]};margin-bottom:8px;">{label_inner}</div>'
     return f"""
-    <div style="margin-top:12px;border-radius:6px;padding:14px 16px;background:{COLORS['code_bg']};">
+    <div style="margin-top:12px;border-radius:6px;padding:14px 16px;background-color:{COLORS['code_bg']};">
       <div style="font-size:11px;letter-spacing:.08em;color:{COLORS['code_muted']};text-transform:uppercase;">📄 原始碼</div>
       <div style="margin-top:8px;">
-        {label_html}<pre style="margin:0;font-family:{CODE_FONT};font-size:12.5px;line-height:1.6;color:{COLORS['code_text']};white-space:pre-wrap;word-break:break-word;">{esc(code)}</pre>
+        {label_html}<pre style="margin:0;background-color:{COLORS['code_bg']};font-family:{CODE_FONT};font-size:12.5px;line-height:1.6;color:{COLORS['code_text']};white-space:pre-wrap;word-break:break-word;">{esc(code)}</pre>
       </div>
     </div>"""
 
@@ -322,8 +324,8 @@ def render(data: dict) -> str:
     return f"""<!DOCTYPE html>
 <html lang="zh-Hant">
 <head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:{COLORS['paper']};font-family:{FONT};">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:{COLORS['paper']};padding:40px 0;">
+<body style="margin:0;padding:0;background-color:{COLORS['paper']};font-family:{FONT};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:{COLORS['paper']};padding:40px 0;">
     <tr>
       <td align="center">
         <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:560px;max-width:90vw;">
