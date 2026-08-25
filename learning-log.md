@@ -6,4 +6,5 @@
 > 註：CS:APP／Linux／演算法（LeetCode）三個領域的教學進度已於 2026-08-24 全部重置，歷史紀錄已清空。下次執行視為從頭開始：CS:APP 從 Ch.1 開始、Linux 從成大課程進度表第一週開始、演算法不再受近 14 天避重複限制。
 
 <!-- LOG START -->
+主線: 鏈結串列的環狀結構 | 2026-08-25 | 演算法: 快慢指標與 Floyd 判圈演算法（141/142/876/202/287）| CS:APP: Ch.1 1.1–1.9 電腦系統導覽 | Linux: Linux 核心 Linked List 實作（container_of 與 intrusive linked list）
 <!-- LOG END -->
