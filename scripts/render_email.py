@@ -126,9 +126,10 @@ COLORS = {
     "review": "#a8875b",    # 複習標記專用，極少量使用
     "derivation": "#7d5ba6", # 紫：數學推導／為什麼區塊專用，跨領域固定同一色，方便一眼辨識
     "derivation_bg": "#f7f4fb",
-    "code_bg": "#2a2824",    # 深色：真實原始碼區塊背景，跟白話說明的淺色底明顯區隔
-    "code_text": "#e8e5de",
-    "code_muted": "#a39d90",
+    "code_bg": "#122843",    # 深藍：真實原始碼區塊背景，跟白話說明的淺色底明顯區隔
+    "code_text": "#e7edf6",
+    "code_muted": "#8aa6cf",
+    "code_border": "#25406b", # 深藍區塊的細邊框，讓區塊有一點「卡片」的立體感，不是死板一片色
 }
 
 CODE_FONT = "ui-monospace,'SF Mono',Menlo,Consolas,monospace"
@@ -156,7 +157,8 @@ def _code_css() -> str:
 def _pre_css() -> str:
     return (
         f"display:block;margin:10px 0;background-color:{COLORS['code_bg']};color:{COLORS['code_text']};"
-        f"padding:12px 14px;border-radius:6px;font-family:{CODE_FONT};font-size:12.5px;"
+        f"padding:12px 14px;border-radius:6px;border:1px solid {COLORS['code_border']};"
+        f"font-family:{CODE_FONT};font-size:12.5px;"
         f"line-height:1.6;white-space:pre-wrap;word-break:break-word;overflow-x:auto;"
     )
 
@@ -224,7 +226,7 @@ def render_source(label: str, url: str, code: str) -> str:
         )
         label_html = f'<div style="font-size:12px;color:{COLORS["code_muted"]};margin-bottom:8px;">{label_inner}</div>'
     return f"""
-    <div style="margin-top:12px;border-radius:6px;padding:14px 16px;background-color:{COLORS['code_bg']};">
+    <div style="margin-top:12px;border-radius:6px;padding:14px 16px;background-color:{COLORS['code_bg']};border:1px solid {COLORS['code_border']};">
       <div style="font-size:11px;letter-spacing:.08em;color:{COLORS['code_muted']};text-transform:uppercase;">📄 原始碼</div>
       <div style="margin-top:8px;">
         {label_html}<pre style="margin:0;background-color:{COLORS['code_bg']};font-family:{CODE_FONT};font-size:12.5px;line-height:1.6;color:{COLORS['code_text']};white-space:pre-wrap;word-break:break-word;">{esc(code)}</pre>
