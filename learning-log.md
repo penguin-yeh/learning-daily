@@ -8,4 +8,5 @@
 <!-- LOG START -->
 主線: 鏈結串列的環狀結構 | 2026-08-25 | 演算法: 快慢指標與 Floyd 判圈演算法（141/142/876/202/287）| CS:APP: Ch.1 1.1–1.9 電腦系統導覽 | Linux: Linux 核心 Linked List 實作（container_of 與 intrusive linked list）
 2026-08-26 | 演算法: 位元反轉的分治技巧 Reverse Bits／平行位元計數（190/191/338）| CS:APP: Ch.2 §2.1.3 Addressing and Byte Ordering（定址與位元組順序）| Linux: 第1週 ERR_PTR／PTR_ERR／IS_ERR 錯誤碼編碼進指標
+2026-08-28 | 演算法: Union-Find（互斥集合／並查集）路徑壓縮與按秩合併（684/990/547/399/305）| CS:APP: Ch.2 §2.1.4 Representing Strings（字串表示法）| Linux: 第1週 解讀計算機編碼：二補數（Two's Complement）的數學設計與資安意涵
 <!-- LOG END -->
