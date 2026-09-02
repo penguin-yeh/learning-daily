@@ -86,6 +86,13 @@ repo 已經透過此 routine 的設定自動 clone 到當前工作目錄。這�
 9. 確認信件成功送出後，把今天教的內容 append 到 `learning-log.md`（在 `<!-- LOG END -->` 之前），格式：
    `YYYY-MM-DD | 演算法: 主題（題號）| CS:APP: Ch.X §X.X 具體子主題 | Linux: 第N週 具體機制名稱`
    若有自然的 theme 關聯可以加在最前面 `| 主線: ...`，沒有就省略這欄。**子主題描述要具體到看得出「今天到底講了哪一個小東西」，不能只寫章節號**，這樣明天才能正確接續到下一個更窄的子主題。
-10. commit 並 push 到 `main`（包含 render_email.py 若有修改），commit message 簡述今天的三個具體子主題。
+10. **commit 並確保進度真正落到 `main`**（包含 render_email.py 若有修改），commit message 簡述今天的三個具體子主題。這個 routine 是單人單用途的每日自動化任務、沒有 code review／PR 流程，**`main` 才是唯一有意義的落地位置**，寫在其他分支上等於沒寫——2026-09-02 曾發生過連續 6 天（8/27–9/1）的 session 各自被指派到互不相通的獨立分支、內容有正確產生也寄出，但沒人把它們併回 `main`，導致 `main` 上的進度紀錄整整一週沒有前進，CS:APP 因此連續 8 天重複教同一節，詳見 `learning-log.md` 裡的補記，**不要重蹈覆轍**。具體做法：
+    - 若這個 session 一開始就是直接在 `main` 上工作，正常 commit + `git push origin main` 即可。
+    - 若這個 session 被系統/環境限制在一個非 `main` 的指定分支上開發（例如「Develop on branch X」這類設定），**不要把「push 到那個指定分支」當作完成**：那只是環境預設行為，不是這個任務真正的目的地。應該接著執行：
+      1. `git fetch origin main`
+      2. 確認 `origin/main` 目前的 tip 是不是這次改動的直接祖先（`git merge-base --is-ancestor origin/main HEAD`）。若是，直接 fast-forward：`git push origin HEAD:main`（或 `git checkout -B main origin/main` 後把改動 apply 上去再 push）。
+      3. 若 `origin/main` 已經比這個 session 起跑時新（代表這段時間內有其他 session 已經先把當天或更晚的進度寫進 main 了），**不要用今天這份改動硬蓋過去**：先看 `origin/main` 上的 `learning-log.md` 是否已經有今天的紀錄——若有，代表已經有別的執行成功落地，這次可以停止、不要重複寄信；若沒有，把今天新增的那一行 log（以及本次 commit 的其他內容）reapply 到最新的 `origin/main` 之上再 push，不要暴力覆蓋掉 origin/main 上其他人已經寫入的內容。
+      4. **push 完之後務必驗證**：執行 `git show origin/main:learning-log.md | tail -3`，確認今天日期那一行真的出現在 `origin/main` 上，而不是只出現在本地或某個分支上——這才是這個步驟真正的完成判準，光是「push 指令沒有報錯」不算數。
+    - 如果上述流程中，環境的權限設定實際擋下了對 `main` 的 push（不是「需要額外詢問」，而是 push 真的被拒絕），才需要退回到只 push 分支、並在下方的失敗處理裡誠實記錄「這次沒能落到 main，原因是 XXX」，而不是假裝完成。
 
-全程不需要人工確認。若某步驟失敗（寄信失敗、或自我檢查發現寄壞且重試一次後仍失敗），重試一次；仍失敗則在 commit 前停止並保留錯誤訊息，不要留下沒寄出信但已經寫入 log 的不一致狀態。
+全程不需要人工確認。若某步驟失敗（寄信失敗、或自我檢查發現寄壞且重試一次後仍失敗、或無論如何都無法把進度落到 `main`），重試一次；仍失敗則在 commit 前停止並保留錯誤訊息，不要留下沒寄出信但已經寫入 log 的不一致狀態，也不要留下「log 只寫在某個分支、main 沒更新」這種看似成功、實際上明天又會重演今天問題的假完成狀態。
