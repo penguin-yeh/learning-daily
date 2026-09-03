@@ -16,4 +16,5 @@
 2026-08-31 | 演算法: 單調堆疊 Monotonic Stack（739/503/84/42/239）| CS:APP: Ch.2 2.1.4 Representing Strings | Linux: Load Average 的定點數（Fixed-Point）實作與核心避免浮點數的原因
 2026-09-01 | 演算法: 併查集 Union-Find / Disjoint Set Union（684/990/1319/947）| CS:APP: Ch.2 2.1.4 Representing Strings | Linux: 核心定點數機制與 EWMA（DECLARE_EWMA 巨集）
 2026-09-02 | 演算法: 單調堆疊 Monotonic Stack（739/84/42/496）| CS:APP: Ch.2 §2.1.4 Representing Strings（字串的表示法）| Linux: 第1週 核心定點數機制與 EWMA（DECLARE_EWMA，include/linux/average.h）
+主線: 機器碼與 FPU/SIMD 暫存器本質上都只是一串位元組，語意來自解讀規則 | 2026-09-03 | 演算法: 二分搜尋於答案空間 Binary Search on Answer Space（875/1011/410/1482）| CS:APP: Ch.2 §2.1.5 Representing Code（程式碼的位元組表示，機器碼不具可攜性）| Linux: 第1週 核心浮點數限制的另一面：kernel_fpu_begin()/kernel_fpu_end() 臨界區間（AES-NI／RAID6 SIMD 例外使用）
 <!-- LOG END -->
