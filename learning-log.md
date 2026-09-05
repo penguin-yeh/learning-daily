@@ -18,4 +18,5 @@
 2026-09-02 | 演算法: 單調堆疊 Monotonic Stack（739/84/42/496）| CS:APP: Ch.2 §2.1.4 Representing Strings（字串的表示法）| Linux: 第1週 核心定點數機制與 EWMA（DECLARE_EWMA，include/linux/average.h）
 主線: 機器碼與 FPU/SIMD 暫存器本質上都只是一串位元組，語意來自解讀規則 | 2026-09-03 | 演算法: 二分搜尋於答案空間 Binary Search on Answer Space（875/1011/410/1482）| CS:APP: Ch.2 §2.1.5 Representing Code（程式碼的位元組表示，機器碼不具可攜性）| Linux: 第1週 核心浮點數限制的另一面：kernel_fpu_begin()/kernel_fpu_end() 臨界區間（AES-NI／RAID6 SIMD 例外使用）
 主線: 位元的兩種面向——代數運算規則（CS:APP）與統計不可預測性（Linux 熵）殊途同歸 | 2026-09-04 | 演算法: 堆積／優先佇列 Top-K 選取與 K-way Merge 模式（215/347/23/295）| CS:APP: Ch.2 §2.1.6 Introduction to Boolean Algebra（布林代數導論）| Linux: 第1週 從熱力學第二定律到系統軟體——以核心亂數產生器（RNG）的最小熵設計為例
+2026-09-05 | 演算法: Trie 字典樹，含位元字典樹與 Trie+DFS 剪枝變形（208/211/212/421）| CS:APP: Ch.2 §2.1.7 Bit-Level Operations in C（C 語言中的位元層級運算）| Linux: 第3週 函式呼叫機制與呼叫慣例（Calling Convention，x86-64 Stack Frame／System V ABI）
 <!-- LOG END -->
