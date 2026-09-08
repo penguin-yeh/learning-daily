@@ -20,4 +20,5 @@
 主線: 位元的兩種面向——代數運算規則（CS:APP）與統計不可預測性（Linux 熵）殊途同歸 | 2026-09-04 | 演算法: 堆積／優先佇列 Top-K 選取與 K-way Merge 模式（215/347/23/295）| CS:APP: Ch.2 §2.1.6 Introduction to Boolean Algebra（布林代數導論）| Linux: 第1週 從熱力學第二定律到系統軟體——以核心亂數產生器（RNG）的最小熵設計為例
 主線: 用一層間接抽象換取操作一致性（CS:APP 位元遮罩／Linux hlist pprev／DP 狀態） | 2026-09-06 | 演算法: 動態規劃 0/1 背包與子集和變形（416/494/474/322）| CS:APP: Ch.2 §2.1.7 Bit-Level Operations in C（C 語言中的位元運算）| Linux: 第1週 hlist_head／hlist_node（雜湊表用單指標鏈結串列，DEFINE_HASHTABLE/hash_add/hash_for_each_possible）
 2026-09-07 | 演算法: 圖論 BFS/DFS 與拓撲排序 Topological Sort（207/210/802/200）| CS:APP: Ch.2 §2.1.8 Logical Operations in C（C 語言中的邏輯運算）| Linux: 第2週 C 語言記憶體對齊與硬體特性（Memory Alignment，include/vdso/align.h／include/uapi/linux/const.h）
+2026-09-08 | 演算法: 前綴和 + 雜湊表 Prefix Sum + HashMap，子陣列和為 K（560/523/974/1248）| CS:APP: Ch.2 §2.1.9 Shift Operations in C（C 語言中的位移運算）| Linux: 第2週 C 語言 Bit Field（位元欄位）在核心中的應用與陷阱（include/uapi/linux/ip.h struct iphdr／include/linux/sched.h task_struct 旗標）
 <!-- LOG END -->
