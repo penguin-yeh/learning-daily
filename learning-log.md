@@ -21,4 +21,5 @@
 主線: 用一層間接抽象換取操作一致性（CS:APP 位元遮罩／Linux hlist pprev／DP 狀態） | 2026-09-06 | 演算法: 動態規劃 0/1 背包與子集和變形（416/494/474/322）| CS:APP: Ch.2 §2.1.7 Bit-Level Operations in C（C 語言中的位元運算）| Linux: 第1週 hlist_head／hlist_node（雜湊表用單指標鏈結串列，DEFINE_HASHTABLE/hash_add/hash_for_each_possible）
 2026-09-07 | 演算法: 圖論 BFS/DFS 與拓撲排序 Topological Sort（207/210/802/200）| CS:APP: Ch.2 §2.1.8 Logical Operations in C（C 語言中的邏輯運算）| Linux: 第2週 C 語言記憶體對齊與硬體特性（Memory Alignment，include/vdso/align.h／include/uapi/linux/const.h）
 2026-09-08 | 演算法: 前綴和 + 雜湊表 Prefix Sum + HashMap，子陣列和為 K（560/523/974/1248）| CS:APP: Ch.2 §2.1.9 Shift Operations in C（C 語言中的位移運算）| Linux: 第2週 C 語言 Bit Field（位元欄位）在核心中的應用與陷阱（include/uapi/linux/ip.h struct iphdr／include/linux/sched.h task_struct 旗標）
+2026-09-09 | 演算法: 樹狀陣列（Fenwick Tree/BIT）與線段樹，動態區間和查詢（303/307/315/327）| CS:APP: Ch.2 §2.2.1 Integral Data Types（整數型別）| Linux: 進度表 Week 4 數值系統+編譯器，打造迷你 C 編譯器（以 AMaCC 為例：Parsing→IR→Codegen）
 <!-- LOG END -->
