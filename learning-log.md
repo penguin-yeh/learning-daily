@@ -24,4 +24,5 @@
 2026-09-09 | 演算法: 樹狀陣列（Fenwick Tree/BIT）與線段樹，動態區間和查詢（303/307/315/327）| CS:APP: Ch.2 §2.2.1 Integral Data Types（整數型別）| Linux: 進度表 Week 4 數值系統+編譯器，打造迷你 C 編譯器（以 AMaCC 為例：Parsing→IR→Codegen）
 主線: 有限位元寬度的巧妙利用與陷阱 | 2026-09-10 | 演算法: Trie 前綴樹，共享前綴的樹狀字串索引（208/211/212/648）| CS:APP: Ch.2 §2.2.2 Unsigned Encodings（無號編碼，B2U 公式與溢位環繞）| Linux: 進度表 Week 4 Linux 核心紅黑樹（rbtree）插入操作的旋轉與重新著色規則
 主線: 二補數的邊界正是 signed overflow 未定義行為的源頭 | 2026-09-11 | 演算法: 圖論最短路徑 Dijkstra 演算法，貪心+優先佇列（743/1514/1631/787）| CS:APP: Ch.2 §2.2.3 Two's-Complement Encoding（二補數編碼）| Linux: 進度表 Week 4 C 語言未定義行為（Undefined Behavior）與 Signed Integer Overflow
+2026-09-13 | 演算法: 貪心演算法／區間排程與合併 Merge Intervals（56/57/435/452）| CS:APP: Ch.2 §2.2.4 Conversions Between Signed and Unsigned（有號無號轉換）| Linux: 進度表 Week 4 錯誤更正碼（ECC）：Reed-Solomon 函式庫 lib/reed_solomon
 <!-- LOG END -->
