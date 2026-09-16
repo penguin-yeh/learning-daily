@@ -26,4 +26,5 @@
 主線: 二補數的邊界正是 signed overflow 未定義行為的源頭 | 2026-09-11 | 演算法: 圖論最短路徑 Dijkstra 演算法，貪心+優先佇列（743/1514/1631/787）| CS:APP: Ch.2 §2.2.3 Two's-Complement Encoding（二補數編碼）| Linux: 進度表 Week 4 C 語言未定義行為（Undefined Behavior）與 Signed Integer Overflow
 2026-09-13 | 演算法: 貪心演算法／區間排程與合併 Merge Intervals（56/57/435/452）| CS:APP: Ch.2 §2.2.4 Conversions Between Signed and Unsigned（有號無號轉換）| Linux: 進度表 Week 4 錯誤更正碼（ECC）：Reed-Solomon 函式庫 lib/reed_solomon
 主線: 位元不變、解讀變了（signed/unsigned 隱式轉換 與 指標型別別名）| 2026-09-14 | 演算法: 二分搜尋變形／旋轉排序陣列 Search in Rotated Sorted Array（33/81/153/154）| CS:APP: Ch.2 §2.2.5 Signed vs. Unsigned in C | Linux: 進度表 Week 4 Strict Aliasing 與 -fno-strict-aliasing（型別別名假設，見 c-undefined-behavior 筆記）
+2026-09-16 | 演算法: LRU Cache 設計，HashMap + 雙向鏈結串列達成 O(1) 存取（146/460/432）| CS:APP: Ch.2 §2.2.6 Expanding the Bit Representation of a Number（位元表示法的擴張：零延伸與符號延伸）| Linux: 進度表 Week 4 Function Inlining（__always_inline／noinline 在核心熱路徑的應用，見 c-compiler-optimization 筆記）
 <!-- LOG END -->
