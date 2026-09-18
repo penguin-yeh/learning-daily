@@ -27,4 +27,5 @@
 2026-09-13 | 演算法: 貪心演算法／區間排程與合併 Merge Intervals（56/57/435/452）| CS:APP: Ch.2 §2.2.4 Conversions Between Signed and Unsigned（有號無號轉換）| Linux: 進度表 Week 4 錯誤更正碼（ECC）：Reed-Solomon 函式庫 lib/reed_solomon
 主線: 位元不變、解讀變了（signed/unsigned 隱式轉換 與 指標型別別名）| 2026-09-14 | 演算法: 二分搜尋變形／旋轉排序陣列 Search in Rotated Sorted Array（33/81/153/154）| CS:APP: Ch.2 §2.2.5 Signed vs. Unsigned in C | Linux: 進度表 Week 4 Strict Aliasing 與 -fno-strict-aliasing（型別別名假設，見 c-undefined-behavior 筆記）
 2026-09-16 | 演算法: LRU Cache 設計，HashMap + 雙向鏈結串列達成 O(1) 存取（146/460/432）| CS:APP: Ch.2 §2.2.6 Expanding the Bit Representation of a Number（位元表示法的擴張：零延伸與符號延伸）| Linux: 進度表 Week 4 Function Inlining（__always_inline／noinline 在核心熱路徑的應用，見 c-compiler-optimization 筆記）
+主線: 位元模式表示抽象狀態——演算法用位元表示子集合、CS:APP 討論位元截斷後的重新詮釋、Linux 從位元模式解碼出最高有效位元 | 2026-09-18 | 演算法: 位元遮罩動態規劃 Bitmask DP／狀態壓縮動態規劃（847/943/1125/698）| CS:APP: Ch.2 §2.2.7 Truncating Numbers（數值的截斷）| Linux: 進度表 Week 4 CS:APP 第 2 章重點提示和練習（tadd_ok／is_little_endian／leftmost_one 與核心 fls()）
 <!-- LOG END -->
