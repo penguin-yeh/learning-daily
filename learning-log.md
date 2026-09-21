@@ -35,4 +35,5 @@
 主線: 位元模式表示抽象狀態——演算法用位元表示子集合、CS:APP 討論位元截斷後的重新詮釋、Linux 從位元模式解碼出最高有效位元 | 2026-09-18 | 演算法: 位元遮罩動態規劃 Bitmask DP／狀態壓縮動態規劃（847/943/1125/698）| CS:APP: Ch.2 §2.2.7 Truncating Numbers（數值的截斷）| Linux: 進度表 Week 4 CS:APP 第 2 章重點提示和練習（tadd_ok／is_little_endian／leftmost_one 與核心 fls()）
 主線: 三個領域都跟「最後發生的事」有關（區間 DP 固定最後戳破的氣球／動態連結器讓 main() 最後執行／§2.2.8 是整數表示這條支線的最後總結） | 2026-09-19 | 演算法: 區間動態規劃 Interval DP／戳氣球 Burst Balloons（312/1547/1039）| CS:APP: Ch.2 §2.2.8 Advice on Signed and Unsigned in C | Linux: 進度表 Week 6 動態連結器（Dynamic Linker：PT_INTERP／GOT-PLT／延遲綁定，fs/binfmt_elf.c）
 主線: 善用已算出的邊界/對稱資訊，避免重複計算 | 2026-09-20 | 演算法: Manacher's Algorithm 最長回文子字串（5/647/214）| CS:APP: Ch.2 §2.3.1 Unsigned Addition | Linux: 進度表 Week 6 C 語言連結器和執行檔資訊（ELF／連結腳本／initcall section）
+主線: 中間產物本身不是最終答案，需要接力解讀/轉換才有意義 | 2026-09-21 | 演算法: 最長遞增子序列 LIS，O(n²) DP 與 O(n log n) Patience Sorting（300/354/673/646）| CS:APP: Ch.2 §2.3.2 Two's-Complement Addition | Linux: 進度表 Week 6 C 語言執行階段程式庫（CRT，_start／crt0 與核心 ELF loader 堆疊佈局合約）
 <!-- LOG END -->
