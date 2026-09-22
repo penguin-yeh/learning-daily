@@ -36,4 +36,5 @@
 主線: 三個領域都跟「最後發生的事」有關（區間 DP 固定最後戳破的氣球／動態連結器讓 main() 最後執行／§2.2.8 是整數表示這條支線的最後總結） | 2026-09-19 | 演算法: 區間動態規劃 Interval DP／戳氣球 Burst Balloons（312/1547/1039）| CS:APP: Ch.2 §2.2.8 Advice on Signed and Unsigned in C | Linux: 進度表 Week 6 動態連結器（Dynamic Linker：PT_INTERP／GOT-PLT／延遲綁定，fs/binfmt_elf.c）
 主線: 善用已算出的邊界/對稱資訊，避免重複計算 | 2026-09-20 | 演算法: Manacher's Algorithm 最長回文子字串（5/647/214）| CS:APP: Ch.2 §2.3.1 Unsigned Addition | Linux: 進度表 Week 6 C 語言連結器和執行檔資訊（ELF／連結腳本／initcall section）
 主線: 中間產物本身不是最終答案，需要接力解讀/轉換才有意義 | 2026-09-21 | 演算法: 最長遞增子序列 LIS，O(n²) DP 與 O(n log n) Patience Sorting（300/354/673/646）| CS:APP: Ch.2 §2.3.2 Two's-Complement Addition | Linux: 進度表 Week 6 C 語言執行階段程式庫（CRT，_start／crt0 與核心 ELF loader 堆疊佈局合約）
+主線: 三個主題都用一套很小的固定規則涵蓋表面上分歧的情況（LCS 的取/不取兩條轉移規則、二補數取負的 flip+1 規則、Linux 的 open/read/write/close 統一介面）| 2026-09-22 | 演算法: 雙字串二維動態規劃 LCS（1143/72/516/583）| CS:APP: Ch.2 §2.3.3 Two's-Complement Negation（二補數取負，-x=~x+1 推導與 TMin 特例）| Linux: 進度表 Week 6「一切皆為檔案」的理念與解讀（VFS／file_operations，null_fops 實例）
 <!-- LOG END -->
