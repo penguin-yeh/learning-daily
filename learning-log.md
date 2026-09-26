@@ -38,4 +38,5 @@
 主線: 中間產物本身不是最終答案，需要接力解讀/轉換才有意義 | 2026-09-21 | 演算法: 最長遞增子序列 LIS，O(n²) DP 與 O(n log n) Patience Sorting（300/354/673/646）| CS:APP: Ch.2 §2.3.2 Two's-Complement Addition | Linux: 進度表 Week 6 C 語言執行階段程式庫（CRT，_start／crt0 與核心 ELF loader 堆疊佈局合約）
 主線: 三個主題都用一套很小的固定規則涵蓋表面上分歧的情況（LCS 的取/不取兩條轉移規則、二補數取負的 flip+1 規則、Linux 的 open/read/write/close 統一介面）| 2026-09-22 | 演算法: 雙字串二維動態規劃 LCS（1143/72/516/583）| CS:APP: Ch.2 §2.3.3 Two's-Complement Negation（二補數取負，-x=~x+1 推導與 TMin 特例）| Linux: 進度表 Week 6「一切皆為檔案」的理念與解讀（VFS／file_operations，null_fops 實例）
 主線: 三個領域都在講「同一個值，換一套規則解讀就會得到完全不同的結果」（乘法截斷回 w 位元、fork() 把同一段記憶體解讀成兩個行程、Bellman-Ford 的距離值要鬆弛夠多次才穩定）| 2026-09-23 | 演算法: Bellman-Ford 演算法與 SPFA（787/1928）| CS:APP: Ch.2 §2.3.4 Two's-Complement Multiplication | Linux: 進度表 Week 6 UNIX fork/exec 系統呼叫的前世今生（歷史設計、COW 成本量測、ASLR 熵、clone／pidfd 現代化）
+2026-09-26 | 演算法: Floyd–Warshall 全源最短路徑演算法（1334/1462/399）| CS:APP: Ch.2 §2.3.4 Unsigned Multiplication（補齊先前跳章，9/23 誤標的「§2.3.4 二補數乘法」實為 §2.3.5，下次接續 §2.3.6 Multiplying by Constants）| Linux: 進度表 Week 7 CPU 排程器（一）：從 O(n) 到 O(1) Scheduler 的演進
 <!-- LOG END -->
