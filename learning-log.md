@@ -39,4 +39,5 @@
 主線: 三個主題都用一套很小的固定規則涵蓋表面上分歧的情況（LCS 的取/不取兩條轉移規則、二補數取負的 flip+1 規則、Linux 的 open/read/write/close 統一介面）| 2026-09-22 | 演算法: 雙字串二維動態規劃 LCS（1143/72/516/583）| CS:APP: Ch.2 §2.3.3 Two's-Complement Negation（二補數取負，-x=~x+1 推導與 TMin 特例）| Linux: 進度表 Week 6「一切皆為檔案」的理念與解讀（VFS／file_operations，null_fops 實例）
 主線: 三個領域都在講「同一個值，換一套規則解讀就會得到完全不同的結果」（乘法截斷回 w 位元、fork() 把同一段記憶體解讀成兩個行程、Bellman-Ford 的距離值要鬆弛夠多次才穩定）| 2026-09-23 | 演算法: Bellman-Ford 演算法與 SPFA（787/1928）| CS:APP: Ch.2 §2.3.4 Two's-Complement Multiplication | Linux: 進度表 Week 6 UNIX fork/exec 系統呼叫的前世今生（歷史設計、COW 成本量測、ASLR 熵、clone／pidfd 現代化）
 主線: 三個領域今天都在示範同一招：把一個「看似天經地義」但代價高、甚至藏著陷阱的運算（乘法、除法／模除、暴力窮舉生成樹）換成更便宜的操作組合（位移加法、乘法取高位、貪心＋並查集），並且都需要額外的數學論證才能保證換掉之後結果仍然正確 | 2026-09-27 | 演算法: 最小生成樹 Kruskal 演算法與並查集（1584/1489/1697）| CS:APP: Ch.2 §2.3.6 Multiplying by Constants | Linux: 進度表 Week 6 從模除偏差談亂數分布（reciprocal_scale／get_random_u32_below）
+主線: 三個領域今天都在示範同一招：先幫原始資料補上一個額外的修正項或限制，後續的比較／選取才站得住腳（除以二的冪要先加偏權值、網路品質指標要先正規化成陽性特徵、單調佇列要先淘汰過期舊元素）| 2026-09-28 | 演算法: 單調佇列 Monotonic Deque／滑動視窗最大值（239/1438/862/1696）| CS:APP: Ch.2 §2.3.7 Dividing by Powers of Two | Linux: 進度表 Week 6 以統計觀點看電腦網路傳輸品質（jserv 筆記，ECDF／EVT／雙時間窗）
 <!-- LOG END -->
