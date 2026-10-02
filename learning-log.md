@@ -40,4 +40,5 @@
 主線: 三個領域都在講「同一個值，換一套規則解讀就會得到完全不同的結果」（乘法截斷回 w 位元、fork() 把同一段記憶體解讀成兩個行程、Bellman-Ford 的距離值要鬆弛夠多次才穩定）| 2026-09-23 | 演算法: Bellman-Ford 演算法與 SPFA（787/1928）| CS:APP: Ch.2 §2.3.4 Two's-Complement Multiplication | Linux: 進度表 Week 6 UNIX fork/exec 系統呼叫的前世今生（歷史設計、COW 成本量測、ASLR 熵、clone／pidfd 現代化）
 主線: 三個領域今天都在示範同一招：把一個「看似天經地義」但代價高、甚至藏著陷阱的運算（乘法、除法／模除、暴力窮舉生成樹）換成更便宜的操作組合（位移加法、乘法取高位、貪心＋並查集），並且都需要額外的數學論證才能保證換掉之後結果仍然正確 | 2026-09-27 | 演算法: 最小生成樹 Kruskal 演算法與並查集（1584/1489/1697）| CS:APP: Ch.2 §2.3.6 Multiplying by Constants | Linux: 進度表 Week 6 從模除偏差談亂數分布（reciprocal_scale／get_random_u32_below）
 主線: 三個領域今天都在處理「先把東西按某個二元條件分成兩側，再對其中一側做修正」——二分圖要求每條邊兩端的顏色分屬不同側；有號數除以 2 的冪只需要對負數那一側加上偏移量修正捨入方向；網路品質統計則是對落在異常尾端那一側的觀測值給予更高的告警權重 | 2026-09-30 | 演算法: 圖論二分圖判定 Bipartite Graph Check，DFS/BFS 雙色染色與 Union-Find 判定法（785/886/1042）| CS:APP: Ch.2 §2.3.7 Dividing by Powers of Two | Linux: 進度表 Week 6 以統計觀點看電腦網路傳輸品質（tcp_info／eBPF／ECDF／EVT）
+2026-10-02 | 演算法: 樹形動態規劃 Tree DP：樹的直徑與最大路徑和模式，含換根法（543/124/1245/834/2246）| CS:APP: Ch.2 §2.3.8 Final Thoughts on Integer Arithmetic | Linux: 進度表 Week 7 Process 和 CPU 排程：CFS 完全公平排程器（vruntime／紅黑樹排程佇列，並說明現已由 EEVDF 取代）
 <!-- LOG END -->
