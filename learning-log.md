@@ -42,4 +42,5 @@
 主線: 三個領域今天都在處理「先把東西按某個二元條件分成兩側，再對其中一側做修正」——二分圖要求每條邊兩端的顏色分屬不同側；有號數除以 2 的冪只需要對負數那一側加上偏移量修正捨入方向；網路品質統計則是對落在異常尾端那一側的觀測值給予更高的告警權重 | 2026-09-30 | 演算法: 圖論二分圖判定 Bipartite Graph Check，DFS/BFS 雙色染色與 Union-Find 判定法（785/886/1042）| CS:APP: Ch.2 §2.3.7 Dividing by Powers of Two | Linux: 進度表 Week 6 以統計觀點看電腦網路傳輸品質（tcp_info／eBPF／ECDF／EVT）
 2026-10-03 | 演算法: 線段樹（Segment Tree）與懶惰傳播（Lazy Propagation），區間更新＋區間查詢（699/732/370/2407）| CS:APP: Ch.2 §2.3.8 Final Thoughts on Integer Arithmetic | Linux: 進度表 Week 7 不只挑選任務的排程器（從 O(1)、CFS 到 EEVDF）
 2026-10-04 | 演算法: 圖論進階 Tarjan 低鏈值技巧——強連通分量(SCC)、橋、割點（1192/802/2360）| CS:APP: Ch.2 §2.4.1 Fractional Binary Numbers | Linux: 進度表 Week 7 EEVDF 排程器的理論基礎（Virtual Time／Eligibility／Lag 守恆）
+2026-10-05 | 演算法: 掃描線演算法 Sweep Line，事件排序計數＋優先佇列維護極值（253/1094/731/218）| CS:APP: Ch.2 §2.4.2 IEEE Floating-Point Representation | Linux: 進度表 Week 8 並行程式設計導論（Concurrency vs Parallelism、Mutex vs Semaphore）
 <!-- LOG END -->
