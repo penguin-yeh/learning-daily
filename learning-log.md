@@ -43,4 +43,5 @@
 2026-10-03 | 演算法: 線段樹（Segment Tree）與懶惰傳播（Lazy Propagation），區間更新＋區間查詢（699/732/370/2407）| CS:APP: Ch.2 §2.3.8 Final Thoughts on Integer Arithmetic | Linux: 進度表 Week 7 不只挑選任務的排程器（從 O(1)、CFS 到 EEVDF）
 2026-10-04 | 演算法: 圖論進階 Tarjan 低鏈值技巧——強連通分量(SCC)、橋、割點（1192/802/2360）| CS:APP: Ch.2 §2.4.1 Fractional Binary Numbers | Linux: 進度表 Week 7 EEVDF 排程器的理論基礎（Virtual Time／Eligibility／Lag 守恆）
 2026-10-05 | 演算法: 掃描線演算法 Sweep Line，事件排序計數＋優先佇列維護極值（253/1094/731/218）| CS:APP: Ch.2 §2.4.2 IEEE Floating-Point Representation | Linux: 進度表 Week 8 並行程式設計導論（Concurrency vs Parallelism、Mutex vs Semaphore）
+主線: 三個領域都在示範「用有限位元數，搭配非均勻的刻度設計，去逼近一個原本更大、更連續的數值範圍」 | 2026-10-06 | 演算法: LFU Cache 設計，雙層 HashMap + 頻率桶（Frequency Bucket）雙向鏈結串列（460/895/432）| CS:APP: Ch.2 §2.4.3 Example Numbers | Linux: 進度表 Week 8《Concurrency Primer》導讀（atomic 操作、CAS、六種 Memory Ordering）
 <!-- LOG END -->
