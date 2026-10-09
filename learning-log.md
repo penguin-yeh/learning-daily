@@ -44,4 +44,5 @@
 2026-10-04 | 演算法: 圖論進階 Tarjan 低鏈值技巧——強連通分量(SCC)、橋、割點（1192/802/2360）| CS:APP: Ch.2 §2.4.1 Fractional Binary Numbers | Linux: 進度表 Week 7 EEVDF 排程器的理論基礎（Virtual Time／Eligibility／Lag 守恆）
 2026-10-05 | 演算法: 掃描線演算法 Sweep Line，事件排序計數＋優先佇列維護極值（253/1094/731/218）| CS:APP: Ch.2 §2.4.2 IEEE Floating-Point Representation | Linux: 進度表 Week 8 並行程式設計導論（Concurrency vs Parallelism、Mutex vs Semaphore）
 主線: 三個領域今天都在講「漸進式」設計——Floyd-Warshall 讓答案隨中繼點數 k 逐步逼近正解、denormalized number 用漸進式下溢取代斷層歸零、coroutine 用合作式讓出取代搶佔式中斷 | 2026-10-08 | 演算法: 圖論全對最短路徑 Floyd-Warshall 演算法（1334/1462/2976）| CS:APP: Ch.2 §2.4.3 Example Numbers | Linux: 並行程式設計：排程器原理（Coroutine 與使用者層級排程）
+主線: 三個領域今天都在處理「有多個合法可能性、卻需要一套固定規則選出唯一確定結果」——minimax 在對手走法中取出最保守的最佳分差、IEEE 754 捨入規則在無限實數中選出最接近的可表示值、記憶體模型界定哪些重排序對程式而言合法可觀察 | 2026-10-09 | 演算法: 賽局理論 Minimax 動態規劃／博弈 DP（486/877/464/1140）| CS:APP: Ch.2 §2.4.4 Rounding | Linux: 並行程式設計：執行順序（Execution Order／記憶體排序模型，sequenced-before／happens-before／x86-TSO／smp_mb）
 <!-- LOG END -->
