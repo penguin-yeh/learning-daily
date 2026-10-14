@@ -46,4 +46,5 @@
 主線: 三個領域今天都在講「漸進式」設計——Floyd-Warshall 讓答案隨中繼點數 k 逐步逼近正解、denormalized number 用漸進式下溢取代斷層歸零、coroutine 用合作式讓出取代搶佔式中斷 | 2026-10-08 | 演算法: 圖論全對最短路徑 Floyd-Warshall 演算法（1334/1462/2976）| CS:APP: Ch.2 §2.4.3 Example Numbers | Linux: 並行程式設計：排程器原理（Coroutine 與使用者層級排程）
 主線: 三個領域今天都在處理「有多個合法可能性、卻需要一套固定規則選出唯一確定結果」——minimax 在對手走法中取出最保守的最佳分差、IEEE 754 捨入規則在無限實數中選出最接近的可表示值、記憶體模型界定哪些重排序對程式而言合法可觀察 | 2026-10-09 | 演算法: 賽局理論 Minimax 動態規劃／博弈 DP（486/877/464/1140）| CS:APP: Ch.2 §2.4.4 Rounding | Linux: 並行程式設計：執行順序（Execution Order／記憶體排序模型，sequenced-before／happens-before／x86-TSO／smp_mb）
 2026-10-12 | 演算法: 回溯法 Backtracking 剪枝搜尋框架（51/52/22/37）| CS:APP: Ch.2 §2.4.5 Floating-Point Operations | Linux: 進度表 Week 9 Futex（Fast Userspace Mutex）快慢路徑設計
+2026-10-14 | 演算法: 樹上查詢技巧 LCA 最低共同祖先與倍增法 Binary Lifting（236/1483/1740/2846）| CS:APP: Ch.2 §2.4.6 Floating Point in C（Ch.2 最後一節）| Linux: 進度表 Week 9 事件驅動 I/O 模型演化（Blocking→select/poll→epoll→io_uring）
 <!-- LOG END -->
