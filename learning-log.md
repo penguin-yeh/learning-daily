@@ -48,4 +48,5 @@
 2026-10-12 | 演算法: 回溯法 Backtracking 剪枝搜尋框架（51/52/22/37）| CS:APP: Ch.2 §2.4.5 Floating-Point Operations | Linux: 進度表 Week 9 Futex（Fast Userspace Mutex）快慢路徑設計
 主線: 什麼時候才能安心跨過原本的限制、放下多餘的戒備（tight 旗標／精度門檻／寬限期）| 2026-10-15 | 演算法: 數位動態規劃 Digit DP（1012/902/233/357）| CS:APP: Ch.2 §2.4.6 Floating Point in C | Linux: 進度表 Week 9 RCU（Read-Copy-Update）同步機制
 主線: 三個領域今天都在講「如何用嚴謹的論證，事先證明某件事情一定有限／安全，而不是靠執行時賭運氣」（單調佇列的攤銷分析／二補數邊界與浮點機器精度的推導／eBPF verifier 的靜態終止性證明）| 2026-10-16 | 演算法: 單調雙端佇列 Monotonic Deque，滑動窗口最大值及其變形（239/1438/1696/862）| CS:APP: Ch.2 §2.5 Summary（全章總結） | Linux: 進度表 Week 9 透過 eBPF 觀察作業系統行為
+主線: 三個領域今天都在講「歷史包袱如何塑造現在的設計」——x86 ISA 從 8086 疊加到 x86-64、Itanium 這條「乾淨設計」的死路（Linux v6.7 已移除對它的支援）同時出現在 CS:APP 與 Linux 兩邊，多源 BFS 的虛擬超級源點則是手法相反、殊途同歸 | 2026-10-18 | 演算法: 多源 BFS（Multi-Source BFS）與 0-1 BFS（994/1091/542/1368）| CS:APP: Ch.3 3.1 A Historical Perspective | Linux: 進度表 Week 10 現代微處理器架構基礎：管線化、超純量與亂序執行
 <!-- LOG END -->
