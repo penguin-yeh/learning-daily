@@ -48,4 +48,5 @@
 2026-10-12 | 演算法: 回溯法 Backtracking 剪枝搜尋框架（51/52/22/37）| CS:APP: Ch.2 §2.4.5 Floating-Point Operations | Linux: 進度表 Week 9 Futex（Fast Userspace Mutex）快慢路徑設計
 主線: 什麼時候才能安心跨過原本的限制、放下多餘的戒備（tight 旗標／精度門檻／寬限期）| 2026-10-15 | 演算法: 數位動態規劃 Digit DP（1012/902/233/357）| CS:APP: Ch.2 §2.4.6 Floating Point in C | Linux: 進度表 Week 9 RCU（Read-Copy-Update）同步機制
 主線: 三個領域今天都在講「如何用嚴謹的論證，事先證明某件事情一定有限／安全，而不是靠執行時賭運氣」（單調佇列的攤銷分析／二補數邊界與浮點機器精度的推導／eBPF verifier 的靜態終止性證明）| 2026-10-16 | 演算法: 單調雙端佇列 Monotonic Deque，滑動窗口最大值及其變形（239/1438/1696/862）| CS:APP: Ch.2 §2.5 Summary（全章總結） | Linux: 進度表 Week 9 透過 eBPF 觀察作業系統行為
+2026-10-19 | 演算法: 矩陣路徑動態規劃 Grid DP（62/63/64/174）| CS:APP: Ch.3 §3.1 A Historical Perspective | Linux: 進度表 Week 9 Linux 2.4 的 O(n) 排程器（goodness() 啟發式評分與全域 runqueue 掃描瓶頸）
 <!-- LOG END -->
