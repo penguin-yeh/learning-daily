@@ -49,4 +49,5 @@
 主線: 什麼時候才能安心跨過原本的限制、放下多餘的戒備（tight 旗標／精度門檻／寬限期）| 2026-10-15 | 演算法: 數位動態規劃 Digit DP（1012/902/233/357）| CS:APP: Ch.2 §2.4.6 Floating Point in C | Linux: 進度表 Week 9 RCU（Read-Copy-Update）同步機制
 主線: 三個領域今天都在講「如何用嚴謹的論證，事先證明某件事情一定有限／安全，而不是靠執行時賭運氣」（單調佇列的攤銷分析／二補數邊界與浮點機器精度的推導／eBPF verifier 的靜態終止性證明）| 2026-10-16 | 演算法: 單調雙端佇列 Monotonic Deque，滑動窗口最大值及其變形（239/1438/1696/862）| CS:APP: Ch.2 §2.5 Summary（全章總結） | Linux: 進度表 Week 9 透過 eBPF 觀察作業系統行為
 2026-10-19 | 演算法: 矩陣路徑動態規劃 Grid DP（62/63/64/174）| CS:APP: Ch.3 §3.1 A Historical Perspective | Linux: 進度表 Week 9 Linux 2.4 的 O(n) 排程器（goodness() 啟發式評分與全域 runqueue 掃描瓶頸）
+主線: 三個領域今天都繞著「做決定」這件事——CS:APP 講一條指令怎麼被編碼成位元組、Linux 講 CPU 怎麼用分支預測器賭條件分支走向、BST 搜尋正是一連串往左或往右的條件分支 | 2026-10-22 | 演算法: 二元搜尋樹（BST）性質與中序遍歷應用（98/230/530/235）| CS:APP: Ch.3 §3.2 Program Encodings | Linux: 進度表 Week 10 現代處理器設計：管線化、超純量與記憶體牆
 <!-- LOG END -->
