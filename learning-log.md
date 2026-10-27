@@ -50,4 +50,5 @@
 主線: 三個領域今天都在講「如何用嚴謹的論證，事先證明某件事情一定有限／安全，而不是靠執行時賭運氣」（單調佇列的攤銷分析／二補數邊界與浮點機器精度的推導／eBPF verifier 的靜態終止性證明）| 2026-10-16 | 演算法: 單調雙端佇列 Monotonic Deque，滑動窗口最大值及其變形（239/1438/1696/862）| CS:APP: Ch.2 §2.5 Summary（全章總結） | Linux: 進度表 Week 9 透過 eBPF 觀察作業系統行為
 2026-10-19 | 演算法: 矩陣路徑動態規劃 Grid DP（62/63/64/174）| CS:APP: Ch.3 §3.1 A Historical Perspective | Linux: 進度表 Week 9 Linux 2.4 的 O(n) 排程器（goodness() 啟發式評分與全域 runqueue 掃描瓶頸）
 2026-10-26 | 演算法: 樹上最低共同祖先 LCA，遞迴解法／Binary Lifting 倍增法／Euler Tour + Sparse Table（236/235/1650/1123）| CS:APP: Ch.3 §3.2 Program Encodings | Linux: 進度表 Week 10 C11/C++11 並行記憶體模型（atomic、memory_order、happens-before）
+2026-10-27 | 演算法: 雙堆技巧 Two Heaps／資料流中位數維護與 Lazy Deletion 延伸（295/480/1825/4）| CS:APP: Ch.3 §3.3 Data Formats | Linux: 進度表 Week 10 現代處理器設計：原理與關鍵特徵（Pipeline／Superscalar／OOO Execution／分支預測）
 <!-- LOG END -->
