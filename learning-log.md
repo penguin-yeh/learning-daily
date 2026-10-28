@@ -51,4 +51,5 @@
 2026-10-19 | 演算法: 矩陣路徑動態規劃 Grid DP（62/63/64/174）| CS:APP: Ch.3 §3.1 A Historical Perspective | Linux: 進度表 Week 9 Linux 2.4 的 O(n) 排程器（goodness() 啟發式評分與全域 runqueue 掃描瓶頸）
 2026-10-26 | 演算法: 樹上最低共同祖先 LCA，遞迴解法／Binary Lifting 倍增法／Euler Tour + Sparse Table（236/235/1650/1123）| CS:APP: Ch.3 §3.2 Program Encodings | Linux: 進度表 Week 10 C11/C++11 並行記憶體模型（atomic、memory_order、happens-before）
 2026-10-27 | 演算法: 雙堆技巧 Two Heaps／資料流中位數維護與 Lazy Deletion 延伸（295/480/1825/4）| CS:APP: Ch.3 §3.3 Data Formats | Linux: 進度表 Week 10 現代處理器設計：原理與關鍵特徵（Pipeline／Superscalar／OOO Execution／分支預測）
+主線: 把一件事拆成立即要做的最小核心、與可以延後或增量完成的其餘部分 | 2026-10-28 | 演算法: 滾動雜湊 Rolling Hash／多項式雜湊 + 二分搜尋答案應用（1044/187/1316/1698）| CS:APP: Ch.3 §3.4 Accessing Information | Linux: 進度表 Week 10 Linux 核心中斷處理與現代架構考量（Top Half/Bottom Half、softirq/tasklet/workqueue、Threaded IRQ、GIC-400）
 <!-- LOG END -->
