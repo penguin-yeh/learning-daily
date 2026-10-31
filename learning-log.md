@@ -54,4 +54,5 @@
 主線: 把一件事拆成立即要做的最小核心、與可以延後或增量完成的其餘部分 | 2026-10-28 | 演算法: 滾動雜湊 Rolling Hash／多項式雜湊 + 二分搜尋答案應用（1044/187/1316/1698）| CS:APP: Ch.3 §3.4 Accessing Information | Linux: 進度表 Week 10 Linux 核心中斷處理與現代架構考量（Top Half/Bottom Half、softirq/tasklet/workqueue、Threaded IRQ、GIC-400）
 2026-10-29 | 演算法: Quickselect 快速選取演算法（215/347/973/324）| CS:APP: Ch.3 §3.5 Arithmetic and Logical Operations | Linux: 進度表 Week 10 多核處理器與 spinlock
 主線: 先用便宜、局部的手段頂著，真的撐不住才付出昂貴代價（Kahn's 入度遞減／cmov 資料流／futex 先自旋再睡） | 2026-10-30 | 演算法: 拓撲排序 Topological Sort（Kahn's Algorithm／BFS 與 DFS 後序兩種實作）（207/210/802/1857）| CS:APP: Ch.3 §3.6 Control（條件碼、跳轉指令、迴圈與 switch 語句的機器碼實現）| Linux: 進度表 Week 12 並行程式設計：以 futex 實作輕量級 Mutex Lock（Spin-then-Block 與 Priority-Inheritance Mutex）
+主線: 三個領域今天都在談如何讓多方安全共用同一份已經算好的資源或資訊，不必每次從頭重算（換根法重用子樹答案／呼叫慣例共用暫存器與堆疊／kref 讓多方共享同一核心物件直到安全釋放） | 2026-10-31 | 演算法: 樹形動態規劃 Tree DP（後序聚合、選/不選兩態、換根法 Rerooting）（543/124/337/310）| CS:APP: Ch.3 §3.7 Procedures | Linux: 進度表 Week 12 案例：Reference Count 參考計數（kref／refcount_t 與 RCU 的取捨）
 <!-- LOG END -->
