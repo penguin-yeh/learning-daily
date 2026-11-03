@@ -55,4 +55,5 @@
 2026-10-29 | 演算法: Quickselect 快速選取演算法（215/347/973/324）| CS:APP: Ch.3 §3.5 Arithmetic and Logical Operations | Linux: 進度表 Week 10 多核處理器與 spinlock
 主線: 先用便宜、局部的手段頂著，真的撐不住才付出昂貴代價（Kahn's 入度遞減／cmov 資料流／futex 先自旋再睡） | 2026-10-30 | 演算法: 拓撲排序 Topological Sort（Kahn's Algorithm／BFS 與 DFS 後序兩種實作）（207/210/802/1857）| CS:APP: Ch.3 §3.6 Control（條件碼、跳轉指令、迴圈與 switch 語句的機器碼實現）| Linux: 進度表 Week 12 並行程式設計：以 futex 實作輕量級 Mutex Lock（Spin-then-Block 與 Priority-Inheritance Mutex）
 主線: 三個領域今天都在講「如何正確判斷一段生命週期何時該結束」（procedure call 靠呼叫堆疊的巢狀 push/pop、reference count 靠計數器歸零並用飽和語意防止算錯、多源 BFS 靠佇列耗盡決定搜尋何時結束） | 2026-11-02 | 演算法: 多源廣度優先搜尋 Multi-source BFS（994/542/1765/1162）| CS:APP: Ch.3 §3.7 Procedures（程序呼叫機制：Stack Frame、呼叫慣例與遞迴支援）| Linux: 進度表 Week 12 並行程式設計案例：Reference Count（kref／refcount_t 與飽和語意）
+主線: 用簡單的線性/分層規則把看似複雜的多維或多層結構攤平成可快速計算的答案 | 2026-11-03 | 演算法: 二分圖最大匹配與網路流基礎，Max-Flow Min-Cut／Ford-Fulkerson／Edmonds-Karp／Dinic's Algorithm（1349/1066/1947）| CS:APP: Ch.3 §3.8 Array Allocation and Access | Linux: 進度表 Week 12 多核處理器排程：Scheduling Domains 與跨 CPU 負載平衡（sched_domain／sched_group）
 <!-- LOG END -->
