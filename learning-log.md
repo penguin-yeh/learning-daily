@@ -57,4 +57,5 @@
 主線: 三個領域今天都在講「如何正確判斷一段生命週期何時該結束」（procedure call 靠呼叫堆疊的巢狀 push/pop、reference count 靠計數器歸零並用飽和語意防止算錯、多源 BFS 靠佇列耗盡決定搜尋何時結束） | 2026-11-02 | 演算法: 多源廣度優先搜尋 Multi-source BFS（994/542/1765/1162）| CS:APP: Ch.3 §3.7 Procedures（程序呼叫機制：Stack Frame、呼叫慣例與遞迴支援）| Linux: 進度表 Week 12 並行程式設計案例：Reference Count（kref／refcount_t 與飽和語意）
 主線: 用簡單的線性/分層規則把看似複雜的多維或多層結構攤平成可快速計算的答案 | 2026-11-03 | 演算法: 二分圖最大匹配與網路流基礎，Max-Flow Min-Cut／Ford-Fulkerson／Edmonds-Karp／Dinic's Algorithm（1349/1066/1947）| CS:APP: Ch.3 §3.8 Array Allocation and Access | Linux: 進度表 Week 12 多核處理器排程：Scheduling Domains 與跨 CPU 負載平衡（sched_domain／sched_group）
 主線: 三個領域今天都在講同一件事——同樣的資料，排列方式不同，效能就天差地別 | 2026-11-04 | 演算法: Trie（字典樹）進階應用：多字串搜尋與剪枝模式（Word Search II / Word Break）（208/212/139/140）| CS:APP: Ch.3 §3.9 Heterogeneous Data Structures | Linux: 進度表 Week 12 CS:APP 第 6 章重點提示與 Cache Line 對齊：避免 False Sharing
+2026-11-06 | 演算法: 蓄水池抽樣 Reservoir Sampling（382/398/528/710）| CS:APP: Ch.3 §3.10 Combining Control and Data in Machine-Level Programs | Linux: 進度表 Week 12 CPU 快取（CPU Caches，Ulrich Drepper 論文／jserv cpumemory-zhtw 翻譯）
 <!-- LOG END -->
