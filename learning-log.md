@@ -58,4 +58,5 @@
 主線: 用簡單的線性/分層規則把看似複雜的多維或多層結構攤平成可快速計算的答案 | 2026-11-03 | 演算法: 二分圖最大匹配與網路流基礎，Max-Flow Min-Cut／Ford-Fulkerson／Edmonds-Karp／Dinic's Algorithm（1349/1066/1947）| CS:APP: Ch.3 §3.8 Array Allocation and Access | Linux: 進度表 Week 12 多核處理器排程：Scheduling Domains 與跨 CPU 負載平衡（sched_domain／sched_group）
 主線: 三個領域今天都在講同一件事——同樣的資料，排列方式不同，效能就天差地別 | 2026-11-04 | 演算法: Trie（字典樹）進階應用：多字串搜尋與剪枝模式（Word Search II / Word Break）（208/212/139/140）| CS:APP: Ch.3 §3.9 Heterogeneous Data Structures | Linux: 進度表 Week 12 CS:APP 第 6 章重點提示與 Cache Line 對齊：避免 False Sharing
 2026-11-06 | 演算法: 蓄水池抽樣 Reservoir Sampling（382/398/528/710）| CS:APP: Ch.3 §3.10 Combining Control and Data in Machine-Level Programs | Linux: 進度表 Week 12 CPU 快取（CPU Caches，Ulrich Drepper 論文／jserv cpumemory-zhtw 翻譯）
+2026-11-07 | 演算法: 樹形動態規劃 Tree DP（337/543/124/968）| CS:APP: Ch.3 §3.11 Floating-Point Code | Linux: 進度表 Week 12 核心記憶體管理：分頁、page fault、kmalloc／vmalloc、Memory Overcommit（CS:APP 第9章重點提示欄位，接續 jserv linux-memory 筆記）
 <!-- LOG END -->
