@@ -59,4 +59,5 @@
 主線: 三個領域今天都在講同一件事——同樣的資料，排列方式不同，效能就天差地別 | 2026-11-04 | 演算法: Trie（字典樹）進階應用：多字串搜尋與剪枝模式（Word Search II / Word Break）（208/212/139/140）| CS:APP: Ch.3 §3.9 Heterogeneous Data Structures | Linux: 進度表 Week 12 CS:APP 第 6 章重點提示與 Cache Line 對齊：避免 False Sharing
 2026-11-06 | 演算法: 蓄水池抽樣 Reservoir Sampling（382/398/528/710）| CS:APP: Ch.3 §3.10 Combining Control and Data in Machine-Level Programs | Linux: 進度表 Week 12 CPU 快取（CPU Caches，Ulrich Drepper 論文／jserv cpumemory-zhtw 翻譯）
 2026-11-07 | 演算法: 樹形動態規劃 Tree DP（337/543/124/968）| CS:APP: Ch.3 §3.11 Floating-Point Code | Linux: 進度表 Week 12 核心記憶體管理：分頁、page fault、kmalloc／vmalloc、Memory Overcommit（CS:APP 第9章重點提示欄位，接續 jserv linux-memory 筆記）
+2026-11-08 | 演算法: Sliding Window 滑動視窗，固定窗與可變窗兩種模板（3/76/1004/567/438）| CS:APP: Ch.3 §3.12 Summary（第三章總結） | Linux: 進度表 Week 13 POSIX Shared Memory（POSIX 共享記憶體機制，shm_open／mmap／ftruncate，接續 11/07 的 jserv linux-memory 筆記）
 <!-- LOG END -->
