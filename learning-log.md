@@ -60,4 +60,5 @@
 2026-11-06 | 演算法: 蓄水池抽樣 Reservoir Sampling（382/398/528/710）| CS:APP: Ch.3 §3.10 Combining Control and Data in Machine-Level Programs | Linux: 進度表 Week 12 CPU 快取（CPU Caches，Ulrich Drepper 論文／jserv cpumemory-zhtw 翻譯）
 2026-11-07 | 演算法: 樹形動態規劃 Tree DP（337/543/124/968）| CS:APP: Ch.3 §3.11 Floating-Point Code | Linux: 進度表 Week 12 核心記憶體管理：分頁、page fault、kmalloc／vmalloc、Memory Overcommit（CS:APP 第9章重點提示欄位，接續 jserv linux-memory 筆記）
 2026-11-08 | 演算法: Sliding Window 滑動視窗，固定窗與可變窗兩種模板（3/76/1004/567/438）| CS:APP: Ch.3 §3.12 Summary（第三章總結） | Linux: 進度表 Week 13 POSIX Shared Memory（POSIX 共享記憶體機制，shm_open／mmap／ftruncate，接續 11/07 的 jserv linux-memory 筆記）
+主線: 同一塊原始材料，套上不同的規則就有天差地別的待遇（Y86-64 的 icode/ifun、/dev/mem 的 devmem_is_allowed()、LFU 的存取頻率） | 2026-11-09 | 演算法: 資料結構設計進階 LFU Cache（Least Frequently Used）O(1) 存取設計，含 TinyLFU／Redis allkeys-lfu 變形（460/981/1146/1352）| CS:APP: Ch.4 §4.1 The Y86-64 Instruction Set Architecture | Linux: 進度表 Week 13 /dev/mem 裝置（實體記憶體的字元裝置介面，devmem_is_allowed()）
 <!-- LOG END -->
