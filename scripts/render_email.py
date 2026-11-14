@@ -102,7 +102,7 @@ JSON 格式（欄位說明）：
 
 輸出：完整 <html>...</html> 字串（inline CSS，Gmail 相容），並在 stderr 印出建議的頁面標題。
 
-設計方向：「技術手札」—— 見 STYLE.md。全部行內 CSS、寬 600px、table 版面；
+設計方向：「技術手札」—— 見 STYLE.md。全部行內 CSS、寬 820px、table 版面；
 三個領域（演算法／CS:APP／Linux Kernel）各自分色（藍／銅橘／森綠），領域標籤為實心 tab，
 報頭下方有「今日目錄」。所有顏色與字型集中在下方 COLORS／字型常數。
 """
@@ -354,7 +354,7 @@ def render(data: dict) -> str:
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:{COLORS['outer']};padding:28px 12px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:{COLORS['paper']};border:1px solid {COLORS['rule']};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:820px;background-color:{COLORS['paper']};border:1px solid {COLORS['rule']};">
           <tr>
             <td style="padding:32px 24px 36px 24px;">
               <div style="{label_css(COLORS['muted'])}">DAILY LEARNING NOTE</div>

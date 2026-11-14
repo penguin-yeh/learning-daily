@@ -9,7 +9,7 @@
 1. **全部使用行內 CSS**，不准有 `<style>` 區塊、不准外部資源。Gmail 會拿掉 `<style>`、`background` 簡寫、`position`、`display:grid`，所以：
    - 底色一律寫 `background-color`，不要寫 `background`。
    - 版面用 `<table role="presentation">`，不要用 grid／flex。
-2. 信件寬度上限 **600px**（外層 `width="100%"` 搭配 `max-width:600px`；不要寫 `width="600"`，手機會橫向捲動），手機不可橫向捲動。
+2. 頁面寬度上限 **820px**（外層 `width="100%"` 搭配 `max-width:820px`；不要寫 `width="820"`，手機會橫向捲動）。2026-11 從 600px 放寬成 820px，因為不再寄 email（見 README），桌面瀏覽 600px 太窄浪費螢幕；放寬只動 `max-width`，外層仍是 `width="100%"`，手機一樣會縮到螢幕寬、不會橫向捲動。
 3. 不准：漸層、陰影、emoji 裝飾（除了下面指定的 📄 與 🔢）、圖片。
 4. 繁體中文。程式碼、組語、路徑與行號必須**逐字抄錄真實來源**，找不到就整組省略，不准編造。
 5. 深度優先：每個領域只講一個具體的窄子主題（見 `ROUTINE_PROMPT.md`），版面不要為了好看而加內容。
