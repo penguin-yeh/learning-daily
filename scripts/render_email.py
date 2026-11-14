@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-render_email.py — 產生「每日學習信」的固定風格 HTML 內容。
+render_email.py — 產生「每日學習筆記」的固定風格 HTML（風格規範見 STYLE.md「技術手札」）。
 
 用途：
 每天的 Routine 只需要把當天的教學內容整理成一份 JSON（結構見下方 SAMPLE），
 餵給這支 script，就能得到一份排版、配色都固定一致的 HTML email 內容，
-直接丟給 Gmail 的 send_message(htmlBody=...) 使用。
+存成 YYYY-MM-DD.html 與 index.html 後 commit 並 push 到 main，由 GitHub Pages 發佈（不再寄 email）。
 
 用法：
     python3 scripts/render_email.py input.json > output.html
@@ -94,19 +94,17 @@ JSON 格式（欄位說明）：
 進階概念，直接在該處內文插入以下固定樣式的行內框（依所在領域套對應強調色，不要用其他顏色），
 不要全部塞進 tip_html —— tip_html 只留給該子項目結尾的單一整體補充：
 
-    <div style="margin:10px 0;padding:10px 14px;border:1px dashed #e7e4dd;border-radius:6px;font-size:13px;line-height:1.6;color:#918e85;">
+    <div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;">
       <b style="color:{ACCENT};">名詞</b>　解釋文字...
     </div>
 
-其中 {ACCENT} 依領域代入：algo → #7089a0，csapp → #c98a4b，linux → #5f8575。
+其中 {ACCENT} 依領域代入：algo → #2f5f9e，csapp → #b0561a，linux → #2c7357。
 
-輸出：完整 <html>...</html> 字串（inline CSS，Gmail 相容），並在 stderr 印出建議的 email 主旨。
+輸出：完整 <html>...</html> 字串（inline CSS，Gmail 相容），並在 stderr 印出建議的頁面標題。
 
-設計方向：北歐極簡風 —— 單一無襯線字體、大量留白、克制但不失溫度的用色。
-不設大標題，日期後直接接內容；小標題與段落左側重點線用同一個強調色標記，
-段落之間靠留白與極細分隔線區隔；有補充內容時，用一個虛線圍住的區域呈現。
-三個領域（演算法／CS:APP／Linux Kernel）各自狜立分色，依序排列，
-每個領域內的三個子項目用小號編號（01/02/03）標示，弱化但可辨識。
+設計方向：「技術手札」—— 見 STYLE.md。全部行內 CSS、寬 600px、table 版面；
+三個領域（演算法／CS:APP／Linux Kernel）各自分色（藍／銅橘／森綠），領域標籤為實心 tab，
+報頭下方有「今日目錄」。所有顏色與字型集中在下方 COLORS／字型常數。
 """
 
 import json
@@ -115,38 +113,50 @@ import sys
 
 # ---- 固定視覺風格（所有顏色/字體都集中在這裡，確保每天輸出風格一致）----
 COLORS = {
-    "paper": "#faf9f7",
-    "ink": "#2a2a27",
-    "muted": "#918e85",
-    "rule": "#e7e4dd",
-    "accent": "#7089a0",    # 灰藍：連結、頁首等全篇通用元素
-    "algo": "#7089a0",      # 灰藍：演算法區塊小標題／重點線
-    "csapp": "#c98a4b",     # 淺橘：CS:APP 區塊小標題／重點線
-    "linux": "#5f8575",     # 灰綠：Linux Kernel 區塊小標題／重點線
-    "review": "#a8875b",    # 複習標記專用，極少量使用
-    "derivation": "#7d5ba6", # 紫：數學推導／為什麼區塊專用，跨領域固定同一色，方便一眼辨識
-    "derivation_bg": "#f7f4fb",
-    "code_bg": "#2a2824",    # 深色：真實原始碼區塊背景，跟白話說明的淺色底明顯區隔
-    "code_text": "#e8e5de",
+    "outer": "#f4f1ea",      # 外層底色
+    "paper": "#fffefb",      # 信紙／頁面色
+    "ink": "#22252b",
+    "muted": "#7a766b",
+    "rule": "#e2ddd0",
+    "algo": "#2f5f9e",       # 藍墨水：演算法
+    "csapp": "#b0561a",      # 銅橘：CS:APP
+    "linux": "#2c7357",      # 森綠：Linux Kernel
+    "review": "#a8751f",     # 複習標記專用
+    "derivation": "#6b4a9a", # 紫：數學推導專用，跨領域固定同一色
+    "derivation_bg": "#f6f2fb",
+    "code_bg": "#22252b",    # 深色：真實原始碼區塊背景
+    "code_text": "#ece8dd",
     "code_muted": "#a39d90",
 }
 
-CODE_FONT = "ui-monospace,'SF Mono',Menlo,Consolas,monospace"
-
+MONO = "ui-monospace,'SF Mono',Menlo,Consolas,monospace"
+SERIF = "Georgia,'Noto Serif TC',serif"
 FONT = "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif"
+CODE_FONT = MONO
+
+WEEKDAYS = "一二三四五六日"
+
+LEGACY_COLORS = {"#e7e4dd": COLORS["rule"], "#918e85": COLORS["muted"], "#7089a0": COLORS["algo"],
+                 "#c98a4b": COLORS["csapp"], "#5f8575": COLORS["linux"]}
 
 
 def esc(s: str) -> str:
     return (s or "").replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
 
 
-# 內文裡隨手寫的 <code>...</code>／<pre>...</pre>（例如 explanation_html／tip_html／
-# derivation_html 裡穿插的行內程式碼），固定套上深色底、跟 render_source() 的原始碼
-# 大區塊同一套配色，不管當天內容產生時有沒有手動加 style，樣式都由這支腳本統一決定，
-# 不會每天長得不一樣。已經自帶 style 屬性的 <code>/<pre> 不會被覆蓋。
+def weekday_label(date: str) -> str:
+    from datetime import datetime
+    try:
+        d = datetime.strptime(date, "%Y-%m-%d")
+        return f"{date}（週{WEEKDAYS[d.weekday()]}）"
+    except ValueError:
+        return date
+
+
+# 內文裡隨手寫的 <code>...</code>／<pre>...</pre>，固定套上深色底，
+# 樣式由這支腳本統一決定。已經自帶 style 屬性的標籤不會被覆蓋。
+# 用 background-color（而非 background 簡寫）：Gmail 對簡寫支援不穩定。
 def _code_css() -> str:
-    # 用 background-color（而非 background 簡寫）：Gmail 對 inline style 裡的
-    # background 簡寫支援不穩定，常常整條被拿掉，只有 background-color 能穩定生效。
     return (
         f"background-color:{COLORS['code_bg']};color:{COLORS['code_text']};"
         f"padding:1px 6px;border-radius:4px;font-family:{CODE_FONT};font-size:0.92em;"
@@ -156,7 +166,7 @@ def _code_css() -> str:
 def _pre_css() -> str:
     return (
         f"display:block;margin:10px 0;background-color:{COLORS['code_bg']};color:{COLORS['code_text']};"
-        f"padding:12px 14px;border-radius:6px;font-family:{CODE_FONT};font-size:12.5px;"
+        f"padding:12px 14px;border-radius:4px;font-family:{CODE_FONT};font-size:12.5px;"
         f"line-height:1.6;white-space:pre-wrap;word-break:break-word;overflow-x:auto;"
     )
 
@@ -165,9 +175,16 @@ def autostyle_code(html: str) -> str:
     """幫內文裡沒有自帶 style 的 <code>/<pre> 標籤補上固定的深色底樣式。"""
     if not html:
         return html
+    # 舊版配色（北歐極簡）自動換成新色票，讓舊格式的內文也一致
+    for old_c, new_c in LEGACY_COLORS.items():
+        html = html.replace(old_c, new_c)
     html = re.sub(r"<code(?![^>]*\bstyle=)>", f'<code style="{_code_css()}">', html)
     html = re.sub(r"<pre(?![^>]*\bstyle=)>", f'<pre style="{_pre_css()}">', html)
     return html
+
+
+def label_css(color: str) -> str:
+    return f"font-family:{MONO};font-size:11px;letter-spacing:1.5px;color:{color};text-transform:uppercase;"
 
 
 def render_problem(p: dict, accent: str) -> str:
@@ -176,13 +193,13 @@ def render_problem(p: dict, accent: str) -> str:
     url = p.get("url", "#")
     note = esc(p.get("note", ""))
     note_html = (
-        f'<div style="margin-top:2px;color:{COLORS["muted"]};font-size:13px;line-height:1.6;">{note}</div>'
+        f'<div style="margin-top:2px;color:{COLORS["muted"]};font-size:13px;line-height:1.6;padding-left:2px;">{note}</div>'
         if note else ""
     )
     return f"""
     <div style="margin-top:10px;">
-      <span style="color:{accent};font-size:13px;">{pid}　</span>
-      <a href="{url}" style="color:{COLORS['ink']};font-size:15px;text-decoration:none;border-bottom:1px solid {COLORS['rule']};">{title}</a>
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid {accent};border-radius:3px;padding:0 6px;font-family:{MONO};font-size:12px;color:{accent};">{pid}</span>
+      <a href="{url}" style="margin-left:8px;color:{COLORS['ink']};font-size:15px;text-decoration:underline;">{title}</a>
       {note_html}
     </div>"""
 
@@ -191,9 +208,9 @@ def render_tip(accent: str, tip_html: str) -> str:
     if not tip_html:
         return ""
     return f"""
-    <div style="margin-top:12px;border:1px dashed {COLORS['rule']};border-radius:6px;padding:12px 16px;">
-      <div style="font-size:11px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">補充</div>
-      <div style="margin-top:6px;font-size:13.5px;line-height:1.7;color:{COLORS['muted']};">
+    <div style="margin-top:14px;border:1px dashed {COLORS['rule']};border-radius:4px;padding:12px 16px;">
+      <div style="{label_css(accent)}">NOTE · 補充</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:{COLORS['muted']};">
         {autostyle_code(tip_html)}
       </div>
     </div>"""
@@ -204,9 +221,9 @@ def render_derivation(derivation_html: str) -> str:
         return ""
     accent = COLORS["derivation"]
     return f"""
-    <div style="margin-top:12px;border:1px solid {accent};background-color:{COLORS['derivation_bg']};border-radius:6px;padding:12px 16px;">
-      <div style="font-size:11px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">🔢 數學推導</div>
-      <div style="margin-top:6px;font-size:13.5px;line-height:1.7;color:{COLORS['ink']};">
+    <div style="margin-top:14px;border:1px solid {accent};background-color:{COLORS['derivation_bg']};border-radius:4px;padding:12px 16px;">
+      <div style="{label_css(accent)}">🔢 數學推導</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:{COLORS['ink']};">
         {autostyle_code(derivation_html)}
       </div>
     </div>"""
@@ -222,37 +239,31 @@ def render_source(label: str, url: str, code: str) -> str:
             f'<a href="{url}" style="color:{COLORS["code_muted"]};text-decoration:underline;">{label_text}</a>'
             if url else label_text
         )
-        label_html = f'<div style="font-size:12px;color:{COLORS["code_muted"]};margin-bottom:8px;">{label_inner}</div>'
+        label_html = f'<div style="margin-top:8px;font-size:12px;color:{COLORS["code_muted"]};">{label_inner}</div>'
     return f"""
-    <div style="margin-top:12px;border-radius:6px;padding:14px 16px;background-color:{COLORS['code_bg']};">
-      <div style="font-size:11px;letter-spacing:.08em;color:{COLORS['code_muted']};text-transform:uppercase;">📄 原始碼</div>
-      <div style="margin-top:8px;">
-        {label_html}<pre style="margin:0;background-color:{COLORS['code_bg']};font-family:{CODE_FONT};font-size:12.5px;line-height:1.6;color:{COLORS['code_text']};white-space:pre-wrap;word-break:break-word;">{esc(code)}</pre>
-      </div>
+    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:{COLORS['code_bg']};">
+      <div style="{label_css(COLORS['code_muted'])}">📄 原始碼</div>
+      {label_html}<pre style="margin:8px 0 0;font-family:{CODE_FONT};font-size:12.5px;line-height:1.6;color:{COLORS['code_text']};white-space:pre-wrap;word-break:break-word;">{esc(code)}</pre>
     </div>"""
 
 
 def render_item(accent: str, index: int, heading: str, body_html: str, tip_html: str = "", extra_html: str = "", derivation_html: str = "", source_label: str = "", source_url: str = "", source_code: str = "") -> str:
-    top_margin = "0" if index == 0 else "26px"
+    top_margin = "20px" if index == 0 else "30px"
     return f"""
     <div style="margin-top:{top_margin};">
-      <div style="font-size:11px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;letter-spacing:.04em;color:{accent};opacity:.7;">
-        {index + 1:02d}
-      </div>
-      <div style="margin-top:4px;font-size:17px;font-weight:600;color:{accent};">
-        {esc(heading)}
-      </div>
-      <div style="margin-top:10px;border-left:3px solid {accent};padding-left:14px;font-size:14px;line-height:1.8;color:{COLORS['ink']};">
+      <div style="font-family:{MONO};font-size:11px;color:{accent};letter-spacing:1px;">§{index + 1:02d}</div>
+      <div style="margin-top:4px;font-family:{SERIF};font-size:20px;font-weight:700;line-height:1.4;color:{accent};">{esc(heading)}</div>
+      <div style="margin-top:12px;border-left:3px solid {accent};padding-left:14px;font-size:14.5px;line-height:1.85;color:{COLORS['ink']};">
         {autostyle_code(body_html)}
       </div>
+      {extra_html}
       {render_derivation(derivation_html)}
       {render_source(source_label, source_url, source_code)}
       {render_tip(accent, tip_html)}
-      {extra_html}
     </div>"""
 
 
-def render_domain(accent: str, eyebrow: str, items: list, item_heading_fn, extra_fn=None) -> str:
+def render_domain(accent: str, tab: str, items: list, item_heading_fn, extra_fn=None, first: bool = False) -> str:
     body = "".join(
         render_item(
             accent, i,
@@ -267,15 +278,27 @@ def render_domain(accent: str, eyebrow: str, items: list, item_heading_fn, extra
         )
         for i, item in enumerate(items)
     )
+    sep = "" if first else f'<div style="margin-top:34px;border-top:1px solid {COLORS["rule"]};"></div>'
     return f"""
-    <tr><td style="padding-top:36px;">
-      <div style="font-size:12px;letter-spacing:.08em;color:{accent};text-transform:uppercase;">
-        {esc(eyebrow)}
-      </div>
-      <div style="margin-top:14px;">
-        {body}
-      </div>
-    </td></tr>"""
+    {sep}
+    <div style="margin-top:28px;border-bottom:2px solid {accent};">
+      <span style="display:inline-block;background-color:{accent};color:#ffffff;padding:4px 12px;font-family:{MONO};font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">{esc(tab)}</span>
+    </div>
+    {body}"""
+
+
+def render_toc(rows: list) -> str:
+    """今日目錄：rows = [(領域簡稱, 色, 子主題)]，內容直接取自各領域標題。"""
+    trs = "".join(
+        f"""
+      <tr>
+        <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:{color};"></div></td>
+        <td width="96" style="padding:5px 0;font-family:{MONO};font-size:11.5px;color:{COLORS['muted']};">{esc(name)}</td>
+        <td style="padding:5px 0;font-size:14px;color:{COLORS['ink']};">{esc(title)}</td>
+      </tr>"""
+        for name, color, title in rows
+    )
+    return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">{trs}</table>'
 
 
 def render(data: dict) -> str:
@@ -288,62 +311,64 @@ def render(data: dict) -> str:
     sources = data.get("sources", []) or []
 
     review_tag = (
-        f'<span style="color:{COLORS["review"]};margin-left:8px;">複習</span>' if is_review else ""
+        f'<span style="margin-left:8px;padding:1px 8px;border:1px solid {COLORS["review"]};border-radius:3px;color:{COLORS["review"]};">複習</span>'
+        if is_review else ""
     )
 
     theme_html = (
-        f'<div style="margin-top:10px;font-size:13.5px;line-height:1.7;color:{COLORS["muted"]};font-style:italic;">{esc(theme)}</div>'
+        f'<div style="margin-top:14px;border-left:2px solid {COLORS["ink"]};padding-left:12px;font-family:{SERIF};font-size:14.5px;line-height:1.8;color:{COLORS["ink"]};font-style:italic;">{esc(theme)}</div>'
         if theme else ""
     )
 
+    algo_head = lambda item: item.get("topic", "")
+    csapp_head = lambda item: f'{item.get("chapter", "")}　{item.get("section", "")}'.strip("　 ")
+    linux_head = lambda item: item.get("topic", "")
+
+    toc_rows = (
+        [("演算法", COLORS["algo"], algo_head(i)) for i in algo]
+        + [("CS:APP", COLORS["csapp"], csapp_head(i)) for i in csapp]
+        + [("Linux Kernel", COLORS["linux"], linux_head(i)) for i in linux]
+    )
+
     algo_section = render_domain(
-        COLORS["algo"], "演算法 · LeetCode", algo,
-        lambda item: item.get("topic", ""),
+        COLORS["algo"], "A · 演算法 · LeetCode", algo, algo_head,
         lambda item, accent: "".join(render_problem(p, accent) for p in item.get("problems", [])),
+        first=True,
     )
+    csapp_section = render_domain(COLORS["csapp"], "B · CS:APP", csapp, csapp_head)
+    linux_section = render_domain(COLORS["linux"], "C · Linux Kernel", linux, linux_head)
 
-    csapp_section = render_domain(
-        COLORS["csapp"], "CS:APP", csapp,
-        lambda item: f'{item.get("chapter", "")}　{item.get("section", "")}'.strip("　 "),
-    )
-
-    linux_section = render_domain(
-        COLORS["linux"], "Linux Kernel", linux,
-        lambda item: item.get("topic", ""),
-    )
-
-    sources_links = "　　".join(
-        f'<a href="{s.get("url", "#")}" style="color:{COLORS["accent"]};text-decoration:none;">{esc(s.get("label", ""))}</a>'
+    sources_links = "　·　".join(
+        f'<a href="{s.get("url", "#")}" style="color:{COLORS["muted"]};text-decoration:underline;">{esc(s.get("label", ""))}</a>'
         for s in sources
     )
     sources_html = (
-        f'<div style="margin-top:24px;font-size:12px;color:{COLORS["muted"]};">{sources_links}</div>'
+        f'<div style="margin-top:34px;padding-top:14px;border-top:1px solid {COLORS["rule"]};font-family:{MONO};font-size:11.5px;line-height:2;color:{COLORS["muted"]};">{sources_links}</div>'
         if sources_links else ""
     )
 
     return f"""<!DOCTYPE html>
 <html lang="zh-Hant">
-<head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background-color:{COLORS['paper']};font-family:{FONT};">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:{COLORS['paper']};padding:40px 0;">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · {esc(date)}</title></head>
+<body style="margin:0;padding:0;background-color:{COLORS['outer']};font-family:{FONT};">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:{COLORS['outer']};padding:28px 12px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:560px;max-width:90vw;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:{COLORS['paper']};border:1px solid {COLORS['rule']};">
           <tr>
-            <td>
-              <div style="font-size:12px;color:{COLORS['muted']};">
-                {esc(date)}　每日東東{review_tag}
-              </div>
+            <td style="padding:32px 24px 36px 24px;">
+              <div style="{label_css(COLORS['muted'])}">DAILY LEARNING NOTE</div>
+              <div style="margin-top:8px;font-family:{SERIF};font-size:28px;font-weight:700;color:{COLORS['ink']};line-height:1.25;">每日東東</div>
+              <div style="margin-top:10px;font-family:{MONO};font-size:12px;color:{COLORS['muted']};">{esc(weekday_label(date))}{review_tag}</div>
               {theme_html}
-              <div style="margin-top:16px;border-bottom:1px solid {COLORS['rule']};"></div>
+              <div style="margin-top:22px;border-bottom:3px double {COLORS['ink']};"></div>
+              {render_toc(toc_rows)}
+              {algo_section}
+              {csapp_section}
+              {linux_section}
+              {sources_html}
             </td>
           </tr>
-          {algo_section}
-          <tr><td style="padding-top:32px;border-bottom:1px solid {COLORS['rule']};"></td></tr>
-          {csapp_section}
-          <tr><td style="padding-top:32px;border-bottom:1px solid {COLORS['rule']};"></td></tr>
-          {linux_section}
-          <tr><td>{sources_html}</td></tr>
         </table>
       </td>
     </tr>
@@ -361,7 +386,7 @@ def main():
     date = data.get("date", "")
     algo_topics = "、".join(i.get("topic", "") for i in data.get("algo", []))
     review_tag = "（複習）" if data.get("is_review") else ""
-    print(f"SUBJECT: 今日學習：{algo_topics}{review_tag}", file=sys.stderr)
+    print(f"TITLE: [{date}] 每日東東：{algo_topics}{review_tag}", file=sys.stderr)
 
 
 if __name__ == "__main__":

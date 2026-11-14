@@ -9,7 +9,7 @@
 1. **全部使用行內 CSS**，不准有 `<style>` 區塊、不准外部資源。Gmail 會拿掉 `<style>`、`background` 簡寫、`position`、`display:grid`，所以：
    - 底色一律寫 `background-color`，不要寫 `background`。
    - 版面用 `<table role="presentation">`，不要用 grid／flex。
-2. 信件寬度 **600px**（`width="600"`，`max-width:100%`），手機不可橫向捲動。
+2. 信件寬度上限 **600px**（外層 `width="100%"` 搭配 `max-width:600px`；不要寫 `width="600"`，手機會橫向捲動），手機不可橫向捲動。
 3. 不准：漸層、陰影、emoji 裝飾（除了下面指定的 📄 與 🔢）、圖片。
 4. 繁體中文。程式碼、組語、路徑與行號必須**逐字抄錄真實來源**，找不到就整組省略，不准編造。
 5. 深度優先：每個領域只講一個具體的窄子主題（見 `ROUTINE_PROMPT.md`），版面不要為了好看而加內容。
@@ -54,8 +54,8 @@
 <body style="margin:0;padding:0;background-color:#f4f1ea">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f1ea;padding:28px 12px">
 <tr><td align="center">
-<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:100%;background-color:#fffefb;border:1px solid #e2ddd0">
-<tr><td style="padding:32px 36px 36px 36px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#fffefb;border:1px solid #e2ddd0">
+<tr><td style="padding:32px 24px 36px 24px">
   …所有區塊（每個區塊用 <div> 或獨立 <table>）…
 </td></tr></table>
 </td></tr></table></body>

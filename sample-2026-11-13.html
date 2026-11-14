@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · 2026-11-13</title></head>
+<body style="margin:0;padding:0;background-color:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f1ea;padding:28px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#fffefb;border:1px solid #e2ddd0;">
+          <tr>
+            <td style="padding:32px 24px 36px 24px;">
+              <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#7a766b;text-transform:uppercase;">DAILY LEARNING NOTE</div>
+              <div style="margin-top:8px;font-family:Georgia,'Noto Serif TC',serif;font-size:28px;font-weight:700;color:#22252b;line-height:1.25;">每日東東</div>
+              <div style="margin-top:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#7a766b;">2026-11-13（週五）</div>
+              
+              <div style="margin-top:22px;border-bottom:3px double #22252b;"></div>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
+      <tr>
+        <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#2f5f9e;"></div></td>
+        <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">演算法</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">Aho-Corasick 自動機：多模式字串匹配</td>
+      </tr>
+      <tr>
+        <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#b0561a;"></div></td>
+        <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">CS:APP</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">Ch.4　4.1 The Y86-64 Instruction Set Architecture</td>
+      </tr>
+      <tr>
+        <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#2c7357;"></div></td>
+        <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">Linux Kernel</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">解析 Linux 共享記憶體機制：SysV／POSIX／memfd_create／dma_buf 全景比較</td>
+      </tr></table>
+              
+    
+    <div style="margin-top:28px;border-bottom:2px solid #2f5f9e;">
+      <span style="display:inline-block;background-color:#2f5f9e;color:#ffffff;padding:4px 12px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">A · 演算法 · LeetCode</span>
+    </div>
+    
+    <div style="margin-top:20px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#2f5f9e;letter-spacing:1px;">§01</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2f5f9e;">Aho-Corasick 自動機：多模式字串匹配</div>
+      <div style="margin-top:12px;border-left:3px solid #2f5f9e;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
+        <p>今天換一個全新類別：<b>多模式字串匹配（Multi-Pattern Matching）</b>。給定一組模式字串 {p₁, p₂, ..., pₖ}（例如敏感詞清單、病毒特徵碼、路由規則），以及一段長文字 S，目標是「同一次掃描」就找出所有模式分別出現在 S 的哪些位置。這跟 KMP 解的「單一模式」問題本質不同：天真的作法是對每條模式各跑一次 KMP，但這樣會重複掃描文字 k 次，當 k 很大（例如一萬條惡意網域黑名單）時就很浪費。</p><p>Aho-Corasick 的第一步是把所有模式字串插入同一棵 </p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:6px;font-size:13px;line-height:1.6;color:#7a766b"><b style="color:#2f5f9e">Trie（字典樹）</b>　一種每個節點代表一段共同前綴的樹狀結構；多個字串共享的前綴會共用同一條路徑，是字首查詢最經典的資料結構。</div>裡，並在模式結尾的節點標記 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">output=true</code>。第二步是對 trie 做 BFS，為每個節點建立失敗連結（fail link），意義與 KMP 的 failure function 一致：前綴比對失敗時，退到次佳的已知前綴繼續比。有了 fail link 之後，文字每讀一個字元就轉移一次，<b>永遠不會往回看</b>，這正是它比暴力解法快的核心。</p><p>複雜度比較：設文字長度 n、k 個模式、總長度 m、實際匹配數 z。暴力解法是 O(n·m)；對每個模式各跑一次 KMP 是 O(k·n + m)；Aho-Corasick 建構 O(m·Σ)，查詢只需 O(n + z)。</p>
+      </div>
+      
+    <div style="margin-top:10px;">
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1032</span>
+      <a href="https://leetcode.com/problems/stream-of-characters/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Stream of Characters</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">線上版本：將所有模式反轉後建自動機，每來一個字元往前走一步，查詢 O(1)</div>
+    </div>
+    <div style="margin-top:10px;">
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1065</span>
+      <a href="https://leetcode.com/problems/index-pairs-of-a-string/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Index Pairs of a String</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">離線批量找出所有模式出現的起訖區間，取代暴力雙重迴圈 O(n·m)</div>
+    </div>
+    <div style="margin-top:10px;">
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">758</span>
+      <a href="https://leetcode.com/problems/bold-words-in-string/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Bold Words in String</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">找出所有匹配區間後做區間合併（interval merge）</div>
+    </div>
+      
+    <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
+        <p>為什麼查詢階段是 O(n+z) 而不是 O(n·depth)？關鍵在攤銷分析：每次成功往前走一步，狀態的深度最多 +1；每次退回 fail link，深度一定嚴格下降。所以讀 n 個字元，深度最多上升 n 次、也最多下降 n 次，所有退回步數加總不會超過 O(n)。</p>
+      </div>
+    </div>
+      
+    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
+      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://cp-algorithms.com/string/aho_corasick.html" style="color:#a39d90;text-decoration:underline;">cp-algorithms.com · Aho-Corasick 自動機（CC BY-SA 4.0）</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">struct Vertex {
+    int next[K];
+    bool output = false;
+    int p = -1;
+    char pch;
+    int link = -1;
+    int go[K];
+    // ... (link 為 fail link，go 為記憶化後的轉移函式，建構時以陣列固定大小 K=字母表大小)
+};</pre>
+    </div>
+      
+    <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#2f5f9e;text-transform:uppercase;">NOTE · 補充</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
+        <p>可以把 Aho-Corasick 理解成「Trie + KMP 的推廣」：當只有一條模式時，trie 退化成一條鏈，fail link 就等於 KMP 的 failure function。業界常見實作：Python 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">pyahocorasick</code>、Rust 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">aho-corasick</code> crate。</p>
+      </div>
+    </div>
+    </div>
+              
+    <div style="margin-top:34px;border-top:1px solid #e2ddd0;"></div>
+    <div style="margin-top:28px;border-bottom:2px solid #b0561a;">
+      <span style="display:inline-block;background-color:#b0561a;color:#ffffff;padding:4px 12px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">B · CS:APP</span>
+    </div>
+    
+    <div style="margin-top:20px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#b0561a;letter-spacing:1px;">§01</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#b0561a;">Ch.4　4.1 The Y86-64 Instruction Set Architecture</div>
+      <div style="margin-top:12px;border-left:3px solid #b0561a;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
+        <p>第三章講完完整的 x86-64 機器碼之後，第四章要帶我們動手「做」一顆處理器——但真正的 x86-64 指令集太龐大，一學期內不可能完整實作。作者因此設計了 <b>Y86-64</b>：一個指令數量大幅精簡、但保留足夠真實感的教學用 ISA。</p><p>指令編碼第一個 byte 拆成兩個 nibble：高 4 位是 <b>icode</b>（指令類別），低 4 位是 <b>ifun</b>（同一類別下的功能變形）。需要暫存器運算元的指令接著第二個 byte：高 4 位放 rA、低 4 位放 rB，不需要的欄位一律填 0xF。例如把 0x100 存進 %rdx 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">irmovq</code>，完整編碼是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">30 F2 00 01 00 00 00 00 00 00</code>，其中立即數以小端序排列。</p>
+      </div>
+      
+      
+    <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
+        <p>為什麼 register 欄位用 4 bit？2⁴=16 剛好能編碼 16 個值，Y86-64 用掉 15 個，第 16 個值（0xF）保留當 sentinel。第一個 byte 拆成 4+4 的 nibble，則是為了在 1 個 byte 內同時表達「類別」與「變化」。</p>
+      </div>
+    </div>
+      
+    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
+      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://hackmd.io/@sysprog/CSAPP-ch4" style="color:#a39d90;text-decoration:underline;">hackmd.io/@sysprog · CS:APP 第 4 章重點提示和練習</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">範例：rmmovl %esp, 0x12345(%edx)
+編碼為：40 42 45 23 01 00
+（第1 byte 40＝icode/ifun；第2 byte 42＝rA=%esp(4)/rB=%edx(2)；
+ 後4 bytes 為位移量 0x12345，補0成4 bytes後以小端序反序排列）</pre>
+    </div>
+      
+    <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#b0561a;text-transform:uppercase;">NOTE · 補充</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
+        <p>CS:APP 第 2 版用的是 32-bit 的 Y86，第 3 版換成 64-bit 的 Y86-64，兩者編碼規則相同，差別主要在暫存器數量與立即數寬度。另外要老實說：這次查遍 CMU 15-213 歷年課程進度表，Chapter 4 並沒有被排成正式授課的一講，因此今天沒有可信的對應講座影片可以附。</p>
+      </div>
+    </div>
+    </div>
+              
+    <div style="margin-top:34px;border-top:1px solid #e2ddd0;"></div>
+    <div style="margin-top:28px;border-bottom:2px solid #2c7357;">
+      <span style="display:inline-block;background-color:#2c7357;color:#ffffff;padding:4px 12px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">C · Linux Kernel</span>
+    </div>
+    
+    <div style="margin-top:20px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#2c7357;letter-spacing:1px;">§01</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2c7357;">解析 Linux 共享記憶體機制：SysV／POSIX／memfd_create／dma_buf 全景比較</div>
+      <div style="margin-top:12px;border-left:3px solid #2c7357;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
+        <p>承接 11/08 教過的 POSIX Shared Memory，今天把視角拉高，看 Linux 歷史上為了「讓多個行程共用同一塊實體記憶體、省掉 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">memcpy</code> 拷貝開銷」這個目標，陸續長出哪些彼此並不相容的機制。共通目標都是 </p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:6px;font-size:13px;line-height:1.6;color:#7a766b"><b style="color:#2c7357">zero-copy（零拷貝）</b>　讓資料只存在一份實體記憶體，透過映射（而非複製）讓多方都能直接存取。</div>。<p><b>SysV 共享記憶體</b>最早：用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmget</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmat</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmdt</code>，key 是全域命名空間，生命週期不會跟著行程結束，必須手動 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcrm</code>。<b>POSIX 共享記憶體</b>用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shm_open</code> 回傳普通 fd，底層由 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/shm</code> 的 tmpfs 撐住。<b>memfd_create</b>（Linux 3.17）回傳不綁定路徑的匿名記憶體 fd，還能加上 file sealing 防止對方事後改大小或內容。<b>dma_buf</b> 則處理裝置之間的 buffer 共享，例如 camera 驅動匯出、GPU 驅動匯入。</p>
+      </div>
+      
+      
+      
+    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
+      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://github.com/torvalds/linux/blob/master/include/linux/dma-buf.h" style="color:#a39d90;text-decoration:underline;">github.com/torvalds/linux · include/linux/dma-buf.h（struct dma_buf_ops，節錄）</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">struct dma_buf_ops {
+	/* 可選（optional）*/
+	int (*attach)(struct dma_buf *, struct dma_buf_attachment *);
+
+	/* 必要（mandatory）*/
+	struct sg_table * (*map_dma_buf)(struct dma_buf_attachment *,
+					  enum dma_data_direction);
+
+	/* 於最後一次 dma_buf_put 之後呼叫，必要 */
+	void (*release)(struct dma_buf *);
+
+	/* 可選，讓 CPU 端也能直接 mmap 存取 */
+	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
+};</pre>
+    </div>
+      
+    <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#2c7357;text-transform:uppercase;">NOTE · 補充</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
+        <p><code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcs -m</code> 可以列出目前系統上所有 SysV 共享記憶體段；搭配 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">lsof +L1</code> 能找出已被 unlink 但仍被某個行程的 fd 抓著、因此繼續佔用 RAM 的隱藏用量。</p>
+      </div>
+    </div>
+    </div>
+              <div style="margin-top:34px;padding-top:14px;border-top:1px solid #e2ddd0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:2;color:#7a766b;"><a href="https://github.com/wisdompeak/LeetCode" style="color:#7a766b;text-decoration:underline;">LeetCode 題目彙整</a>　·　<a href="https://cp-algorithms.com/string/aho_corasick.html" style="color:#7a766b;text-decoration:underline;">cp-algorithms · Aho-Corasick 自動機</a>　·　<a href="https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw" style="color:#7a766b;text-decoration:underline;">owlfox CS:APP 中文筆記</a>　·　<a href="https://hackmd.io/@sysprog/CSAPP-ch4" style="color:#7a766b;text-decoration:underline;">sysprog CS:APP 第4章重點筆記</a>　·　<a href="https://hackmd.io/@sysprog/linux-shared-memory" style="color:#7a766b;text-decoration:underline;">jserv Linux 核心課程筆記</a>　·　<a href="https://www.kernel.org/doc/Documentation/filesystems/tmpfs.rst" style="color:#7a766b;text-decoration:underline;">kernel.org · tmpfs 官方文件</a></div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
