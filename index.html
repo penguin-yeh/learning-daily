@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · 2026-11-13</title></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · 2026-11-14</title></head>
 <body style="margin:0;padding:0;background-color:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f1ea;padding:28px 12px;">
     <tr>
@@ -10,14 +10,14 @@
             <td style="padding:32px 24px 36px 24px;">
               <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#7a766b;text-transform:uppercase;">DAILY LEARNING NOTE</div>
               <div style="margin-top:8px;font-family:Georgia,'Noto Serif TC',serif;font-size:28px;font-weight:700;color:#22252b;line-height:1.25;">每日東東</div>
-              <div style="margin-top:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#7a766b;">2026-11-13（週五）</div>
-              <div style="margin-top:14px;border-left:2px solid #22252b;padding-left:12px;font-family:Georgia,'Noto Serif TC',serif;font-size:14.5px;line-height:1.8;color:#22252b;font-style:italic;">節錄範例：這是 11/13 內容的節錄，用來展示「技術手札」新版面；完整頁面會在下一次每日排程後自動取代。</div>
+              <div style="margin-top:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#7a766b;">2026-11-14（週六）</div>
+              
               <div style="margin-top:22px;border-bottom:3px double #22252b;"></div>
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
       <tr>
         <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#2f5f9e;"></div></td>
         <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">演算法</td>
-        <td style="padding:5px 0;font-size:14px;color:#22252b;">Aho-Corasick 自動機：多模式字串匹配</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">加權區間排程 Weighted Interval Scheduling（DP ＋ 二分搜尋）</td>
       </tr>
       <tr>
         <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#b0561a;"></div></td>
@@ -27,7 +27,7 @@
       <tr>
         <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#2c7357;"></div></td>
         <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">Linux Kernel</td>
-        <td style="padding:5px 0;font-size:14px;color:#22252b;">解析 Linux 共享記憶體機制：SysV／POSIX／memfd_create／dma_buf 全景比較</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">Linux 共享記憶體機制全景：System V shm、POSIX shm、memfd_create 與 dma_buf</td>
       </tr></table>
               
     
@@ -37,51 +37,87 @@
     
     <div style="margin-top:20px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#2f5f9e;letter-spacing:1px;">§01</div>
-      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2f5f9e;">Aho-Corasick 自動機：多模式字串匹配</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2f5f9e;">加權區間排程 Weighted Interval Scheduling（DP ＋ 二分搜尋）</div>
       <div style="margin-top:12px;border-left:3px solid #2f5f9e;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
-        <p>今天換一個全新類別：<b>多模式字串匹配（Multi-Pattern Matching）</b>。給定一組模式字串 {p₁, p₂, ..., pₖ}（例如敏感詞清單、病毒特徵碼、路由規則），以及一段長文字 S，目標是「同一次掃描」就找出所有模式分別出現在 S 的哪些位置。這跟 KMP 解的「單一模式」問題本質不同：天真的作法是對每條模式各跑一次 KMP，但這樣會重複掃描文字 k 次，當 k 很大（例如一萬條惡意網域黑名單）時就很浪費。</p><p>Aho-Corasick 的第一步是把所有模式字串插入同一棵 </p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:6px;font-size:13px;line-height:1.6;color:#7a766b"><b style="color:#2f5f9e">Trie（字典樹）</b>　一種每個節點代表一段共同前綴的樹狀結構；多個字串共享的前綴會共用同一條路徑，是字首查詢最經典的資料結構。</div>裡，並在模式結尾的節點標記 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">output=true</code>。第二步是對 trie 做 BFS，為每個節點建立失敗連結（fail link），意義與 KMP 的 failure function 一致：前綴比對失敗時，退到次佳的已知前綴繼續比。有了 fail link 之後，文字每讀一個字元就轉移一次，<b>永遠不會往回看</b>，這正是它比暴力解法快的核心。</p><p>複雜度比較：設文字長度 n、k 個模式、總長度 m、實際匹配數 z。暴力解法是 O(n·m)；對每個模式各跑一次 KMP 是 O(k·n + m)；Aho-Corasick 建構 O(m·Σ)，查詢只需 O(n + z)。</p>
+        <p>上次（11/08）練的滑動視窗，本質上是貪心式地維護一個「當下合法」的窗口。今天要換一個表面相似、
+但核心完全不同的類別：<b>加權區間排程（Weighted Interval Scheduling）</b>。最經典的「區間排程」問題
+（Activity Selection）只問「最多能排幾個互不重疊的活動」，貪心策略（每次挑結束時間最早的）保證最優；
+但只要每個區間多了一個權重（profit），貪心就會立刻失效——想像三個互相重疊的工作，利潤分別是 1、1、100，
+結束時間最早的那個利潤只有 1，貪心會優先選它，但正確答案顯然是只選利潤 100 的那個。這正是今天要處理的
+「加權」版本，必須換成動態規劃。</p>
+<p>先把問題講精確：給定 n 個工作，每個工作有 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">start</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">end</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">profit</code>
+三個屬性，兩個工作「相容」代表它們的時間區間不重疊（即一個的 end 不晚於另一個的 start），目標是從中選出
+一組兩兩相容的工作子集合，使 profit 加總最大。第一步永遠是把所有工作依 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">end</code> 時間由小到大排序，
+這一步排序正是後面能用二分搜尋的前提。<div style='margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;'><b style='color:#2f5f9e;'>二分搜尋的單調前提 Monotonic Precondition</b>　二分搜尋能用的必要條件不是「資料已排序」這麼單純，而是「搜尋目標函式在排序後的陣列上具有單調性」。本題把工作依結束時間排序後，結束時間本身單調不減，所以能對「結束時間 ≤ 某個開始時間」這個條件做二分搜尋。</div></p>
+<p>排序完之後定義狀態：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dp[i]</code> 表示「只考慮排序後前 i 個工作時，能拿到的最大利潤」。
+轉移方程式是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dp[i] = max(dp[i-1], profit[i] + dp[p(i)])</code>，其中 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">p(i)</code> 是「結束時間
+不晚於第 i 個工作開始時間」的最大索引（找不到就當作 0）。這個 max 裡的兩項分別對應「不選第 i 個工作」與
+「選第 i 個工作，並接上它能相容的最後一段最優解」。<div style='margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;'><b style='color:#2f5f9e;'>最適子結構 Optimal Substructure</b>　問題的最優解可以由子問題的最優解組合而成，是所有動態規劃解法成立的前提；本題中「前 i 個工作（依結束時間排序後）的最大利潤」確實只取決於「前 i-1 個工作的最大利潤」與「選第 i 個工作後、跳回最後一個相容工作的最大利潤」這兩個子問題。</div></p>
+<p>找 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">p(i)</code> 的方式就是對「已經排好序的 end 時間陣列」做二分搜尋，找「end ≤ start[i]」的最大索引。
+這裡要特別澄清一個常見的混淆：真正支撐二分搜尋合法性的，是<b>排序後的 end 時間陣列本身單調不減</b>，而不是
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dp[]</code> 陣列單調——雖然 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dp[]</code> 碰巧也會是不減的（因為 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dp[i]≥dp[i-1]</code>
+恆成立），但這只是附帶結果，二分搜尋從來不是對 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dp[]</code> 做的。</p>
+<p>複雜度比較：純暴力窮舉每個工作「選／不選」是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(2ⁿ)</code>，連中等規模（n=30）都跑不完；
+加上記憶化但找相容前一個工作用線性掃描，變成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n²)</code>；排序後用二分搜尋找 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">p(i)</code>，
+整體降到 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n log n)</code>（排序 O(n log n) + n 次二分搜尋，每次 O(log n)）。空間複雜度都是
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n)</code> 存 dp 陣列。這組「指數 → 多項式 → n log n」的遞進，是面試裡示範「為什麼要用 DP」
+最乾淨的例子之一。</p>
+<p>Edge case 要注意幾種：多個工作結束時間相同時，排序的次序不影響正確性（因為轉移只看數值不看原始順序），
+但實作上要確保 tie-break 一致；區間「剛好相接」（例如工作 A 在 10 結束、工作 B 在 10 開始）通常視為相容
+（不重疊），這點要跟題目的定義核對，二分搜尋條件要寫成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">end ≤ start</code>而不是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">end &lt; start</code>；
+如果所有工作兩兩都衝突（形成一條鏈），dp 會退化成逐一比較「選或不選」的線性掃描，仍然正確但失去了二分搜尋的優勢。</p>
+<p>這個模式有幾種常見變形。第一種是像 1751 一樣多加一個維度 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">k</code>：最多只能選 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">k</code> 個工作，
+dp 狀態要多一維記錄「目前已經選了幾個」，變成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dp[i][j]</code>，複雜度上升到
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n·k·log n)</code>。第二種是像 2008 一樣把問題包裝成完全不同的場景（計程車載客），
+但拆開表面敘述後本質跟 1235 一模一樣，是面試官很愛用來測試「你能不能看穿包裝」的手法。第三種更進階的變形是
+「串流到達、無法事先排序」的線上版本，這時就要把陣列換成能動態插入並維護前綴最大值的資料結構
+（例如以 end 時間為 key 的平衡樹或線段樹），二分搜尋會被線段樹上的區間查詢取代。</p>
+<p>面試官常見的追問方向：（1）不只要最大利潤，還要還原出具體選了哪些工作——需要額外一個陣列記錄每個
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dp[i]</code> 是從「選」還是「不選」轉移過來，再從 n 往回走；（2）如果資料是即時串流進來、每來一個
+新工作就要馬上回答目前最大利潤，要怎麼設計；（3）如果允許工作有「資源需求」而不是單純的 0/1
+（例如會議室排程要考慮房間容量），該怎麼把這套框架擴充成多維背包式的 DP。這些追問都是從今天的核心
+「排序＋二分搜尋找相容前驅」自然長出來的，值得在練習時主動想一遍。</p>
       </div>
       
     <div style="margin-top:10px;">
-      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1032</span>
-      <a href="https://leetcode.com/problems/stream-of-characters/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Stream of Characters</a>
-      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">線上版本：將所有模式反轉後建自動機，每來一個字元往前走一步，查詢 O(1)</div>
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1235</span>
+      <a href="https://leetcode.com/problems/maximum-profit-in-job-scheduling/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Maximum Profit in Job Scheduling</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">每個工作有 startTime/endTime/profit，是加權區間排程的標準形式；dp[i]=max(dp[i-1], profit[i]+dp[p(i)])，排序後對 end 時間二分搜尋找 p(i)，時間 O(n log n) 空間 O(n)</div>
     </div>
     <div style="margin-top:10px;">
-      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1065</span>
-      <a href="https://leetcode.com/problems/index-pairs-of-a-string/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Index Pairs of a String</a>
-      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">離線批量找出所有模式出現的起訖區間，取代暴力雙重迴圈 O(n·m)</div>
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1751</span>
+      <a href="https://leetcode.com/problems/maximum-number-of-events-that-can-be-attended-ii/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Maximum Number of Events That Can Be Attended II</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">在 1235 的基礎上多一個維度 k（最多能參加 k 場活動），dp[i][j] 表示考慮前 i 場、已選 j 場的最大價值，仍可用二分搜尋找下一個相容活動，時間 O(n·k·log n)</div>
     </div>
     <div style="margin-top:10px;">
-      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">758</span>
-      <a href="https://leetcode.com/problems/bold-words-in-string/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Bold Words in String</a>
-      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">找出所有匹配區間後做區間合併（interval merge）</div>
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">2008</span>
+      <a href="https://leetcode.com/problems/maximum-earnings-from-taxi/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Maximum Earnings From Taxi</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">表面是計程車載客問題，把每趟 ride 看成區間 [start,end]、利潤 end-start+tip，拆開包裝後與 1235 完全同構，是測試能否看穿偽裝的經典變形</div>
     </div>
       
     <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
-        <p>為什麼查詢階段是 O(n+z) 而不是 O(n·depth)？關鍵在攤銷分析：每次成功往前走一步，狀態的深度最多 +1；每次退回 fail link，深度一定嚴格下降。所以讀 n 個字元，深度最多上升 n 次、也最多下降 n 次，所有退回步數加總不會超過 O(n)。</p>
+        <p>為什麼整體是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n log n)</code> 而不是更快或更慢？拆開看兩個步驟：排序 n 個工作依 end 時間，
+不管用什麼排序演算法，下界就是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n log n)</code>（比較排序的資訊論下界）；排序完之後，對每一個工作
+各做一次二分搜尋找 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">p(i)</code>，單次二分搜尋是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(log n)</code>，n 個工作總共
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n log n)</code>。兩步相加仍是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n log n)</code>，不會因為「排序 + n 次 log n」而變成
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">O(n log n · log n)</code>——因為這兩項是相加而非相乘的關係（先排序一次，再對已排序的結果重複查詢）。</p>
+<p>另外值得推導的是：為什麼不能跳過排序、直接在原始順序上二分搜尋？因為二分搜尋的正確性要求陣列具備單調性，
+原始輸入的 end 時間完全可能是任意順序；排序這一步正是「用 O(n log n) 的代價，換取之後 n 次查詢各只要
+O(log n)」的攤銷設計——如果每次查詢都線性掃描（不排序、不二分），總代價會回到 O(n²)，排序的投資在
+n 次查詢之後就回本了。</p>
       </div>
     </div>
       
-    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
-      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
-      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://cp-algorithms.com/string/aho_corasick.html" style="color:#a39d90;text-decoration:underline;">cp-algorithms.com · Aho-Corasick 自動機（CC BY-SA 4.0）</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">struct Vertex {
-    int next[K];
-    bool output = false;
-    int p = -1;
-    char pch;
-    int link = -1;
-    int go[K];
-    // ... (link 為 fail link，go 為記憶化後的轉移函式，建構時以陣列固定大小 K=字母表大小)
-};</pre>
-    </div>
       
     <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#2f5f9e;text-transform:uppercase;">NOTE · 補充</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
-        <p>可以把 Aho-Corasick 理解成「Trie + KMP 的推廣」：當只有一條模式時，trie 退化成一條鏈，fail link 就等於 KMP 的 failure function。業界常見實作：Python 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">pyahocorasick</code>、Rust 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">aho-corasick</code> crate。</p>
+        <p>這一題型在 Google 風格的面試裡常見的包裝是「會議室排程加權重」或「打工排班挑班表」：面試官通常先給
+unweighted 版本看你會不會用貪心，一旦你用了貪心，立刻追加「每個時段有不同薪水／價值」逼你換成 DP，
+最後再問「如果資料是即時串流進來的呢」逼你講出線段樹／平衡樹的線上版本。把 1235／1751／2008 這三題連著
+刷一輪，正好覆蓋「基本型 → 加資源限制 → 換皮包裝」三個追問方向。</p>
       </div>
     </div>
     </div>
@@ -95,29 +131,83 @@
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#b0561a;letter-spacing:1px;">§01</div>
       <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#b0561a;">Ch.4　4.1 The Y86-64 Instruction Set Architecture</div>
       <div style="margin-top:12px;border-left:3px solid #b0561a;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
-        <p>第三章講完完整的 x86-64 機器碼之後，第四章要帶我們動手「做」一顆處理器——但真正的 x86-64 指令集太龐大，一學期內不可能完整實作。作者因此設計了 <b>Y86-64</b>：一個指令數量大幅精簡、但保留足夠真實感的教學用 ISA。</p><p>指令編碼第一個 byte 拆成兩個 nibble：高 4 位是 <b>icode</b>（指令類別），低 4 位是 <b>ifun</b>（同一類別下的功能變形）。需要暫存器運算元的指令接著第二個 byte：高 4 位放 rA、低 4 位放 rB，不需要的欄位一律填 0xF。例如把 0x100 存進 %rdx 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">irmovq</code>，完整編碼是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">30 F2 00 01 00 00 00 00 00 00</code>，其中立即數以小端序排列。</p>
+        <p>上週把第 3 章（x86-64 機器碼）教完了，第 4 章要帶我們從「讀懂機器碼」進一步到「動手設計一顆會執行
+機器碼的處理器」。但真正的 x86-64 指令集太龐大、太多歷史遺留的特例，一學期內不可能完整實作出硬體電路。
+作者 Bryant 和 O'Hallaron 因此設計了一套教學用的簡化指令集 <b>Y86-64</b>：指令數量大幅精簡、拿掉大量
+x86-64 的複雜定址模式與特例，但保留足夠的真實感，讓接下來 4.3 節的單週期處理器（SEQ）與 4.5 節的管線化
+處理器（PIPE）都能實際用邏輯閘電路語言 HCL 實作出來並模擬執行。</p>
+<p><div style='margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;'><b style='color:#b0561a;'>ISA（指令集架構，Instruction Set Architecture）</b>　軟體與硬體之間的一份固定契約：它規定處理器支援哪些指令、每個指令的語意與編碼格式，但完全不規定底層電路要怎麼實作這些行為——同一份 ISA 可以對應到很慢的單週期電路，也可以對應到很快的管線化電路。</div> 本節要講的「Y86-64 指令集架構」，具體內容分成三塊：處理器對程式設計師可見的狀態
+（programmer-visible state）、指令集本身有哪些指令、以及這些指令怎麼編碼成位元組。這三塊合起來，就是
+一份完整定義好、不含糊的契約。</p>
+<p>先看程式設計師可見狀態：15 個 64-bit 通用暫存器（%rax、%rcx、%rdx、%rbx、%rsp、%rbp、%rsi、%rdi、
+%r8 到 %r14，刻意沒有 %r15——因為暫存器欄位用 4 bit 編碼，4 bit 能表示 16 個值，Y86-64 把第 16 個值
+0xF 保留當作「沒有暫存器」的 sentinel，而不是真的拿來當第 15 個通用暫存器）、一個程式計數器 PC、
+一塊從位址 0 開始、位元組編址的記憶體，以及 3 個條件碼 ZF（零旗標）、SF（符號旗標）、OF（溢位旗標），
+由算術或邏輯指令執行後更新。<div style='margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;'><b style='color:#b0561a;'>Stat（程式狀態欄位）</b>　Y86-64 處理器除了暫存器、PC、記憶體、條件碼之外，還多維護一個 Stat 欄位記錄目前的執行狀態：1 = AOK（正常執行）、2 = HLT（執行了 halt）、3 = ADR（存取不合法位址）、4 = INS（遇到不合法的指令編碼），一旦不是 AOK，處理器就必須停止繼續執行。</div></p>
+<p>指令集本身可以分成幾類：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">halt</code>（停機）、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">nop</code>（不做事）、
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rrmovq</code> 與六種條件搬移 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">cmovXX</code>（共用同一個 icode，只靠 ifun 區分是不是加上條件，
+這跟上週才教過的「同一大類指令、用功能碼區分變形」的設計思路一致）、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">irmovq</code>（立即數存進暫存器）、
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rmmovq</code>（暫存器存進記憶體）、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mrmovq</code>（記憶體讀進暫存器）、四種算術邏輯運算
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">OPq</code>（addq/subq/andq/xorq）、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">jmp</code> 與六種條件跳躍 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">jXX</code>、
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">call</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ret</code>（函式呼叫與返回）、以及 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">pushq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">popq</code>
+（堆疊操作）。</p>
+<p>指令編碼是本節最值得細讀的部分：每條指令的第一個 byte 固定拆成兩個 nibble（各 4 bit）——高 4 位是
+<b>icode</b>（指令大類，例如 rmmovq 這整類），低 4 位是 <b>ifun</b>（同一大類底下的具體變形，例如
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">OPq</code> 底下 addq=0、subq=1、andq=2、xorq=3）。如果這條指令需要暫存器運算元，接著會有第二個
+byte，高 4 位放 rA、低 4 位放 rB，不需要的那個欄位一律填 0xF。如果還需要常數（立即數或位移量），
+最後會接上完整 8 bytes，<div style='margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;'><b style='color:#b0561a;'>little-endian（小端序）</b>　多位元組的數值在記憶體中由低位元組先放、高位元組後放。Y86-64 的 8 bytes 常數（立即數或位移量）一律用小端序排列，這跟第 2 章學過、x86-64 在記憶體中擺位元組順序的規則完全一致。</div>。舉一個完整例子：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rmmovq %rbx, 0x18(%rax)</code>
+（把 %rbx 存到 %rax+0x18 這個記憶體位址）的編碼是
+<pre style="display:block;margin:10px 0;background-color:#22252b;color:#ece8dd;padding:12px 14px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;overflow-x:auto;">40 30 18 00 00 00 00 00 00 00</pre>
+其中第 1 byte <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">40</code> 是 rmmovq 的 icode:ifun；第 2 byte <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">30</code> 是 rA=%rbx(3)、
+rB=%rax(0)；後面 8 bytes 是位移量 0x18，補成 8 bytes 後以小端序排列（最低位元組 0x18 放在最前面）。</p>
+<p>正因為「要不要暫存器 byte」「要不要 8-byte 常數」是依指令類別決定的，整條指令的長度並不固定，
+會是 1、2、9 或 10 bytes 其中一種：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">halt</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">nop</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ret</code> 只有 1 byte
+（只有 icode:ifun，沒有運算元）；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">OPq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rrmovq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">cmovXX</code>／
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">pushq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">popq</code> 是 2 bytes（多一個暫存器 byte，没有常數）；
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">jXX</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">call</code> 是 9 bytes（1 byte icode:ifun + 8 byte 絕對目標位址，
+注意這裡沒有暫存器 byte，因為跳躍目標是直接給位址不是暫存器）；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">irmovq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rmmovq</code>／
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mrmovq</code> 是 10 bytes（1+1+8）。</p>
+<p>Y86-64 處理器還定義了程式狀態欄位 Stat，對應三種非正常狀態：執行到不存在的 icode:ifun 組合會進入
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">INS</code>（不合法指令）；存取超出範圍的記憶體位址會進入 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ADR</code>（不合法位址）；
+執行到 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">halt</code> 會進入 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">HLT</code>。這幾種異常處理故意做得非常粗糙——一旦不是
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">AOK</code>，處理器就整個停下來，完全不像真正 x86-64 有特權層級、分頁保護、中斷向量表那樣精緻的
+例外處理機制，這是刻意的簡化：Y86-64 的目標是讓讀者看清楚「ISA 定義行為、microarchitecture 決定怎麼
+實作這個行為」的分離，不是做出一顆能跑真實作業系統的 CPU。</p>
+<p>雖然 Y86-64 本身不會出現在任何求職面試題裡，但這裡建立的「ISA／microarchitecture 分離」概念，
+是後面理解「同一套 x86-64 指令集，Intel 和 AMD 的晶片可以用完全不同的管線深度與執行單元去實作」
+這類問題的基礎，也直接銜接下週會接續讀到的 4.3 單週期實作（SEQ）與 4.5 管線化實作（PIPE）——同一份
+今天定義好的指令集，會先用最笨但最容易懂的單週期方式跑一次，再重新設計成管線化、大幅提升吞吐量。</p>
       </div>
       
       
     <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
-        <p>為什麼 register 欄位用 4 bit？2⁴=16 剛好能編碼 16 個值，Y86-64 用掉 15 個，第 16 個值（0xF）保留當 sentinel。第一個 byte 拆成 4+4 的 nibble，則是為了在 1 個 byte 內同時表達「類別」與「變化」。</p>
+        <p>為什麼暫存器欄位固定用 4 bit？因為 2⁴=16，剛好是「15 個真實暫存器 + 1 個 sentinel」這個需求的最小
+位元寬度——用 3 bit 只能表示 8 個值不夠用，用 5 bit 可以表示 32 個值但浪費一半以上的編碼空間，4 bit
+正好卡在「夠用」與「不浪費」的邊界上。</p>
+<p>為什麼第一個 byte 要拆成 4+4 的兩個 nibble，而不是用一整個 byte 表示「指令種類」？因為 Y86-64 的指令
+分類天生有「大類＋變形」兩層結構（例如 OPq 底下有 4 種運算、jXX 底下有 7 種條件），用 4 bit icode 分出
+最多 16 個大類、每個大類底下再用 4 bit ifun 分出最多 16 種變形，剛好用 1 個 byte 同時表達兩層資訊，
+不需要額外多一個 byte 專門存「變形種類」。</p>
+<p>為什麼最長的指令剛好是 10 bytes？因為編碼規則是「1 byte icode:ifun ＋（可選）1 byte 暫存器 ＋
+（可選）8 bytes 常數」，8 bytes 是因為 Y86-64 是 64-bit 的 ISA，暫存器與記憶體位址都是 64-bit 寛，
+常數必須完整容納一個 64-bit 數值；1+1+8=10 就是三個欄位都出現時的上限，這也是為什麼
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">irmovq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rmmovq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mrmovq</code>（同時需要暫存器與常數的三種指令）
+會是最長的指令。</p>
       </div>
     </div>
       
-    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
-      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
-      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://hackmd.io/@sysprog/CSAPP-ch4" style="color:#a39d90;text-decoration:underline;">hackmd.io/@sysprog · CS:APP 第 4 章重點提示和練習</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">範例：rmmovl %esp, 0x12345(%edx)
-編碼為：40 42 45 23 01 00
-（第1 byte 40＝icode/ifun；第2 byte 42＝rA=%esp(4)/rB=%edx(2)；
- 後4 bytes 為位移量 0x12345，補0成4 bytes後以小端序反序排列）</pre>
-    </div>
       
     <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#b0561a;text-transform:uppercase;">NOTE · 補充</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
-        <p>CS:APP 第 2 版用的是 32-bit 的 Y86，第 3 版換成 64-bit 的 Y86-64，兩者編碼規則相同，差別主要在暫存器數量與立即數寬度。另外要老實說：這次查遍 CMU 15-213 歷年課程進度表，Chapter 4 並沒有被排成正式授課的一講，因此今天沒有可信的對應講座影片可以附。</p>
+        <p>老實說明一下找片的過程：查過 CMU 15-213 Fall 2015 的正式課程進度表（Machine Prog 系列五講只到
+3.10 節為止），以及目前（2026）版本的課程進度表，都找不到任何一講標題叫「Processor Architecture」
+或提到「Y86」；CMU 近年似乎把這部分的學習主要交給 Architecture Lab，讓學生自己動手寫 HCL／跑
+SEQ、PIPE 模擬器，沒有把它排成一堂正式錄影講課。因此這次誠實標註：沒有找到可信的 CMU 15-213 對應
+講座影片，不要硬湊其他主題的影片充數。附上的 Williams College CS237 講義是基於 Bryant/O'Hallaron
+原始教材整理的公開 PDF，可以當作補充閱讀。</p>
       </div>
     </div>
     </div>
@@ -129,39 +219,109 @@
     
     <div style="margin-top:20px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#2c7357;letter-spacing:1px;">§01</div>
-      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2c7357;">解析 Linux 共享記憶體機制：SysV／POSIX／memfd_create／dma_buf 全景比較</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2c7357;">Linux 共享記憶體機制全景：System V shm、POSIX shm、memfd_create 與 dma_buf</div>
       <div style="margin-top:12px;border-left:3px solid #2c7357;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
-        <p>承接 11/08 教過的 POSIX Shared Memory，今天把視角拉高，看 Linux 歷史上為了「讓多個行程共用同一塊實體記憶體、省掉 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">memcpy</code> 拷貝開銷」這個目標，陸續長出哪些彼此並不相容的機制。共通目標都是 </p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:6px;font-size:13px;line-height:1.6;color:#7a766b"><b style="color:#2c7357">zero-copy（零拷貝）</b>　讓資料只存在一份實體記憶體，透過映射（而非複製）讓多方都能直接存取。</div>。<p><b>SysV 共享記憶體</b>最早：用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmget</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmat</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmdt</code>，key 是全域命名空間，生命週期不會跟著行程結束，必須手動 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcrm</code>。<b>POSIX 共享記憶體</b>用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shm_open</code> 回傳普通 fd，底層由 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/shm</code> 的 tmpfs 撐住。<b>memfd_create</b>（Linux 3.17）回傳不綁定路徑的匿名記憶體 fd，還能加上 file sealing 防止對方事後改大小或內容。<b>dma_buf</b> 則處理裝置之間的 buffer 共享，例如 camera 驅動匯出、GPU 驅動匯入。</p>
+        <p>承接 11/08 教過的 POSIX Shared Memory（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shm_open</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ftruncate</code>），
+今天把視角拉高，完整看一遍 Linux 歷史上為了「讓兩個以上互不相關的行程直接存取同一塊實體記憶體」這個同一個
+目標，陸續長出哪些彼此並不相容、甚至彼此競爭的機制：System V 共享記憶體、POSIX 共享記憶體、
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">memfd_create</code>，以及跨裝置驅動用的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dma_buf</code>。它們共通的目的都是達成 <div style='margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;'><b style='color:#2c7357;'>zero-copy（零拷貝）</b>　讓同一份資料只在實體記憶體存在一份，透過分頁表映射讓多個行程或裝置都能直接存取，而不是像 read()/write() 那樣每次都要在使用者空間與核心空間之間 memcpy 搬一次。</div>，
+省掉 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">read()</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">write()</code> 來回在使用者空間與核心空間之間搬資料的開銷。</p>
+<p>最早出現的是 <b>System V 共享記憶體</b>：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmget(key, size, shmflg)</code> 用一個全域的
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">key</code>（或 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">IPC_PRIVATE</code>）向核心要一塊共享記憶體段，拿到 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmid</code> 之後，
+每個想用的行程各自呼叫 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmat(shmid, ...)</code> 把它掛進自己的虛擬位址空間，用完呼叫
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmdt</code> 卸載，整個段最後要靠 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmctl(shmid, IPC_RMID, ...)</code> 明確刪除。
+真實核心原始碼（今天附在下面原始碼區）顯示，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmget</code> 系統呼叫背後的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ksys_shmget</code>
+把 key／size／flag 包成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct ipc_params</code>，再呼叫共用的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcget()</code>——這個
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcget</code> 正是整個 System V IPC（shm、semaphore、message queue 共用的那一套）的核心：
+先用 key 在目前 IPC namespace 的 id table 裡查有沒有既存的段，查不到才呼叫 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">newseg()</code> 建立新的。</p>
+<p>這裡要特別強調 System V shm 的生命週期陷阱：這個核心物件綁定的是「這個 key／id」，不是任何單一行程，
+所有行程都 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmdt</code> 離開後，這塊記憶體依然健在，沒有人主動 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcrm</code> 或
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmctl(IPC_RMID)</code> 就會一直佔用實體記憶體——這是教科書等級的資源洩漏來源，也是為什麼實務上
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcs -m</code> 這個指令幾乎是每個資深 Linux 工程師都會的除錯反射動作。</p>
+<p><b>POSIX 共享記憶體</b>（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shm_open</code> + <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap</code>）設計上明顯比 SysV 進步：
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shm_open()</code> 回傳的是一個普通的檔案描述符（fd），底層實際上是掛在 <div style='margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;'><b style='color:#2c7357;'>tmpfs</b>　一種把資料直接放在記憶體（必要時可被交換到 swap）而非實體磁碟的檔案系統；POSIX 共享記憶體的 /dev/shm 底層就是一個 tmpfs 掛載點，這也是為什麼 shm_open() 建出來的物件重開機後就會消失。</div> 的
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/shm</code> 上。因為是普通 fd，所以可以直接用一般 UNIX 檔案 API 操作它——<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">fstat</code>
+看大小、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">chmod</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">chown</code> 控權限、甚至可以丟進 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">poll</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">select</code>
+的監控集合；這些都是 SysV shm 的不透明 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shmid</code> 做不到的。也正因為底層是 tmpfs 檔案，
+忘記呼叫 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shm_unlink()</code> 一樣會讓 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/shm</code> 殘留檔案，是另一種形式的同一類洩漏。</p>
+<p><b>memfd_create()</b>（Linux 3.17 引入）更進一步：回傳的 fd 完全匿名，不綁定任何 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/shm</code>
+路徑名稱，也不需要先 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">unlink</code> 掉名字來做到「匿名」。它真正強大的地方在於可以搭配 UNIX domain
+socket 的 <div style='margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;'><b style='color:#2c7357;'>SCM_RIGHTS</b>　UNIX domain socket 的一種輔助訊息（ancillary message）類型，讓行程可以把一個開啟的檔案描述符（fd）透過 socket 傳給另一個完全沒有親緣關係（非 fork 出來）的行程，是 memfd_create 配合匿名記憶體跨行程分享的關鍵機制。</div>，把這個 fd 直接傳給一個完全沒有親緣關係（不是用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">fork()</code> 衍生出來）
+的行程。更進一步，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">memfd_create</code> 支援 file sealing（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">fcntl(fd, F_ADD_SEALS, ...)</code>），
+讓接收端可以放心這塊記憶體事後不會被對方偷改大小或內容——這在 Android 的 zygote fork 模型、
+Chromium 的沙箱架構裡都是關鍵的安全邊界機制。</p>
+<p><b>dma_buf</b> 處理的是完全不同層次的「共享」：不是行程之間，而是<b>裝置驅動之間</b>共享一塊 DMA
+buffer——例如相機驅動把拍到的一張影格匯出（export）成一個 dma_buf fd，GPU 驅動把它匯入（import）
+進去直接做影像處理，整段資料完全不經過 CPU 複製。它的介面不是像前三者那樣對應到具體系統呼叫，而是
+核心內部的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct dma_buf_ops</code> 這組 callback（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">attach</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">map_dma_buf</code>／
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">release</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap</code>），由各裝置驅動自己實作，再透過 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dma_buf_fd()</code>
+包裝成使用者空間看得到的 fd。</p>
+<p>有一個貫穿四種機制都要留意的陷阱：共享記憶體本身<b>只解決「資料怎麼讓兩邊都看得到」，完全不解決
+「誰先寫、誰先讀」的同步問題</b>——兩個行程同時寫同一塊共享記憶體，一樣會有資料競爭（data race），
+仍然需要額外搭配 POSIX semaphore、futex 或 atomic 操作來保護，這點常常被剛接觸共享記憶體的人誤會成
+「用了 shm 就自動安全」。</p>
+<p>與系統設計面試的關聯：這幾種機制最終都繞不開 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap</code> 把實體記憶體映射進 virtual address
+space 這個核心概念，直接呼應 CS:APP 虛擬記憶體章節、也是上週（11/07）記憶體管理主題的延伸。系統設計
+面試裡常見的「兩個 process 之間要交換大量資料，你會怎麼設計」這類問題，比較 SysV／POSIX／memfd 的
+trade-off（相容性 vs. 介面乾淨度 vs. 匿名傳遞能力）正是一個很扎實的切入角度；選用準則大致是：
+舊程式碼相容或嵌入式環境→SysV；一般新應用→POSIX shm；需要匿名傳給無親緣關係行程或做沙箱隔離→
+memfd_create；跨裝置驅動的 zero-copy pipeline→dma_buf。</p>
       </div>
       
       
+    <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
+        <p>memfd_create 的 file sealing 用的是位元旗標（bitmask）設計：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">F_SEAL_SEAL=0x0001</code>、
+<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">F_SEAL_SHRINK=0x0002</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">F_SEAL_GROW=0x0004</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">F_SEAL_WRITE=0x0008</code>。
+用 OR 把多個旗標組合起來一次設定（例如同時封印「不能縮小」與「不能寫入」），核心內部再用 AND 去檢查
+某個旗標有沒有被設定，這跟幾週前才教過的 C 語言 bit-field／bitwise 操作是同一套思路：每個獨立的
+「能不能做某件事」用一個 bit 表示，組合狀態用 OR，查詢狀態用 AND，4 個旗標剛好只需要 1 byte 就能表達
+全部 16 種組合（其中 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">F_SEAL_SEAL</code> 本身是「封印這組旗標，不准再加新旗標」的 meta-旗標，
+一旦設定就讓剩下三個旗標的狀態從此凍結）。</p>
+      </div>
+    </div>
       
     <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
-      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://github.com/torvalds/linux/blob/master/include/linux/dma-buf.h" style="color:#a39d90;text-decoration:underline;">github.com/torvalds/linux · include/linux/dma-buf.h（struct dma_buf_ops，節錄）</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">struct dma_buf_ops {
-	/* 可選（optional）*/
-	int (*attach)(struct dma_buf *, struct dma_buf_attachment *);
+      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://github.com/torvalds/linux/blob/v6.6/ipc/shm.c#L831-L852" style="color:#a39d90;text-decoration:underline;">torvalds/linux（v6.6）· ipc/shm.c#L831-L852（ksys_shmget 與 SYSCALL_DEFINE3(shmget)）</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">long ksys_shmget(key_t key, size_t size, int shmflg)
+{
+	struct ipc_namespace *ns;
+	static const struct ipc_ops shm_ops = {
+		.getnew = newseg,
+		.associate = security_shm_associate,
+		.more_checks = shm_more_checks,
+	};
+	struct ipc_params shm_params;
 
-	/* 必要（mandatory）*/
-	struct sg_table * (*map_dma_buf)(struct dma_buf_attachment *,
-					  enum dma_data_direction);
+	ns = current-&gt;nsproxy-&gt;ipc_ns;
 
-	/* 於最後一次 dma_buf_put 之後呼叫，必要 */
-	void (*release)(struct dma_buf *);
+	shm_params.key = key;
+	shm_params.flg = shmflg;
+	shm_params.u.size = size;
 
-	/* 可選，讓 CPU 端也能直接 mmap 存取 */
-	int (*mmap)(struct dma_buf *, struct vm_area_struct *vma);
-};</pre>
+	return ipcget(ns, &amp;shm_ids(ns), &amp;shm_ops, &amp;shm_params);
+}
+
+SYSCALL_DEFINE3(shmget, key_t, key, size_t, size, int, shmflg)
+{
+	return ksys_shmget(key, size, shmflg);
+}</pre>
     </div>
       
     <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#2c7357;text-transform:uppercase;">NOTE · 補充</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
-        <p><code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcs -m</code> 可以列出目前系統上所有 SysV 共享記憶體段；搭配 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">lsof +L1</code> 能找出已被 unlink 但仍被某個行程的 fd 抓著、因此繼續佔用 RAM 的隱藏用量。</p>
+        <p>找對應影片的結果：jserv 在 2019 年講 Linux 核心記憶體管理的直播（涵蓋 vmalloc／kmalloc／kmem_cache
+與 shared memory 在整體記憶體管理脈絡中的定位）裡有觸及今天的主題，但它是整體記憶體管理的大範圍直播，
+不是逐一聚焦「共享記憶體機制比較」本身，因此附上時誠實標註這層對應關係不是百分之百精準；今天最直接、
+最逐字對應今天內容的仍然是下面附的 jserv 改寫筆記本身。除錯小技巧：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ipcs -m</code> 可以列出目前
+系統上所有 SysV 共享記憶體段；搭配 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">lsof +L1</code> 能找出已經被 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">shm_unlink</code>／刪除，
+但仍被某個行程的 fd 抓著、因此繼續佔用 RAM 的「隱藏用量」。</p>
       </div>
     </div>
     </div>
-              <div style="margin-top:34px;padding-top:14px;border-top:1px solid #e2ddd0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:2;color:#7a766b;"><a href="https://github.com/wisdompeak/LeetCode" style="color:#7a766b;text-decoration:underline;">LeetCode 題目彙整</a>　·　<a href="https://cp-algorithms.com/string/aho_corasick.html" style="color:#7a766b;text-decoration:underline;">cp-algorithms · Aho-Corasick 自動機</a>　·　<a href="https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw" style="color:#7a766b;text-decoration:underline;">owlfox CS:APP 中文筆記</a>　·　<a href="https://hackmd.io/@sysprog/CSAPP-ch4" style="color:#7a766b;text-decoration:underline;">sysprog CS:APP 第4章重點筆記</a>　·　<a href="https://hackmd.io/@sysprog/linux-shared-memory" style="color:#7a766b;text-decoration:underline;">jserv Linux 核心課程筆記</a>　·　<a href="https://www.kernel.org/doc/Documentation/filesystems/tmpfs.rst" style="color:#7a766b;text-decoration:underline;">kernel.org · tmpfs 官方文件</a></div>
+              <div style="margin-top:34px;padding-top:14px;border-top:1px solid #e2ddd0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:2;color:#7a766b;"><a href="https://github.com/wisdompeak/LeetCode" style="color:#7a766b;text-decoration:underline;">LeetCode 題目彙整</a>　·　<a href="https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw" style="color:#7a766b;text-decoration:underline;">owlfox CS:APP 中文筆記</a>　·　<a href="https://hackmd.io/@sysprog/CSAPP-ch4" style="color:#7a766b;text-decoration:underline;">jserv CS:APP 第4章重點筆記</a>　·　<a href="https://www.cs.williams.edu/~cs237/lectures/20-y86-isa.pdf" style="color:#7a766b;text-decoration:underline;">Y86-64 ISA 補充講義（Williams College CS237）</a>　·　<a href="https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/schedule.html" style="color:#7a766b;text-decoration:underline;">CMU 15-213（Fall 2015）課程進度表</a>　·　<a href="https://hackmd.io/@sysprog/linux-shared-memory" style="color:#7a766b;text-decoration:underline;">jserv Linux 核心課程筆記：解析 Linux 共享記憶體機制</a>　·　<a href="https://wiki.csie.ncku.edu.tw/linux/schedule" style="color:#7a766b;text-decoration:underline;">成大 Linux 核心課程進度表</a>　·　<a href="https://www.youtube.com/watch?v=kY3g2r03erk" style="color:#7a766b;text-decoration:underline;">jserv Linux 核心記憶體管理直播</a>　·　<a href="https://github.com/torvalds/linux/blob/v6.6/ipc/shm.c#L831-L852" style="color:#7a766b;text-decoration:underline;">Linux 核心原始碼 ipc/shm.c（shmget）</a></div>
             </td>
           </tr>
         </table>
