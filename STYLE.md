@@ -54,7 +54,7 @@
 <body style="margin:0;padding:0;background-color:#f4f1ea">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f1ea;padding:28px 12px">
 <tr><td align="center">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#fffefb;border:1px solid #e2ddd0">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:820px;background-color:#fffefb;border:1px solid #e2ddd0">
 <tr><td style="padding:32px 24px 36px 24px">
   …所有區塊（每個區塊用 <div> 或獨立 <table>）…
 </td></tr></table>
