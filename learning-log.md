@@ -61,4 +61,5 @@
 2026-11-07 | 演算法: 樹形動態規劃 Tree DP（337/543/124/968）| CS:APP: Ch.3 §3.11 Floating-Point Code | Linux: 進度表 Week 12 核心記憶體管理：分頁、page fault、kmalloc／vmalloc、Memory Overcommit（CS:APP 第9章重點提示欄位，接續 jserv linux-memory 筆記）
 2026-11-08 | 演算法: Sliding Window 滑動視窗，固定窗與可變窗兩種模板（3/76/1004/567/438）| CS:APP: Ch.3 §3.12 Summary（第三章總結） | Linux: 進度表 Week 13 POSIX Shared Memory（POSIX 共享記憶體機制，shm_open／mmap／ftruncate，接續 11/07 的 jserv linux-memory 筆記）
 2026-11-14 | 演算法: 加權區間排程 Weighted Interval Scheduling，DP＋二分搜尋（1235/1751/2008）| CS:APP: Ch.4 §4.1 The Y86-64 Instruction Set Architecture | Linux: 進度表 Week 13 解析 Linux 共享記憶體機制（System V shm／POSIX shm／memfd_create／dma_buf 全景比較，接續 11/08 的 POSIX Shared Memory）
+2026-11-15 | 演算法: Z 函式（Z-function）字串比對，全新分類（2223/459/1392）| CS:APP: Ch.4 §4.2 Logic Design and the Hardware Control Language HCL | Linux: 進度表 Week 13 /dev/mem 裝置（接續 11/14 的 Linux 共享記憶體機制全景）
 <!-- LOG END -->
