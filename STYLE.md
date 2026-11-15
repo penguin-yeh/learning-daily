@@ -181,3 +181,7 @@ CS:APP 標題格式：`Ch.X　X.Y 小節名`（章節編號在前）。
 - [ ] 信件 HTML 沒有被 escape 過（寄出後用 `get_message` 讀回 snippet 確認不是 `&lt;`）。
 - [ ] 手機寬度不橫向捲動。
 - [ ] 主旨格式維持 `ROUTINE_PROMPT.md` 的規定。
+
+## 日期導覽列（必備）
+
+每個 `YYYY-MM-DD.html` 與 `index.html` 最上方必須有「◀ 前一天／日期選單／後一天 ▶」。**不要手寫**：產生頁面後執行 `python3 scripts/add_nav.py`，它用 `<!--nav-->…<!--/nav-->` 標記插入或更新（行內 CSS、不需要 `<script>`）。不准刪掉或手改標記內的內容。

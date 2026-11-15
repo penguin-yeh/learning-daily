@@ -35,9 +35,28 @@ jobs:
             git push origin HEAD:main
           fi
 
-  deploy:
+  nav:
     needs: sync
     if: ${{ always() && (needs.sync.result == 'success' || needs.sync.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Refresh date navigation
+        run: |
+          python3 scripts/add_nav.py
+          git add -A
+          if ! git diff --cached --quiet; then
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -q -m "Refresh date navigation"
+            git push origin HEAD:main
+          fi
+
+  deploy:
+    needs: nav
+    if: ${{ always() && needs.nav.result == 'success' }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages

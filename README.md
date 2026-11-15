@@ -10,3 +10,7 @@
 3. 更新 `learning-log.md`，commit 並 push 到 `main`。
 
 `sample-2026-11-13.html` 與 `data/sample-2026-11-13.json` 是新風格的節錄範例（內容節錄自 11/13 當天內容）。需要 GitHub Pages 設成從 `main` 根目錄發佈。
+
+## 日期切換
+
+每個日期頁面與 `index.html` 最上方都有「前一天／日期選單／後一天」導覽列，由 `scripts/add_nav.py` 產生（冪等、行內 CSS）。產生新頁面後請執行 `python3 scripts/add_nav.py`；`pages.yml` 也會在每次發佈前自動補跑，所以漏跑也會補上。
