@@ -1,0 +1,106 @@
+{
+  "date": "2026-11-16",
+  "is_review": false,
+  "algo": [
+    {
+      "topic": "LFU Cache 設計：雙層雜湊 + 頻率桶（Frequency Bucket）達成 O(1) 存取與淘汰",
+      "explanation_html": "<p><b>LFU（Least Frequently Used，最少使用頻率）快取淘汰</b>是「設計資料結構」這一大類面試題裡最常被拿出來追問到底的題目之一。題目要求實作一個固定容量的快取，支援 <code>get(key)</code> 與 <code>put(key, value)</code>：容量滿了要淘汰時，優先淘汰「存取次數最少」的鍵；如果多個鍵的存取次數同樣最少，再淘汰其中最久沒被存取的那個（也就是在「使用頻率」這個主排序鍵之下，用 LRU 當次排序鍵）。這跟之前學過的 LRU（Least Recently Used）快取（146）是近親：LRU 只看「最近用過沒」，LFU 還要多追蹤「用過幾次」。</p>\n\n<p>先想暴力解：如果只用一個 <code>HashMap&lt;key,(value,freq)&gt;</code>，<code>get</code> 可以 O(1)，但 <code>put</code> 在容量滿、需要淘汰時，必須掃過所有鍵找出目前最小的 freq（若平手還要再找其中最舊的）——這是 O(n)，n 是容量。真正的目標是<b>get 與 put 都要做到嚴格 O(1)</b>（不是均攤 O(1)，是每一次呼叫都 O(1)），這跟一般雜湊表「均攤 O(1)」的保證等級不一樣，也是這題被列為 Hard 的原因。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\">\n  <b style=\"color:#2f5f9e;\">攤銷複雜度（Amortized Complexity）</b>　指「連續做 n 次操作的總成本除以 n」得到的平均成本，允許個別某一次操作偶爾較貴，只要長期平均攤下來仍是常數；跟本題要求「每一次呼叫都是 O(1)」的嚴格保證不同，後者更強。\n</div>\n\n<p>達成 O(1) 的關鍵結構是「雙層雜湊 + 頻率桶（Frequency Bucket）」：<code>Map&lt;key,(value,freq)&gt;</code> 記錄每個 key 目前的值與使用次數；另一個 <code>freq → 雙向鏈結串列&lt;key&gt;</code> 的雜湊表，把同一個使用次數的所有 key 依「最後一次被存取」的順序串成一條鏈（鏈頭最舊、鏈尾最新）；再用 <code>key → iterator</code> 記住每個 key 目前在哪一條頻率鏈的哪個節點上（否則「刪除某個 key」要先 O(n) 找到節點才能刪，白白浪費雙向鏈結串列 O(1) 刪除的優勢）；最後用一個整數 <code>minFreq</code> 全域追蹤目前最小的使用次數，淘汰時直接看 <code>freq[minFreq]</code> 鏈頭即可。</p>\n\n<p><code>get(key)</code> 的步驟：查不到回 -1；查到的話，把這個 key 從 <code>freq[oldFreq]</code> 的鏈上刪掉，freq 加 1，插入 <code>freq[oldFreq+1]</code> 鏈尾（代表「最新」）；如果 <code>freq[oldFreq]</code> 剛好被清空「而且 oldFreq 正好等於 minFreq」，minFreq 才要加 1——這個條件判斷很容易漏掉第二個子句，是這題最常見的 bug 來源。<code>put(key,value)</code>：若 key 已存在，等同先跑一次 get 讓 freq 正確遞增，再覆寫 value；若不存在且容量已滿，先淘汰 <code>freq[minFreq]</code> 鏈頭（一定同時是「使用次數最少」且「最少被使用裡面最舊」的 key，兩個排序條件一次滿足），再把新 key 以 freq=1 插入 <code>freq[1]</code> 鏈尾，並把 <code>minFreq</code> 直接設回 1（新插入的 key 一定是目前最小頻率）。</p>\n\n<p>Edge case：容量為 0 時 put 應該什麼都不做（不能真的塞進去又立刻淘汰，會動到不該動的狀態）；key 重複 put 時必須更新 value 同時仍要走 freq 遞增的路徑，不能只是單純覆寫；<code>minFreq</code> 只會因為「某個頻率鏈被清空且清空的正好是目前最小」而遞增，絕不會因為舊資料而遞減——因為每次 put 新 key 時會把 minFreq 直接重設成 1，這個不變量（只升不因舊資料降，但會被新資料重置）正是正確性證明的核心。</p>\n\n<p>複雜度對照：暴力掃描版 get O(1)／put 最壞 O(n)（n=容量）；雙層雜湊+頻率桶版 get／put 都是嚴格 O(1)，額外空間 O(capacity)（每個 key 恰好活在一條頻率鏈與一個 Map entry 裡）。另一種常見但較差的做法，是用一個以 freq 為鍵的最小堆（min-heap）取代頻率桶，淘汰時 pop 堆頂——程式碼更短，但每次 get/put 要做 O(log n) 的堆調整，回不到 O(1)，面試官通常會追問「能不能做到比 O(log n) 更好」來引導到頻率桶解法。</p>\n\n<p>兩個常見變形：第一種是 432《All O‘one Data Structure》——不只要淘汰最少頻率，還要能 O(1) 回答「目前頻率最大的 key」與「目前頻率最小的 key」兩種查詢。這逼得頻率桶本身也要串成一條雙向鏈結串列（而不只是用 hashmap 存 freq→list），因為「最大/最小頻率是誰」若只靠 hashmap 無法 O(1) 取得，必須靠鏈結串列的頭尾指標直接拿到；第二種是 895《Maximum Frequency Stack》——把「同一頻率內的次序」從 LRU 改成 Stack（後進先出）：pop 永遠回傳目前最高頻率裡「最後被 push 進去」的那個元素。這題的頻率桶幾乎跟 LFU 一模一樣，只是每條頻率鏈改用 stack 語意（push/pop 都從尾端），很適合用來驗證自己是不是真的理解頻率桶這個資料結構，而不是背下 LFU 的程式碼。</p>\n\n<p>面試官常見追問：「如果多執行緒同時 get/put 需要 thread-safe 怎麼做？」（通常答案是在頻率桶操作外包一層鎖，或用分段鎖/CAS，但嚴格 O(1) 的無鎖版本很難，值得誠實說出 trade-off）；「如果要支援『頻率會隨時間衰減』（避免早期熱門的 key 永遠占住高頻率）要怎麼改？」；以及「這個設計跟作業系統裡的頁面置換演算法（LFU page replacement）或 CPU 快取替換策略有什麼對應關係？」——這正是把演算法課本上的 LFU 和系統課裡「cache replacement policy」連起來思考的好機會。</p>",
+      "derivation_html": "<p>嚴格 O(1) 不是「均攤」而是「每一次呼叫都 O(1)」，關鍵在於三個操作都只需要「已知節點指標」的雙向鏈結串列基本操作：從鏈上移除一個已知節點（改前後兩個節點的 next/prev 指標，O(1)，不需要走訪整條鏈）、插入到鏈尾（O(1)）、查詢某個 key 目前的節點位置（直接查 <code>key→iterator</code> 這個雜湊表，O(1)）。</p>\n<p>對照用最小堆存 <code>(freq,key)</code> 的做法：堆的 push/pop/調整堆積序都是 O(log n)（n 為目前堆大小，上界是 capacity），因為堆是以陣列模擬的完整二元樹，每次調整要沿著樹高走，樹高是 ⌈log₂ n⌉。頻率桶能把這個 log n 消掉的本質原因是：它不需要維持「全域誰最小」的嚴格排序，只需要維持一個會被頻繁觀察的局部不變量——<code>minFreq</code> 這一個整數——並且可以證明這個整數只在「<code>freq[minFreq]</code> 的鏈被清空」時才遞增，每次 get 最多讓某一條鏈的大小減 1，所以不需要每次呼叫都重新掃描去找新的最小值。</p>",
+      "source_label": "wisdompeak/LeetCode · Design/460.LFU-Cache/460.LFU Cache.cpp",
+      "source_url": "https://github.com/wisdompeak/LeetCode/blob/master/Design/460.LFU-Cache/460.LFU%20Cache.cpp",
+      "source_code": "class LFUCache {\n    int cap, minfreq;\n    unordered_map<int,pair<int,int>>Map; // key -> value, freq;\n    unordered_map<int,list<int>>freq; // freq -> keys\n    unordered_map<int,list<int>::iterator>iter; // key -> iterator\npublic:\n    LFUCache(int capacity)\n    {\n        cap=capacity;\n    }\n\n    int get(int key)\n    {\n        if (Map.find(key)==Map.end()) return -1;\n        int f=Map[key].second;\n        freq[f].erase(iter[key]);\n        freq[f+1].push_back(key);\n        iter[key]=--freq[f+1].end();\n        Map[key].second++;\n        if (freq[minfreq].size()==0)\n            minfreq++;\n        return Map[key].first;\n    }\n\n    void put(int key, int value)\n    {\n        if (cap<=0) return;\n        if (get(key)!=-1)\n        {\n            Map[key].first=value;\n            return;\n        }\n        else\n        {\n            if (Map.size()>=cap)\n            {\n                int minKey=freq[minfreq].front();\n                iter.erase(minKey);\n                Map.erase(minKey);\n                freq[minfreq].pop_front();\n            }\n            Map[key]={value,1};\n            freq[1].push_back(key);\n            iter[key]=--freq[1].end();\n            minfreq=1;\n            return;\n        }\n    }\n};",
+      "problems": [
+        {
+          "id": "460",
+          "title": "LFU Cache",
+          "url": "https://leetcode.com/problems/lfu-cache/",
+          "note": "主題：雙層雜湊 + 頻率桶，get/put 均為嚴格 O(1) 時間、O(capacity) 空間"
+        },
+        {
+          "id": "146",
+          "title": "LRU Cache",
+          "url": "https://leetcode.com/problems/lru-cache/",
+          "note": "對照組：只看最近使用順序，不追蹤使用次數，結構較簡單的 O(1) design"
+        },
+        {
+          "id": "432",
+          "title": "All O‘one Data Structure",
+          "url": "https://leetcode.com/problems/all-oone-data-structure/",
+          "note": "變形：頻率桶本身要串成雙向鏈結串列，才能 O(1) 回答目前最大/最小頻率的 key"
+        },
+        {
+          "id": "895",
+          "title": "Maximum Frequency Stack",
+          "url": "https://leetcode.com/problems/maximum-frequency-stack/",
+          "note": "變形：同頻率內改用 Stack（後進先出）語意取代 LRU 語意"
+        }
+      ],
+      "tip_html": "<p>這套「頻率桶」結構在真實世界也有身影：Java 的 Caffeine 快取函式庫並不是用這裡介紹的精確 LFU，而是用一種稱為 W-TinyLFU 的機率近似結構：用一個小型 LRU 視窗加上一個 4-bit Count-Min Sketch（頻率草圖）去估計「誰的歷史使用頻率低」，以機率誤差換取遠比精確版更小的額外記憶體開銷——這是從「教科書精確解」走向「工程上可接受的近似解」的一個好例子，也是面試被問到「如果 capacity 是百萬級怎麼辦」時可以提到的方向。</p>"
+    }
+  ],
+  "csapp": [
+    {
+      "chapter": "Ch.4",
+      "section": "4.3 Sequential Y86-64 Implementations",
+      "explanation_html": "<p>上一節（§4.2）教了 HCL（Hardware Control Language）這套「用布林/字組運算式描述組合邏輯」的迷你語言；這一節要把 HCL 真正拿來用：把 §4.1 定義好的 Y86-64 指令集，實作成一個完整能跑的處理器——SEQ（Sequential implementation，單週期循序實作）。SEQ 的目標不是效能，而是「正確、容易懂」：先把每條指令該做的事情想清楚、拆成固定的步驟，之後第 4.5 節才會在 SEQ 的基礎上切出管線（PIPE），追求效能。</p>\n\n<p>SEQ 最核心的設計思想是：<b>不管是哪一種指令，執行時都走過同一組六個固定階段</b>——Fetch（取指）、Decode（解碼）、Execute（執行）、Memory（存取記憶體）、Write back（寫回暫存器）、PC update（更新程式計數器）。對某條特定指令不需要的階段，就讓它在那個階段「什麼都不做」（例如 <code>irmovq</code> 不需要存取記憶體，Memory 階段對它而言就是空的），而不是每種指令各寫一套專屬電路。這跟寫程式時「用一個統一的介面處理不同 case，而不是對每個 case 各寫一個特例函式」是同一種工程直覺：犧牲一點點「有些階段對某些指令是浪費的」，換來電路只需要畫一次、每個階段的邏輯都能共用。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\">\n  <b style=\"color:#b0561a;\">HCL（Hardware Control Language）</b>　CS:APP 自創的教學用硬體描述語言，用布林/字組層級的條件運算式描述「給定 icode 等訊號，某個控制訊號該等於什麼」，可以直接編譯成模擬器的 C 程式碼，用來精確定義 SEQ/PIPE 每個控制訊號的邏輯，而不必真的畫電路圖。\n</div>\n\n<p>逐階段看訊號是怎麼接起來的：Fetch 階段從 PC 指到的記憶體位址讀出第一個位元組，拆成 <code>icode:ifun</code>（指令碼：功能碼），根據 icode 判斷這條指令是否需要暫存器指定位元組（<code>rA:rB</code>）、是否需要常數欄位 <code>valC</code>，並算出下一條指令的位址 <code>valP</code>（= PC + 這條指令實際佔用的位元組數，見下方數學推導）。Decode 階段把 rA、rB 餵進暫存器檔案的兩個讀取埠，依 icode 決定「實際上」要讀哪個暫存器當 valA／valB（例如 <code>pushq</code> 的 srcB 永遠是 %rsp，不是指令編碼裡的 rB）。Execute 階段用一個共用 ALU，依 icode 決定 aluA／aluB 該接哪個訊號、alufun 該做加法還是指令指定的運算，算出 valE，對 OPq 類指令還要順便更新條件碼（ZF／SF／OF）。Memory 階段依 icode 決定要不要讀/寫記憶體、位址是 valE 還是 valA、寫入的資料是 valA 還是 valP。Write back 把 valE／valM 寫回 dstE／dstM 指定的暫存器。PC update 則根據 icode（以及條件跳躍的 Cnd 訊號）決定下一個 PC 該是 valP、valC，還是從記憶體讀回來的 valM。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\">\n  <b style=\"color:#b0561a;\">valP／valC／valE／valM</b>　SEQ 訊號命名慣例：valP 是下一條指令位址、valC 是指令裡編碼的常數、valE 是 ALU 算出來的值、valM 是從記憶體讀回來的值；這套命名在 §4.3～§4.5 的所有圖與 HCL 程式碼裡保持一致，認得這幾個字首就能看懂絕大多數 SEQ/PIPE 的訊號圖。\n</div>\n\n<p>拿一條最能把六個階段都「用好用滿」的指令走一遍最有感覺：<code>call</code>。Fetch 讀出 icode=ICALL，需要 valC（呼叫目標位址）；Decode 幾乎不用讀一般暫存器；Execute 算 valE = %rsp − 8（把堆疊指標往下移一格，幫等一下要 push 的回傳位址騰出空間）；Memory 階段把 valP（也就是 call 指令自己之後那條指令的位址——回傳位址）寫到位址 valE；Write back 把 valE 寫回 %rsp（更新堆疊指標）；PC update 直接把 PC 設成 valC（跳到被呼叫的函式）。六個階段裡 call 幾乎每一個都有實際工作，對照 <code>nop</code> 這種幾乎每個階段都在空轉的指令，能具體感受到「統一六階段流程」是怎麼同時撐起這兩種極端。</p>\n\n<p>SEQ 也要處理「指令執行失敗」的情況，靠的是一個貫穿六個階段、最後才被使用的狀態訊號 <code>Stat</code>：Fetch 階段若讀到記憶體保護範圍外的位址（<code>imem_error</code>）或指令本身不合法（不在已知 icode 集合裡），這個錯誤資訊會一路跟著這條指令走完剩下的階段（但後面階段看到錯誤狀態會避免真的去寫壞暫存器或記憶體），直到 PC update 階段才真正依據 Stat 決定「處理器該停下來」還是「繼續跑下一條」。這種「先標記、延後處理」的設計，正是第 8 章例外控制流（Exceptional Control Flow）的硬體對應版本——真正的 CPU 在例外發生時也不是立刻中斷，而是讓錯誤標記跟著指令流到某個固定點才觸發例外處理。</p>\n\n<p>SEQ 之所以叫「Sequential」、而不是「Pipelined」，是因為它每個時脈週期只處理一條指令、六個階段的組合邏輯在同一個週期內一次算完，整個處理器裡唯一真正的「狀態暫存器」只有 PC（其餘的 valA/valE/valM 等都只是組合邏輯算出來、當下週期用完就丟的訊號，不會跨週期保存）。這個設計的缺點很直白：一條指令要走完 Fetch 到 PC update 的整條邏輯鏈，才能開始下一條指令，電路的「關鍵路徑」（critical path）長度等於六個階段邏輯延遲的總和，時脈頻率被壓得很低——這正是 §4.5 要引入 PIPE（把六個階段拆成真正的管線暫存器，讓六條指令同時在六個不同階段重疊執行）的動機。</p>\n\n<p>對面試準備而言，SEQ 的價值不在於背誦 HCL 語法，而是建立一個心智模型：真正的 CPU 執行一條指令必然要經過「取指→解碼→（可能的）運算→（可能的）記憶體存取→寫回→更新 PC」這個骨架，之後學分支預測、亂序執行、快取、管線危障（hazard）與資料旁路（forwarding）時，都是在這個骨架上疊加優化。理解 SEQ 也能回答一類常見的系統設計／效能面試追問：「為什麼記憶體存取比暫存器存取慢這麼多會影響整體設計」——因為 Memory 階段在 SEQ 裡跟其他階段一樣只分配到一個週期的時間，真實硬體要用快取、預先寫入佇列等技巧把「本來該花很多週期的記憶體存取」硬塞進管線的節奏裡。</p>",
+      "derivation_html": "<p>Fetch 階段算出的 <code>valP</code>（下一條指令位址）＝ PC ＋ 這條指令實際佔用的位元組數，而「這條指令佔幾個位元組」完全由 icode 決定，可以拆成三項相加：<b>1</b>（第一個位元組，固定存放 icode:ifun）＋ <b>need_regids ? 1 : 0</b>（要不要再接一個 rA:rB 位元組）＋ <b>need_valC ? 8 : 0</b>（要不要再接一個 8 bytes 的常數／位址欄位，Y86-64 的字組寬度是 64 位元＝8 bytes）。這正好對應 SEQ 的 HCL 控制邏輯裡另外算出的兩個布林訊號 <code>need_regids</code> 與 <code>need_valC</code>。代入不同 icode：<code>halt</code>／<code>nop</code>／<code>ret</code> 兩者都不需要 → 1 byte；<code>OPq</code>／<code>rrmovq</code>／<code>pushq</code>／<code>popq</code> 只需要 regid → 1+1=2 bytes；<code>jXX</code>／<code>call</code> 只需要 valC（沒有暫存器欄位）→ 1+8=9 bytes；<code>irmovq</code>／<code>rmmovq</code>／<code>mrmovq</code> 兩者都需要 → 1+1+8=10 bytes。Y86-64 的指令長度從 1 到 10 bytes 不等，而不是像一些教學用 ISA 那樣固定長度——固定長度指令集解碼電路更簡單，但平均每條指令浪費的位元組更多，是指令集設計上一個經典的時間（解碼複雜度）換空間（程式碼密度）取捨。</p>",
+      "source_label": "seq-full.hcl（CS:APP3e SEQ 控制邏輯樣板，Randal E. Bryant & David R. O'Hallaron 2010；此處取自公開課程作業庫中未改動的樣板片段）",
+      "source_url": "https://github.com/zhuozhiyongde/Introduction-to-Computer-System-2023Fall-PKU/blob/b8888db1a2421a0951ea26ec9c5d726b35fdb179/04-Arch-Lab/partB/seq-full.hcl",
+      "source_code": "## Determine instruction status\nword Stat = [\n\timem_error || dmem_error : SADR;\n\t!instr_valid: SINS;\n\ticode == IHALT : SHLT;\n\t1 : SAOK;\n];",
+      "tip_html": "<p>原本想依照慣例附上 CMU 15-213 對應週次的課堂影片連結，但查證後發現：目前能公開取得的 15-213 歷年課堂錄影（檢查過標示為 Fall/Spring 多個學期的版本）清一色都在 Lecture「Machine-Level Programming V」之後直接跳到「The Memory Hierarchy／Cache Memories」，完全沒有對應第 4 章 Y86-64／處理器架構／管線化的講次——這與 Architecture Lab（架構實驗）在許多學期是以自學＋習題課為主、沒有排進正式錄影課堂的開課方式一致。CMU 官方 Fall 2015 課程網站提到「15-513」有錄影，但連結指向需要 CMU 校內帳號登入的 Panopto 系統，一般讀者打不開。因此這一節誠實不附課堂影片連結，改以 HCL 原始碼與教科書章節內容為主要依據，避免附上猜測性、沒有核對過的連結。</p>"
+    }
+  ],
+  "linux": [
+    {
+      "topic": "C 語言的物件導向程式設計：struct + 函式指標 vtable、container_of 與方法派送（接續 /dev/mem 的 file_operations）",
+      "explanation_html": "<p>C 語言沒有 <code>class</code>、沒有 <code>virtual</code>、沒有內建的繼承語法，但整個 Linux 核心從頭到尾都是用物件導向的「思維」組織起來的——昨天讀 <code>/dev/mem</code> 裝置時看到的 <code>drivers/char/mem.c</code>，裡面每個裝置節點（<code>/dev/mem</code>、<code>/dev/null</code>、<code>/dev/zero</code>…）都對應一份不同的 <code>file_operations</code>，這正是今天要講的機制本身。延續宅色夫（jserv）「你所不知道的 C 語言」系列裡的「物件導向程式設計篇」，今天聚焦三個互相支撐的技巧：封裝（Encapsulation）、以函式指標達成的多型／方法派送（Polymorphism / Method Dispatch），以及用結構體嵌入與 <code>container_of</code> 達成的繼承（Inheritance）。</p>\n\n<p>封裝的最小範例是「不透明指標」（opaque pointer，C++ 俗稱 pimpl idiom）：標頭檔只宣告 <code>struct counter;</code>（不完整型別，incomplete type），完全不透露內部有哪些欄位；只有實作該結構的 .c 檔案才看得到 <code>struct counter { ... };</code> 的完整定義。外部程式碼只能拿著 <code>struct counter *</code> 這個指標，透過該模組提供的函式操作它，完全無法直接存取或假設內部欄位的排列——這跟 C++／Java 裡 <code>private</code> 成員要做到的事情一樣，只是 C 語言用「編譯單元看不到定義」這個更粗暴但同樣有效的手段達成。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\">\n  <b style=\"color:#2c7357;\">不透明指標 Opaque Pointer（Pimpl）</b>　只讓外部看到一個指向不完整型別的指標、把實際欄位藏在定義它的那個 .c 檔案裡的封裝手法；呼叫端完全無法得知、也無法依賴內部欄位排列，換取未來能自由改動內部實作而不破壞使用端程式碼的自由度。\n</div>\n\n<p>多型的主力是「函式指標表」：核心裡最知名的一份就是 <code>include/linux/fs.h</code> 的 <code>struct file_operations</code>，裡面是一整排函式指標成員（<code>.read</code>、<code>.write</code>、<code>.open</code>、<code>.release</code>、<code>.unlocked_ioctl</code>、<code>.mmap</code>……）。每個驅動程式或檔案系統各自宣告一份 <code>static const struct file_operations</code>，用 designated initializer（例如 <code>.read = my_read</code>）只填自己支援的幾個函式指標，其餘留空自動是 <code>NULL</code>。VFS（虛擬檔案系統）層完全不知道、也不需要知道背後是哪個驅動，呼叫時一律寫成 <code>file->f_op->read(file, buf, count, pos)</code>——這一行就是純 C 版本的「虛擬函式呼叫」：透過一層指標間接跳到實際型別對應的實作，跟 C++ 編譯器在背後幫你插入的 vtable 查表完全同一回事，只是 C 要自己手動排這張表、自己手動做這次間接跳轉。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\">\n  <b style=\"color:#2c7357;\">方法派送 Method Dispatch</b>　決定「呼叫這個方法時，實際上要執行哪一段程式碼」的機制。C++／Java 靠編譯器自動產生的 vtable 做動態派送；純 C 核心則靠手動填好的函式指標表（如 file_operations）加上一次顯式的指標間接呼叫達成同樣效果。\n</div>\n\n<p>把這個機制接回昨天 <code>/dev/mem</code> 的例子就會很具體：核心用一個對照表把次編號（minor number）對應到不同的 <code>file_operations</code>（<code>/dev/mem</code> 用一份、<code>/dev/null</code> 用另一份、<code>/dev/zero</code> 又是另一份）；當使用者呼叫 <code>open(\"/dev/mem\", ...)</code>，核心依次編號挑出對應那一份 <code>file_operations</code>，裝到新建立的 <code>struct file</code> 的 <code>f_op</code> 欄位上。之後每一次 <code>read()</code>／<code>write()</code> 系統呼叫，VFS 都是透過同一行 <code>file->f_op->read(...)</code> 間接跳轉——同一段呼叫端程式碼，因為 <code>f_op</code> 指向不同的表，就表現出完全不同的行為（<code>/dev/null</code> 的 read 永遠回傳 0 bytes，<code>/dev/zero</code> 的 read 永遠填 0，<code>/dev/mem</code> 的 read 真的去讀實體記憶體）。這就是純 C 物件導向「多型」的完整生命週期：從挑選實作、綁定到介面、到透過介面呼叫。</p>\n\n<p>繼承有兩種做法，取決於「基底」欄位在結構體裡的位置。第一種是把基底結構放在最前面（first-member embedding）：根據 C99 §6.7.2.1 第 13 條（common initial sequence 規則），如果 struct A 的第一個成員型別是 struct B，那麼 <code>(struct B*)a_ptr</code> 這種轉型是定義明確、保證正確的——因為兩者記憶體最前面那一段版面配置完全一致。核心裡大量用這招做「向上轉型」。</p>\n\n<p>第二種是基底／成員不在最前面時，要用 <code>container_of(ptr, type, member)</code>：這個巨集的語意是「已知某個成員的指標，反推出外層結構體的起始位址」，作法是 <code>(type*)((char*)ptr - offsetof(type, member))</code>——<code>offsetof</code> 在編譯期就能算出 member 在 type 裡的位元組位移量，整個操作是零額外執行成本的指標運算（見下方數學推導）。這是核心裡 <code>list_head</code>／<code>hlist_node</code> 這類「侵入式」(intrusive) 容器能夠運作的根本機制：容器節點本身嵌在你的資料結構裡任何位置，<code>container_of</code> 讓你拿著節點指標就能找回整個物件。附帶一提，查最新版核心原始碼會發現 <code>container_of()</code> 的註解已經寫上「<i>Do not use container_of() in new code</i>」，建議改用新加入的 <code>container_of_const()</code>——原因是原版 <code>container_of</code> 會不動聲色地丟掉 <code>ptr</code> 的 <code>const</code> 修飾（<i>WARNING: any const qualifier of @ptr is lost</i>），這是一個容易被忽略、卻會讓「明明該是唯讀的資料被意外改寫」的真實正確性陷阱，<code>container_of_const</code> 用 <code>_Generic</code> 在編譯期依照傳入指標是否為 const 選擇對應版本，把這個 const 正確性補回來。</p>\n\n<p>方法派送表還牽涉到一個與資安直接相關的細節：核心的程式設計慣例與 <code>Documentation/security/self-protection.rst</code> 都建議把這類函式指標表宣告成 <code>static const</code>，讓它被放進唯讀的 <code>.rodata</code> 段——因為如果 <code>file_operations</code> 這種表是可寫的，攻擊者只要能找到任意記憶體寫入的漏洞，就能直接覆寫表裡的函式指標，把後續對這個物件的呼叫全部劫持到攻擊者控制的位址（這是核心提權漏洞利用裡一個經典手法）；宣告成 <code>const</code> 之後，正常執行階段完全沒有合法路徑可以寫到這塊記憶體，大幅墊高攻擊門檔。生命週期管理也走同一套「函式指標當回呼」的思路：<code>struct kref</code>／<code>struct kobject</code> 把參照計數跟一個使用者提供的 release 回呼函式綁在一起，<code>kref_put(&obj->refcount, my_release)</code> 在計數器真正歸零時才呼叫 <code>my_release(obj)</code>——這就是純 C 版本的「虛擬解構子」。</p>\n\n<p>對面試準備而言，這組技巧的價值在於：只要看懂「struct + 函式指標 = 介面」、「container_of = 由成員找回整體」這兩個套路，核心裡幾乎每個子系統的程式碼（VFS 的 <code>file_operations</code>、網路裝置的 <code>net_device_ops</code>、裝置模型的 <code>platform_driver</code>、<code>bus_type</code>）讀起來都是同一種模式反覆出現，而不是各自孤立要硬背的特例；同時也是系統設計／底層面試常見的追問：「C 語言要怎麼模擬介面與多型？」「為什麼 C++ 的虛擬函式呼叫有額外開銷？」都可以直接從這裡的 vtable 間接跳轉機制回答。</p>",
+      "derivation_html": "<p><code>container_of(ptr, type, member)</code> 的位址運算：若 <code>member</code> 在 <code>type</code> 裡的位元組位移量是 <code>offsetof(type, member)</code>（由編譯器在編譯期用「假設一個位址 0 的 type 物件，取 member 的位址，這個位址數值就是位移量」的經典技巧算出，等價於 <code>(size_t)&(((type*)0)->member)</code>），那麼外層結構體的起始位址就是 <code>member</code> 的位址減掉這個位移量：<code>container_of_addr = member_addr − offsetof(type, member)</code>。整個運算只是一次指標減法，不需要任何執行期的型別資訊（RTTI）、不需要任何表查詢——這也是為什麼 C 語言「模擬繼承」的執行期成本可以做到完全是 0，真正的開銷只發生在編譯期算 <code>offsetof</code> 這個常數的時候。</p>",
+      "source_label": "torvalds/linux · include/linux/container_of.h",
+      "source_url": "https://github.com/torvalds/linux/blob/master/include/linux/container_of.h",
+      "source_code": "/* SPDX-License-Identifier: GPL-2.0 */\n#ifndef _LINUX_CONTAINER_OF_H\n#define _LINUX_CONTAINER_OF_H\n\n#include <linux/build_bug.h>\n#include <linux/stddef.h>\n\n#define typeof_member(T, m)\ttypeof(((T*)0)->m)\n\n/**\n * container_of - cast a member of a structure out to the containing structure\n * @ptr:\tthe pointer to the member.\n * @type:\tthe type of the container struct this is embedded in.\n * @member:\tthe name of the member within the struct.\n *\n * WARNING: any const qualifier of @ptr is lost.\n * Do not use container_of() in new code.\n */\n#define container_of(ptr, type, member) ({\t\t\t\t\\\n\tstatic_assert(__same_type(*(ptr), typeof_member(type, member)) || \\\n\t\t      __same_type(*(ptr), void),\t\t\t\\\n\t\t      \"pointer type mismatch in container_of()\");\t\\\n\t(type *)((void *)(ptr) - offsetof(type, member)); })\n\n/**\n * container_of_const - cast a member of a structure out to the containing\n *\t\t\tstructure and preserve the const-ness of the pointer\n * @ptr:\t\tthe pointer to the member\n * @type:\t\tthe type of the container struct this is embedded in.\n * @member:\t\tthe name of the member within the struct.\n *\n * Always prefer container_of_const() instead of container_of() in new code.\n */\n#define container_of_const(ptr, type, member)\t\t\t\t\\\n\t_Generic(ptr,\t\t\t\t\t\t\t\\\n\t\tconst typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\\\n\t\tdefault: ((type *)container_of(ptr, type, member))\t\\\n\t)\n\n#endif\t/* _LINUX_CONTAINER_OF_H */",
+      "tip_html": "<p>jserv 這篇講義其實還示範了幾個更進階的設計模式如何用純 C 實作（Observer、Strategy、Visitor，主要靠介面 struct + 函式指標切換），以及用 Designated Initializer 搭配 <code>NULL</code> 表示「這個行為維持預設」的慣例；對應的兩段直播錄影（上／下集）就收錄在講義最上方，有興趣深入可以直接對照原始碼逐段看。</p>"
+    }
+  ],
+  "sources": [
+    {
+      "label": "wisdompeak/LeetCode · LFU/LRU/All O‘one/Max Frequency Stack 題解",
+      "url": "https://github.com/wisdompeak/LeetCode/tree/master/Design"
+    },
+    {
+      "label": "LeetCode 460. LFU Cache",
+      "url": "https://leetcode.com/problems/lfu-cache/"
+    },
+    {
+      "label": "owlfox CS:APP 中文筆記",
+      "url": "https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw"
+    },
+    {
+      "label": "CS:APP 筆記（章節架構參考）",
+      "url": "https://hackmd.io/@sysprog/CSAPP"
+    },
+    {
+      "label": "CMU 15-213 Fall 2015 課程網站",
+      "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/index.html"
+    },
+    {
+      "label": "jserv《你所不知道的C語言》物件導向程式設計篇",
+      "url": "https://hackmd.io/0FiEdsGERFKD-fPTrUK0HA"
+    },
+    {
+      "label": "jserv 直播錄影：物件導向程式設計篇（上）",
+      "url": "https://youtu.be/luOQh7VgBis"
+    },
+    {
+      "label": "jserv 直播錄影：物件導向程式設計篇（下）",
+      "url": "https://youtu.be/zbs0G5-E3Jk"
+    },
+    {
+      "label": "成大 Linux 核心課程進度表 第13週",
+      "url": "https://wiki.csie.ncku.edu.tw/linux/schedule"
+    },
+    {
+      "label": "torvalds/linux · include/linux/container_of.h",
+      "url": "https://github.com/torvalds/linux/blob/master/include/linux/container_of.h"
+    }
+  ]
+}

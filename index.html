@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · 2026-11-15</title></head>
-<body style="margin:0;padding:0;background-color:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif;"><!--nav--><nav style="max-width:820px;margin:0 auto;padding:10px 12px;display:flex;gap:8px;align-items:center;justify-content:space-between;background-color:#f4f1ea"><a href="2026-11-14.html" style="font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;border:1px solid #e2ddd0;border-radius:4px;padding:6px 10px;text-decoration:none;color:#22252b;background-color:#fffefb">◀ 前一天</a><select aria-label="選擇日期" onchange="location.href=this.value" style="font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;color:#22252b;background-color:#fffefb;border:1px solid #e2ddd0;border-radius:4px;padding:6px 8px;min-width:9em"><option value="2026-11-15.html" selected>11/15（日）</option><option value="2026-11-14.html">11/14（六）</option></select><span style="font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;border:1px solid #e2ddd0;border-radius:4px;padding:6px 10px;text-decoration:none;color:#7a766b;background-color:#fffefb;opacity:.45">後一天 ▶</span></nav><!--/nav-->
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · 2026-11-16</title></head>
+<body style="margin:0;padding:0;background-color:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif;">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f1ea;padding:28px 12px;">
     <tr>
       <td align="center">
@@ -10,24 +10,24 @@
             <td style="padding:32px 24px 36px 24px;">
               <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#7a766b;text-transform:uppercase;">DAILY LEARNING NOTE</div>
               <div style="margin-top:8px;font-family:Georgia,'Noto Serif TC',serif;font-size:28px;font-weight:700;color:#22252b;line-height:1.25;">每日東東</div>
-              <div style="margin-top:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#7a766b;">2026-11-15（週日）</div>
+              <div style="margin-top:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#7a766b;">2026-11-16（週一）</div>
               
               <div style="margin-top:22px;border-bottom:3px double #22252b;"></div>
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
       <tr>
         <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#2f5f9e;"></div></td>
         <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">演算法</td>
-        <td style="padding:5px 0;font-size:14px;color:#22252b;">Z 函式（Z-function）：線性掃描記錄每個位置與開頭的最長共同前綴</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">LFU Cache 設計：雙層雜湊 + 頻率桶（Frequency Bucket）達成 O(1) 存取與淘汰</td>
       </tr>
       <tr>
         <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#b0561a;"></div></td>
         <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">CS:APP</td>
-        <td style="padding:5px 0;font-size:14px;color:#22252b;">Ch.4　4.2 Logic Design and the Hardware Control Language HCL</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">Ch.4　4.3 Sequential Y86-64 Implementations</td>
       </tr>
       <tr>
         <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#2c7357;"></div></td>
         <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">Linux Kernel</td>
-        <td style="padding:5px 0;font-size:14px;color:#22252b;">Linux 核心的 /dev/mem 裝置：把實體記憶體位址空間直接攤開成一個可 mmap 的檔案</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">C 語言的物件導向程式設計：struct + 函式指標 vtable、container_of 與方法派送（接續 /dev/mem 的 file_operations）</td>
       </tr></table>
               
     
@@ -37,98 +37,115 @@
     
     <div style="margin-top:20px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#2f5f9e;letter-spacing:1px;">§01</div>
-      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2f5f9e;">Z 函式（Z-function）：線性掃描記錄每個位置與開頭的最長共同前綴</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2f5f9e;">LFU Cache 設計：雙層雜湊 + 頻率桶（Frequency Bucket）達成 O(1) 存取與淘汰</div>
       <div style="margin-top:12px;border-left:3px solid #2f5f9e;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
-        
-<p>今天換一個完全沒教過的分類：<b>Z 函式（Z-function）</b>。給定字串 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s</code>（長度 n），Z 陣列定義
-為 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">z[i]</code> = <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s[i..n-1]</code> 與 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s[0..n-1]</code> 的「最長共同前綴」長度（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">z[0]</code>
-通常直接定義為 0 或 n，依實作慣例而定，底下取 n）。換句話說，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">z[i]</code> 回答的是：「從位置 i 開始看，
-最多能往後抄多少個字元，跟開頭一模一樣？」這跟之前教過的 KMP failure function 問的是同一類問題的「鏡像版本」——
-failure function 問「這個前綴的尾巴，最多能跟自己的開頭重疊多少」，Z 函式問「字串中每個位置，跟整體開頭最多重疊多少」。</p>
+        <p><b>LFU（Least Frequently Used，最少使用頻率）快取淘汰</b>是「設計資料結構」這一大類面試題裡最常被拿出來追問到底的題目之一。題目要求實作一個固定容量的快取，支援 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">get(key)</code> 與 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">put(key, value)</code>：容量滿了要淘汰時，優先淘汰「存取次數最少」的鍵；如果多個鍵的存取次數同樣最少，再淘汰其中最久沒被存取的那個（也就是在「使用頻率」這個主排序鍵之下，用 LRU 當次排序鍵）。這跟之前學過的 LRU（Least Recently Used）快取（146）是近親：LRU 只看「最近用過沒」，LFU 還要多追蹤「用過幾次」。</p>
 
-<p>暴力算法很直覺：對每個 i，從 s[i] 開始逐字元跟 s[0] 比對，比到不相等為止。這樣單個 i 最壞要花 O(n) 比較，
-n 個位置合計 O(n²)。Z 函式的關鍵洞察是：比對過程中產生的資訊不該被丟棄。演算法維護一個視窗 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">[l, r]</code>，
-代表「目前見過、延伸最靠右的一次匹配區間」（也就是某個 z[l] 的匹配延伸到了 r）。處理新的位置 i 時分兩種情況：
-如果 i 還在視窗內（i ≤ r），表示 s[i..r] 其實已經知道等於 s[i-l..r-l]（因為整段 [l,r] 本身就是開頭的拷貝），
-所以可以直接借用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">z[i-l]</code> 當作初始猜測，不必從零比對；如果猜測值剛好頂到視窗邊界 r，才需要從 r+1
-開始「手動」往後多比幾個字元確認有沒有更長。如果 i 已經超出視窗（i > r），就只能老實從頭手動比對，比完後更新
-[l, r] 為新找到的這段。</p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;"><b style="color:#2f5f9e;">Z-box</b>　指演算法當下維護的區間 [l, r]：曾經確認過 s[l..r] 等於 s 的前綴 s[0..r-l]，是整個加速技巧的「已知情報快取」。</div>
-<p>走一遍實例會比較有感覺。令 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s = "aabxaabxcaabxaabxay"</code>……其實不用這麼長，拿一個經典小例子
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s = "aaabaab"</code>（n=7）來看：z[0] 定義為 7（整串跟自己比對當然全等，實作上這個位置通常另外處理，不列入
-「找最長 proper border」的候選）；z[1]：從 s[1]="aabaab" 比對開頭 "aaabaab"，第一個字元 a=a，第二個字元
-a=a，第三個字元 b≠a，所以 z[1]=2；z[2]：從 "abaab" 比，a=a，b≠a，z[2]=1；z[3]（字元是 'b'，跟開頭 'a' 第一
-個字元就不同）z[3]=0；z[4]：從 "aab" 比開頭 "aaabaab"，a=a、a=a、b≠a，z[4]=2；z[5]：從 "ab" 比，a=a，
-b≠a，z[5]=1；z[6]：從 "b" 比，b≠a，z[6]=0。整個 Z 陣列是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">[7,2,1,0,2,1,0]</code>。這組數字馬上告訴你
-一個重要事實：位置 1 跟位置 4 都「局部長得像開頭」，長度分別是 2 跟 2——這正是後面講字串週期時會用到的線索。</p>
+<p>先想暴力解：如果只用一個 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">HashMap&lt;key,(value,freq)&gt;</code>，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">get</code> 可以 O(1)，但 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">put</code> 在容量滿、需要淘汰時，必須掃過所有鍵找出目前最小的 freq（若平手還要再找其中最舊的）——這是 O(n)，n 是容量。真正的目標是<b>get 與 put 都要做到嚴格 O(1)</b>（不是均攤 O(1)，是每一次呼叫都 O(1)），這跟一般雜湊表「均攤 O(1)」的保證等級不一樣，也是這題被列為 Hard 的原因。</p>
 
-<p>Edge case 值得特別小心：如果整個字串每個字元都不同（例如 "abcde"），Z 陣列除了 z[0] 之外全部是 0，演算法
-不會因此錯誤地「省略比較」，視窗 [l,r] 會一路維持退化（r 幾乎不往前推進），但這剛好印證了下面數學推導要證明
-的攤還論證——視窗沒有進展時，演算法本來就只做常數次工作，不會變慢。另一個邊界是整個字串由同一個字元組成
-（例如 "aaaaa"），這時 z[i] = n-i 對所有 i 成立（每個位置往後看都跟開頭重疊到字串結尾），視窗會一路擴張到底，
-是「視窗推進量」被用滿的極端情況，也是驗證實作正確性時最容易踩雷的輸入（off-by-one 常在這種全同字元輸入下现形）。</p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;"><b style="color:#2f5f9e;">border（邊界）</b>　字串的 border 是「同時是它的 proper 前綴、又是它的 proper 後綴」的子字串（proper 指長度嚴格小於原字串）。KMP 的 failure function 和 Z-function 本質上都是在幫你快速找出所有 border。</div>
-<p>複雜度比一比：暴力法對每個起點重新掃一次，最壞 O(n²)（例如整串同字元時每個起點都要掃到底）；如果是「多個
-模式字串對同一個長文本做比對」，暴力更糟，變成 O(n·m) 甚至更高。Z 函式只需要一次線性掃描，時間 O(n)、額外空間
-O(n)（存 Z 陣列本身），且是 one-pass、不需要像後綴自動機那樣先建出一個更重的資料結構，這也是它在演算法面試裡
-討喜的原因——程式碼量跟 KMP failure function 差不多（都在 20 行內），但很多人覺得 Z 函式的「視窗推進」邏輯比
-KMP 的「失敗後回退到哪裡」更直覺好記。</p>
+<div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;">
+  <b style="color:#2f5f9e;">攤銷複雜度（Amortized Complexity）</b>　指「連續做 n 次操作的總成本除以 n」得到的平均成本，允許個別某一次操作偶爾較貴，只要長期平均攤下來仍是常數；跟本題要求「每一次呼叫都是 O(1)」的嚴格保證不同，後者更強。
+</div>
 
-<p>兩個最常見的變形模式：第一種是<b>單模式字串比對</b>——把 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">pattern + 分隔符 + text</code> 接成一條新字串
-（分隔符要選一個保證不會出現在 pattern 或 text 裡的字元，常用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">#</code> 或 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">\x00</code>），對這條新
-字串算一次 Z 陣列，只要某個落在 text 部分的位置 z 值剛好等於 pattern 長度，就代表那裡出現一次完整匹配，整體時間
-仍是 O(n+m)，跟 KMP 做字串搜尋是同一個複雜度量級的替代方案。第二種是<b>字串週期／循環節偵測</b>：字串 s（長度 n）
-存在長度為 d 的週期（也就是 s 可以看成某個長度 d 的子字串重複貼出來），條件是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">z[d] == n-d</code>；如果還要求
-「剛好整除、完全由重複單元拼成」（不是只在尾端部分重疊），再加上 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">n % d == 0</code> 這個額外條件即可。</p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;"><b style="color:#2f5f9e;">sentinel 分隔符</b>　在「pattern + 分隔符 + text」技巧裡插入的那個保證不會出現在原字串中的特殊字元，作用是切斷 Z 陣列的匹配，避免 pattern 的比對不小心「跨過邊界」延伸進 text 裡、或反過來，造成誤判。</div>
-<p>面試官常見追問，建議心裡先有答案：「Z 函式跟 KMP 的 failure function 是不是同一個東西？」答案是：兩者都在
-O(n) 時間內提取出字串的 border 結構，彼此可以互相推導（已知 Z 陣列可以 O(n) 轉成 failure 陣列，反過來也可以），
-但視角不同——failure function 是「每個前綴自己的最長 proper border」，Z 函式是「每個位置跟整體開頭的最長共同前綴」，
-在單模式字串搜尋這個最常見的應用上效能完全等價，差異主要在工程習慣與哪種視窗邏輯比較好除錯。另一個常見追問是
-「視窗 [l,r] 為什麼保證均攤 O(n)？」——這題的嚴謹論證放進下面的數學推導區塊；還有「如果要同時搜尋 k 個模式字串，
-Z 函式還夠用嗎？」——單純重複套用 k 次 O(n+mᵢ) 的技巧仍然可行但沒有共用資訊，這時更合適的工具是後綴自動機或
-Aho-Corasick（字典樹 + failure link 的多模式版本），可以把資訊結構一次攤平共用，這也是這題如果追問到底，最終
-會導向「你知道比 Z 函式更進階的字串資料結構嗎」的分水嶺問題。</p>
+<p>達成 O(1) 的關鍵結構是「雙層雜湊 + 頻率桶（Frequency Bucket）」：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Map&lt;key,(value,freq)&gt;</code> 記錄每個 key 目前的值與使用次數；另一個 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">freq → 雙向鏈結串列&lt;key&gt;</code> 的雜湊表，把同一個使用次數的所有 key 依「最後一次被存取」的順序串成一條鏈（鏈頭最舊、鏈尾最新）；再用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">key → iterator</code> 記住每個 key 目前在哪一條頻率鏈的哪個節點上（否則「刪除某個 key」要先 O(n) 找到節點才能刪，白白浪費雙向鏈結串列 O(1) 刪除的優勢）；最後用一個整數 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">minFreq</code> 全域追蹤目前最小的使用次數，淘汰時直接看 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">freq[minFreq]</code> 鏈頭即可。</p>
+
+<p><code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">get(key)</code> 的步驟：查不到回 -1；查到的話，把這個 key 從 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">freq[oldFreq]</code> 的鏈上刪掉，freq 加 1，插入 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">freq[oldFreq+1]</code> 鏈尾（代表「最新」）；如果 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">freq[oldFreq]</code> 剛好被清空「而且 oldFreq 正好等於 minFreq」，minFreq 才要加 1——這個條件判斷很容易漏掉第二個子句，是這題最常見的 bug 來源。<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">put(key,value)</code>：若 key 已存在，等同先跑一次 get 讓 freq 正確遞增，再覆寫 value；若不存在且容量已滿，先淘汰 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">freq[minFreq]</code> 鏈頭（一定同時是「使用次數最少」且「最少被使用裡面最舊」的 key，兩個排序條件一次滿足），再把新 key 以 freq=1 插入 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">freq[1]</code> 鏈尾，並把 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">minFreq</code> 直接設回 1（新插入的 key 一定是目前最小頻率）。</p>
+
+<p>Edge case：容量為 0 時 put 應該什麼都不做（不能真的塞進去又立刻淘汰，會動到不該動的狀態）；key 重複 put 時必須更新 value 同時仍要走 freq 遞增的路徑，不能只是單純覆寫；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">minFreq</code> 只會因為「某個頻率鏈被清空且清空的正好是目前最小」而遞增，絕不會因為舊資料而遞減——因為每次 put 新 key 時會把 minFreq 直接重設成 1，這個不變量（只升不因舊資料降，但會被新資料重置）正是正確性證明的核心。</p>
+
+<p>複雜度對照：暴力掃描版 get O(1)／put 最壞 O(n)（n=容量）；雙層雜湊+頻率桶版 get／put 都是嚴格 O(1)，額外空間 O(capacity)（每個 key 恰好活在一條頻率鏈與一個 Map entry 裡）。另一種常見但較差的做法，是用一個以 freq 為鍵的最小堆（min-heap）取代頻率桶，淘汰時 pop 堆頂——程式碼更短，但每次 get/put 要做 O(log n) 的堆調整，回不到 O(1)，面試官通常會追問「能不能做到比 O(log n) 更好」來引導到頻率桶解法。</p>
+
+<p>兩個常見變形：第一種是 432《All O‘one Data Structure》——不只要淘汰最少頻率，還要能 O(1) 回答「目前頻率最大的 key」與「目前頻率最小的 key」兩種查詢。這逼得頻率桶本身也要串成一條雙向鏈結串列（而不只是用 hashmap 存 freq→list），因為「最大/最小頻率是誰」若只靠 hashmap 無法 O(1) 取得，必須靠鏈結串列的頭尾指標直接拿到；第二種是 895《Maximum Frequency Stack》——把「同一頻率內的次序」從 LRU 改成 Stack（後進先出）：pop 永遠回傳目前最高頻率裡「最後被 push 進去」的那個元素。這題的頻率桶幾乎跟 LFU 一模一樣，只是每條頻率鏈改用 stack 語意（push/pop 都從尾端），很適合用來驗證自己是不是真的理解頻率桶這個資料結構，而不是背下 LFU 的程式碼。</p>
+
+<p>面試官常見追問：「如果多執行緒同時 get/put 需要 thread-safe 怎麼做？」（通常答案是在頻率桶操作外包一層鎖，或用分段鎖/CAS，但嚴格 O(1) 的無鎖版本很難，值得誠實說出 trade-off）；「如果要支援『頻率會隨時間衰減』（避免早期熱門的 key 永遠占住高頻率）要怎麼改？」；以及「這個設計跟作業系統裡的頁面置換演算法（LFU page replacement）或 CPU 快取替換策略有什麼對應關係？」——這正是把演算法課本上的 LFU 和系統課裡「cache replacement policy」連起來思考的好機會。</p>
       </div>
       
     <div style="margin-top:10px;">
-      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">2223</span>
-      <a href="https://leetcode.com/problems/sum-of-scores-of-built-strings/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Sum of Scores of Built Strings</a>
-      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">Z 函式最直接的應用：對整條字串算一次 Z 陣列，score(i) 就是 z[i]（i 從尾端往回看跟整體開頭的最長共同前綴），答案是所有 z[i] 加上整串本身的長度 n；時間 O(n) 空間 O(n)，注意總和要用 64-bit 以免溢位</div>
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">460</span>
+      <a href="https://leetcode.com/problems/lfu-cache/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">LFU Cache</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">主題：雙層雜湊 + 頻率桶，get/put 均為嚴格 O(1) 時間、O(capacity) 空間</div>
     </div>
     <div style="margin-top:10px;">
-      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">459</span>
-      <a href="https://leetcode.com/problems/repeated-substring-pattern/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Repeated Substring Pattern</a>
-      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">判斷字串是否由某個子字串重複貼出來：對字串 s（長度 n）算 Z 陣列，只要存在 1≤d&lt;n 滿足 z[d]==n-d 且 n%d==0，就代表 s 可以用長度 d 的單元完整鋪滿，時間 O(n)，是「字串週期」這個 Z 函式經典變形的直接練習</div>
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">146</span>
+      <a href="https://leetcode.com/problems/lru-cache/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">LRU Cache</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">對照組：只看最近使用順序，不追蹤使用次數，結構較簡單的 O(1) design</div>
     </div>
     <div style="margin-top:10px;">
-      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1392</span>
-      <a href="https://leetcode.com/problems/longest-happy-prefix/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Longest Happy Prefix</a>
-      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">主流教科書解法是 KMP failure function（算完整串後直接讀最後一格），但同一題也可以把 s 和它自己用分隔符接起來算 Z 陣列、找最長的 border 解出來；拿來對照兩種 O(n) border 演算法的異同，是常見的面試追問</div>
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">432</span>
+      <a href="https://leetcode.com/problems/all-oone-data-structure/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">All O‘one Data Structure</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">變形：頻率桶本身要串成雙向鏈結串列，才能 O(1) 回答目前最大/最小頻率的 key</div>
+    </div>
+    <div style="margin-top:10px;">
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">895</span>
+      <a href="https://leetcode.com/problems/maximum-frequency-stack/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Maximum Frequency Stack</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">變形：同頻率內改用 Stack（後進先出）語意取代 LRU 語意</div>
     </div>
       
     <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
-        
-<p>宣稱 Z 函式是「攤還 O(n)」，核心論證在於視窗右端 r 在整個演算法執行過程中<b>只會往右移動，不會往左退</b>。
-每次處理位置 i 時，演算法做的「真正逐字元比較」只發生在兩種情況：(1) i 超出目前視窗（i &gt; r），这時從 r+1（也就是
-i 本身）開始手動比對；(2) i 在視窗內但借用的猜測值剛好頂到視窗邊界，於是從 r+1 繼續往後多比幾個字元確認。這兩種
-情況合起來看，每一次「手動比較」要麼立刻失敗（比較 1 次就結束，退出迴圈），要麼成功並讓 r 往右推進 1。
-全程下來，「成功的手動比較次數」累計起來最多等於 r 總共推進的距離，而 r 的範圍被限制在 [0, n-1]，所以成功比較的
-總次數 ≤ n；「失敗的手動比較」每次最多發生 1 次就立刻終止該輪的擴張，所以總共最多 n 次。兩者相加，整個演算法
-的逐字元比較次數上界是 O(n)，而不是每個 i 都重新比對一次的 O(n²)——這跟滑動視窗、雙指標類演算法的攤還證明是
-同一套「指標單調不回頭」的論證骨架。</p>
+        <p>嚴格 O(1) 不是「均攤」而是「每一次呼叫都 O(1)」，關鍵在於三個操作都只需要「已知節點指標」的雙向鏈結串列基本操作：從鏈上移除一個已知節點（改前後兩個節點的 next/prev 指標，O(1)，不需要走訪整條鏈）、插入到鏈尾（O(1)）、查詢某個 key 目前的節點位置（直接查 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">key→iterator</code> 這個雜湊表，O(1)）。</p>
+<p>對照用最小堆存 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">(freq,key)</code> 的做法：堆的 push/pop/調整堆積序都是 O(log n)（n 為目前堆大小，上界是 capacity），因為堆是以陣列模擬的完整二元樹，每次調整要沿著樹高走，樹高是 ⌈log₂ n⌉。頻率桶能把這個 log n 消掉的本質原因是：它不需要維持「全域誰最小」的嚴格排序，只需要維持一個會被頻繁觀察的局部不變量——<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">minFreq</code> 這一個整數——並且可以證明這個整數只在「<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">freq[minFreq]</code> 的鏈被清空」時才遞增，每次 get 最多讓某一條鏈的大小減 1，所以不需要每次呼叫都重新掃描去找新的最小值。</p>
       </div>
     </div>
       
+    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
+      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://github.com/wisdompeak/LeetCode/blob/master/Design/460.LFU-Cache/460.LFU%20Cache.cpp" style="color:#a39d90;text-decoration:underline;">wisdompeak/LeetCode · Design/460.LFU-Cache/460.LFU Cache.cpp</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">class LFUCache {
+    int cap, minfreq;
+    unordered_map&lt;int,pair&lt;int,int&gt;&gt;Map; // key -&gt; value, freq;
+    unordered_map&lt;int,list&lt;int&gt;&gt;freq; // freq -&gt; keys
+    unordered_map&lt;int,list&lt;int&gt;::iterator&gt;iter; // key -&gt; iterator
+public:
+    LFUCache(int capacity)
+    {
+        cap=capacity;
+    }
+
+    int get(int key)
+    {
+        if (Map.find(key)==Map.end()) return -1;
+        int f=Map[key].second;
+        freq[f].erase(iter[key]);
+        freq[f+1].push_back(key);
+        iter[key]=--freq[f+1].end();
+        Map[key].second++;
+        if (freq[minfreq].size()==0)
+            minfreq++;
+        return Map[key].first;
+    }
+
+    void put(int key, int value)
+    {
+        if (cap&lt;=0) return;
+        if (get(key)!=-1)
+        {
+            Map[key].first=value;
+            return;
+        }
+        else
+        {
+            if (Map.size()&gt;=cap)
+            {
+                int minKey=freq[minfreq].front();
+                iter.erase(minKey);
+                Map.erase(minKey);
+                freq[minfreq].pop_front();
+            }
+            Map[key]={value,1};
+            freq[1].push_back(key);
+            iter[key]=--freq[1].end();
+            minfreq=1;
+            return;
+        }
+    }
+};</pre>
+    </div>
       
     <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#2f5f9e;text-transform:uppercase;">NOTE · 補充</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
-        
-<p>這題跟之前（9/12、9/15）教過的 KMP failure function、以及 7/x 系列教過的 Manacher 最長回文子字串，剛好可以
-串成一條「O(n) 字串結構三部曲」的複習地圖：KMP 處理「前綴 vs 自己的後綴」、Manacher 處理「以每個點為中心的最長
-回文半徑」、Z 函式處理「每個位置 vs 整體開頭」。1392 題（Longest Happy Prefix）教科書式解法是 KMP failure
-function 的最後一格，但也完全可以改用 Z 函式在 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s + 分隔符 + s</code> 上找「border」解出來——這正是上面
-提到的「兩者可以互相推導」的具體案例，若面試官要求你用兩種方法各寫一次，是很好的練習。</p>
+        <p>這套「頻率桶」結構在真實世界也有身影：Java 的 Caffeine 快取函式庫並不是用這裡介紹的精確 LFU，而是用一種稱為 W-TinyLFU 的機率近似結構：用一個小型 LRU 視窗加上一個 4-bit Count-Min Sketch（頻率草圖）去估計「誰的歷史使用頻率低」，以機率誤差換取遠比精確版更小的額外記憶體開銷——這是從「教科書精確解」走向「工程上可接受的近似解」的一個好例子，也是面試被問到「如果 capacity 是百萬級怎麼辦」時可以提到的方向。</p>
       </div>
     </div>
     </div>
@@ -140,94 +157,54 @@ function 的最後一格，但也完全可以改用 Z 函式在 <code style="bac
     
     <div style="margin-top:20px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#b0561a;letter-spacing:1px;">§01</div>
-      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#b0561a;">Ch.4　4.2 Logic Design and the Hardware Control Language HCL</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#b0561a;">Ch.4　4.3 Sequential Y86-64 Implementations</div>
       <div style="margin-top:12px;border-left:3px solid #b0561a;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
-        
-<p>上一次（11/14）學完 4.1 的 Y86-64 指令集架構之後，今天進入 <b>4.2 Logic Design and the Hardware Control
-Language HCL</b>——邏輯設計與硬體控制語言 HCL。這一節的任務是「換心智模型」：4.1 讓你用寫組合語言程式的方式理解
-Y86-64，4.2 要讓你學會用「搭電路」的方式思考同一組指令要怎麼被硬體真正執行，而 4.3 緊接著就會把這一節學到的元件
-真正接線組成一台可以跑 Y86-64 程式的 SEQ（Sequential）處理器。換句話說，4.2 不是獨立的理論章節，而是 4.3 的
-零件清單與電路圖語言。</p>
+        <p>上一節（§4.2）教了 HCL（Hardware Control Language）這套「用布林/字組運算式描述組合邏輯」的迷你語言；這一節要把 HCL 真正拿來用：把 §4.1 定義好的 Y86-64 指令集，實作成一個完整能跑的處理器——SEQ（Sequential implementation，單週期循序實作）。SEQ 的目標不是效能，而是「正確、容易懂」：先把每條指令該做的事情想清楚、拆成固定的步驟，之後第 4.5 節才會在 SEQ 的基礎上切出管線（PIPE），追求效能。</p>
 
-<p>整節的第一個觀念回顧：邏輯閘（AND、OR、NOT 等）是<b>沒有狀態的物理電路</b>，它們是純函式——輸出完全由當下輸入
-決定，不記得任何歷史。這點看似理所當然，但是整個數位邏輯設計最重要的前提：之後你會看到，處理器裡「會記得東西」
-的部分（程式計數器、暫存器、記憶體）必須被刻意、明確地跟這些「不會記得東西」的組合邏輯分開設計，兩者混在一起接線
-是硬體 bug 的主要來源之一。CS:APP 第 4 章重點筆記裡對這個性質下了很精準的一句話：「組合邏輯不需要任何時序或
-控制——只要輸入變化，值就通過邏輯閘傳播。」</p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;"><b style="color:#b0561a;">組合邏輯（Combinational Logic）</b>　由邏輯閘搭建、完全沒有內部狀態的電路：任何時刻的輸出都只是當下輸入的函式，沒有「記憶」，輸入一變，經過閘延遲之後輸出就自動跟著變。</div>
-<p>HCL 的 Boolean 表達式語法就是把這種「純函式」電路，用類似 C 的語法寫下來：宣告一個 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">bool</code> 型的
-訊號，右邊用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">&amp;&amp;</code>（AND 閘）、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">||</code>（OR 閘）、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">!</code>（NOT 閘）、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">==</code>
-（相等比較電路）組合其他訊號。比方說 Y86-64 要判斷「目前這個 icode 是不是屬於條件跳躍或條件搬移這一類」，HCL
-會寫成類似 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">bool Bch = icode in { IJXX, ICMOVXX };</code> 這種形式——這正是下一段要講的 set membership
-語法糖。每個 HCL 的 bool 表達式最終都會被拆解回一組邏輯閘的接線圖，所以 HCL 本身並不是一種「程式語言」，而是
-「畫電路圖的文字描述法」，寫出來的每一行都對應一塊實際存在的硬體。</p>
-<p>比 Boolean 訊號更進一步，4.2 引入<b>字組層級（word-level）</b>的組合邏輯：把一整束位元線（例如 64 條線）
-當成一個「字」整體操作，最典型的元件是<b>多工器（MUX）</b>——根據一個或多個選擇訊號，從好幾個輸入字裡選出一個
-當輸出。HCL 用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">int</code> 型訊號搭配 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">case</code> 表達式來描述 MUX：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">case</code> 裡列出一串
-「條件 : 值」，依序往下求值，<b>第一個條件為真的那一行決定輸出</b>（不是所有符合條件的都生效，只取最先符合的），
-這個「優先權」語意直接對應硬體上用一串優先編碼邏輯接出來的多工器，而不是「同時」比較所有分支。這點是初學者最容易
-誤解的地方——HCL 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">case</code> 看起來像 C 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">switch</code>，但 C 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">switch</code> 預設會貫穿
-到下一個 case（除非寫 break），HCL 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">case</code> 則是「只取第一個為真的分支」，語意上更接近巢狀的
-if-else if 鏈。</p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;"><b style="color:#b0561a;">多工器（MUX, Multiplexer）</b>　一種字組層級的組合邏輯元件：輸入好幾條等寬的資料線與一組選擇訊號，依照選擇訊號的值，把其中一條輸入線直接接通到輸出。Y86-64 處理器裡每個「這個數值從哪裡來」的分支，硬體上幾乎都是一顆 MUX。</div>
-<p><b>Set membership</b> 是 HCL 提供的語法糖：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">x in {v1, v2, v3}</code> 這一個寫法，背後會被展開成
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">(x==v1) || (x==v2) || (x==v3)</code>，純粹是為了讓「判斷某個訊號是不是屬於某一類值」這件事在 HCL 裡寫起來
-更簡潔。這個語法在 Y86-64 的控制邏輯裡大量出現，原因是處理器經常要問「目前這個 icode，是屬於算術運算類、跳躍類、
-還是堆疊操作類」，與其寫一長串 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">||</code>，不如直接列舉這一類包含哪些 icode 值，可讀性高很多，也更貼近
-「這是在描述一種分類關係」的本意，而不只是硬體線路的細節。</p>
+<p>SEQ 最核心的設計思想是：<b>不管是哪一種指令，執行時都走過同一組六個固定階段</b>——Fetch（取指）、Decode（解碼）、Execute（執行）、Memory（存取記憶體）、Write back（寫回暫存器）、PC update（更新程式計數器）。對某條特定指令不需要的階段，就讓它在那個階段「什麼都不做」（例如 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">irmovq</code> 不需要存取記憶體，Memory 階段對它而言就是空的），而不是每種指令各寫一套專屬電路。這跟寫程式時「用一個統一的介面處理不同 case，而不是對每個 case 各寫一個特例函式」是同一種工程直覺：犧牲一點點「有些階段對某些指令是浪費的」，換來電路只需要畫一次、每個階段的邏輯都能共用。</p>
 
-<p>最後一個子小節 <b>Memory and Clocking</b>，是整節真正的分水嶺——從「沒有狀態的組合邏輯」切換到「有狀態的
-時序邏輯（sequential logic）」。CS:APP 的 SEQ 處理器裡，只有四個部件真正需要被明確的時脈訊號控制時序：
-<b>程式計數器（PC）</b>、<b>條件碼暫存器（CC）</b>、<b>資料記憶體</b>、<b>暫存器檔案（register file）</b>；
-除了這四個，處理器裡其他所有邏輯都是純組合邏輯，不需要時脈。筆記裡的原文描述得很精確：「這些單元通過一個時鐘
-信號來控制，它觸發將新值轉載到暫存器，並將值寫到隨機存取記憶體。」更具體一點：程式計數器每個時鐘週期都會載入
-新的指令位址；條件碼暫存器只有在執行整數運算指令時才會被更新；暫存器檔案只有在執行 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rmmovq</code>、
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">pushq</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">call</code> 這類會寫暫存器的指令時才寫入。</p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;"><b style="color:#b0561a;">正緣觸發（Edge-Triggered）</b>　時序元件只在時鐘訊號由 0 跳到 1 的那一瞬間（上升緣）才真正把新值鎖存進去，週期內其餘時間即使輸入訊號一直在變，輸出也維持舊值不動，直到下一次上升緣才更新。</div>
-<p>為什麼一定要「正緣觸發」而不是隨時更新？因為這是保證整台處理器行為可預測的關鍵約束：一個時鐘週期內，指令
-讀取狀態時，讀到的永遠是「上一個週期結束時鎖存的舊值」，絕對不會讀到「本週期正在計算、還沒寫回去的新值」——
-如果沒有這條規則，電路裡一旦出現「輸出回頭影響自己輸入」的回授路徑，就可能永遠震盪、收斂不到穩定值，或是不同
-元件之間因為微小的延遲差異，讀到彼此處於「寫一半」的中間狀態，產生無法重現的 race condition。這也解釋了為什麼
-4.2 要先把「無狀態的組合邏輯」跟「有狀態、靠時脈更新的時序邏輯」切得這麼乾淨——4.3 之後要設計 SEQ 處理器的每一
-個 stage（取指、解碼、執行、記憶體存取、寫回），本質上就是在這兩種元件之間接線，而「這條線到底是組合邏輯算出來
-的瞬時值，還是時序元件鎖存著的穩定值」，是後面讀懂整張 SEQ 電路圖最重要的一條分界線。</p>
+<div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;">
+  <b style="color:#b0561a;">HCL（Hardware Control Language）</b>　CS:APP 自創的教學用硬體描述語言，用布林/字組層級的條件運算式描述「給定 icode 等訊號，某個控制訊號該等於什麼」，可以直接編譯成模擬器的 C 程式碼，用來精確定義 SEQ/PIPE 每個控制訊號的邏輯，而不必真的畫電路圖。
+</div>
 
-<p>面試或實務上常見的追問延伸到這一節：「為什麼數位電路設計要嚴格禁止組合邏輯裡出現回授迴路（feedback
-loop）？」——答案就是上一段講的震盪/不穩定風險，純組合邏輯被定義成必須是無迴圈的有向圖（DAG），一旦出現環，
-就不再是「輸出是輸入的函式」這麼簡單的語意了。「同步電路跟非同步電路的差異是什麼？」——同步電路（像這裡的 SEQ）
-所有狀態更新都綁在同一顆全域時鐘上，非同步電路沒有全域時鐘，靠訊號本身的到達順序觸發，設計更自由但也更難驗證
-正確性，是許多真實晶片抓蟲的重災區。CS:APP 刻意先用 HCL 把「組合邏輯 vs 時序邏輯」這條線畫得清清楚楚，正是為了
-讓後面 4.3～4.5 一路推進到 pipeline 處理器時，你能一眼看出每個訊號屬於哪一種性質。</p>
+<p>逐階段看訊號是怎麼接起來的：Fetch 階段從 PC 指到的記憶體位址讀出第一個位元組，拆成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">icode:ifun</code>（指令碼：功能碼），根據 icode 判斷這條指令是否需要暫存器指定位元組（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rA:rB</code>）、是否需要常數欄位 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">valC</code>，並算出下一條指令的位址 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">valP</code>（= PC + 這條指令實際佔用的位元組數，見下方數學推導）。Decode 階段把 rA、rB 餵進暫存器檔案的兩個讀取埠，依 icode 決定「實際上」要讀哪個暫存器當 valA／valB（例如 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">pushq</code> 的 srcB 永遠是 %rsp，不是指令編碼裡的 rB）。Execute 階段用一個共用 ALU，依 icode 決定 aluA／aluB 該接哪個訊號、alufun 該做加法還是指令指定的運算，算出 valE，對 OPq 類指令還要順便更新條件碼（ZF／SF／OF）。Memory 階段依 icode 決定要不要讀/寫記憶體、位址是 valE 還是 valA、寫入的資料是 valA 還是 valP。Write back 把 valE／valM 寫回 dstE／dstM 指定的暫存器。PC update 則根據 icode（以及條件跳躍的 Cnd 訊號）決定下一個 PC 該是 valP、valC，還是從記憶體讀回來的 valM。</p>
+
+<div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;">
+  <b style="color:#b0561a;">valP／valC／valE／valM</b>　SEQ 訊號命名慣例：valP 是下一條指令位址、valC 是指令裡編碼的常數、valE 是 ALU 算出來的值、valM 是從記憶體讀回來的值；這套命名在 §4.3～§4.5 的所有圖與 HCL 程式碼裡保持一致，認得這幾個字首就能看懂絕大多數 SEQ/PIPE 的訊號圖。
+</div>
+
+<p>拿一條最能把六個階段都「用好用滿」的指令走一遍最有感覺：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">call</code>。Fetch 讀出 icode=ICALL，需要 valC（呼叫目標位址）；Decode 幾乎不用讀一般暫存器；Execute 算 valE = %rsp − 8（把堆疊指標往下移一格，幫等一下要 push 的回傳位址騰出空間）；Memory 階段把 valP（也就是 call 指令自己之後那條指令的位址——回傳位址）寫到位址 valE；Write back 把 valE 寫回 %rsp（更新堆疊指標）；PC update 直接把 PC 設成 valC（跳到被呼叫的函式）。六個階段裡 call 幾乎每一個都有實際工作，對照 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">nop</code> 這種幾乎每個階段都在空轉的指令，能具體感受到「統一六階段流程」是怎麼同時撐起這兩種極端。</p>
+
+<p>SEQ 也要處理「指令執行失敗」的情況，靠的是一個貫穿六個階段、最後才被使用的狀態訊號 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Stat</code>：Fetch 階段若讀到記憶體保護範圍外的位址（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">imem_error</code>）或指令本身不合法（不在已知 icode 集合裡），這個錯誤資訊會一路跟著這條指令走完剩下的階段（但後面階段看到錯誤狀態會避免真的去寫壞暫存器或記憶體），直到 PC update 階段才真正依據 Stat 決定「處理器該停下來」還是「繼續跑下一條」。這種「先標記、延後處理」的設計，正是第 8 章例外控制流（Exceptional Control Flow）的硬體對應版本——真正的 CPU 在例外發生時也不是立刻中斷，而是讓錯誤標記跟著指令流到某個固定點才觸發例外處理。</p>
+
+<p>SEQ 之所以叫「Sequential」、而不是「Pipelined」，是因為它每個時脈週期只處理一條指令、六個階段的組合邏輯在同一個週期內一次算完，整個處理器裡唯一真正的「狀態暫存器」只有 PC（其餘的 valA/valE/valM 等都只是組合邏輯算出來、當下週期用完就丟的訊號，不會跨週期保存）。這個設計的缺點很直白：一條指令要走完 Fetch 到 PC update 的整條邏輯鏈，才能開始下一條指令，電路的「關鍵路徑」（critical path）長度等於六個階段邏輯延遲的總和，時脈頻率被壓得很低——這正是 §4.5 要引入 PIPE（把六個階段拆成真正的管線暫存器，讓六條指令同時在六個不同階段重疊執行）的動機。</p>
+
+<p>對面試準備而言，SEQ 的價值不在於背誦 HCL 語法，而是建立一個心智模型：真正的 CPU 執行一條指令必然要經過「取指→解碼→（可能的）運算→（可能的）記憶體存取→寫回→更新 PC」這個骨架，之後學分支預測、亂序執行、快取、管線危障（hazard）與資料旁路（forwarding）時，都是在這個骨架上疊加優化。理解 SEQ 也能回答一類常見的系統設計／效能面試追問：「為什麼記憶體存取比暫存器存取慢這麼多會影響整體設計」——因為 Memory 階段在 SEQ 裡跟其他階段一樣只分配到一個週期的時間，真實硬體要用快取、預先寫入佇列等技巧把「本來該花很多週期的記憶體存取」硬塞進管線的節奏裡。</p>
       </div>
       
       
     <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
-        
-<p>4.2.5 Memory and Clocking 雖然沒有給出具體公式，但它隱含了一個所有真實硬體時序設計都要面對的數字限制：
-時鐘週期 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Tc</code> 不能無限縮小，必須滿足 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Tc ≥ t_pd + t_setup</code>——其中 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">t_pd</code> 是
-這一段組合邏輯從輸入變化到輸出穩定所需的最長傳播延遲（propagation delay，取決於串接了多少層邏輯閘），
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">t_setup</code> 是時序元件（暫存器）要求「新值必須提前穩定多久，才能保證下一次上升緣能正確鎖存」的
-setup time。如果時鐘週期短於這個下限，暫存器可能鎖存到還在變化、尚未穩定的中間值，造成不可預期的錯誤狀態
-（這在真實晶片設計裡稱為 setup-time violation）。這正是為什麼 4.2 要先讓讀者認識「組合邏輯有延遲、時序元件有
-穩定時間需求」這兩個前提——4.4～4.5 之後要把 SEQ 拆成多個 pipeline stage 來提升時脈頻率，本質上就是把一條很長
-的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">t_pd</code>（跨整個指令執行路徑）切成好幾段較短的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">t_pd</code>，讓每一段都能單獨滿足上面這個不等
-式、把 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Tc</code> 壓得更小，整台處理器的輸出總帶寬（throughput）才能因此提升，即使單一指令從頭到尾所需的
-總延遲（latency）並沒有變短，甚至因為加入暫存器而略微增加。</p>
+        <p>Fetch 階段算出的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">valP</code>（下一條指令位址）＝ PC ＋ 這條指令實際佔用的位元組數，而「這條指令佔幾個位元組」完全由 icode 決定，可以拆成三項相加：<b>1</b>（第一個位元組，固定存放 icode:ifun）＋ <b>need_regids ? 1 : 0</b>（要不要再接一個 rA:rB 位元組）＋ <b>need_valC ? 8 : 0</b>（要不要再接一個 8 bytes 的常數／位址欄位，Y86-64 的字組寬度是 64 位元＝8 bytes）。這正好對應 SEQ 的 HCL 控制邏輯裡另外算出的兩個布林訊號 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">need_regids</code> 與 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">need_valC</code>。代入不同 icode：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">halt</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">nop</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ret</code> 兩者都不需要 → 1 byte；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">OPq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rrmovq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">pushq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">popq</code> 只需要 regid → 1+1=2 bytes；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">jXX</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">call</code> 只需要 valC（沒有暫存器欄位）→ 1+8=9 bytes；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">irmovq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rmmovq</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mrmovq</code> 兩者都需要 → 1+1+8=10 bytes。Y86-64 的指令長度從 1 到 10 bytes 不等，而不是像一些教學用 ISA 那樣固定長度——固定長度指令集解碼電路更簡單，但平均每條指令浪費的位元組更多，是指令集設計上一個經典的時間（解碼複雜度）換空間（程式碼密度）取捨。</p>
       </div>
     </div>
       
+    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
+      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://github.com/zhuozhiyongde/Introduction-to-Computer-System-2023Fall-PKU/blob/b8888db1a2421a0951ea26ec9c5d726b35fdb179/04-Arch-Lab/partB/seq-full.hcl" style="color:#a39d90;text-decoration:underline;">seq-full.hcl（CS:APP3e SEQ 控制邏輯樣板，Randal E. Bryant &amp; David R. O'Hallaron 2010；此處取自公開課程作業庫中未改動的樣板片段）</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">## Determine instruction status
+word Stat = [
+	imem_error || dmem_error : SADR;
+	!instr_valid: SINS;
+	icode == IHALT : SHLT;
+	1 : SAOK;
+];</pre>
+    </div>
       
     <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#b0561a;text-transform:uppercase;">NOTE · 補充</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
-        
-<p>照慣例今天應該附一段 CMU 15-213（Fall 2015）對應這一節的課堂錄影，但實際查證下來要誠實報告一個落空的結果：
-翻過 15-213 Fall 2015 官方課程表（27 堂課的完整清單）之後，Chapter 4（Y86-64 處理器架構／邏輯設計／HCL）完全
-沒有被排進任何一堂錄影講座——課程表從第 9 講「Machine Prog: Advanced」直接跳到第 10 講「Code Optimization」，
-中間整整跳過處理器架構這一章；另外查了 Fall 2017 學期公開在 YouTube 上的完整錄影清單，同樣的缺口也存在，一模
-一樣地從機器層級程式設計跳到程式碼最佳化。這代表 CMU 在這兩個學期都把 Y86-64／HCL／處理器設計這整塊內容留給
-學生自行透過 Architecture Lab（archlab，實作一個可以跑 Y86-64 的 pipeline 處理器）自學，沒有對應的課堂錄影。
-為了不編造不存在的連結，今天就不附「CMU 15-213 第 X 講」這個條目，改附上查證用的課程表本身，讀者可以自己核對
-這個落空的結論；若之後哪天查到其他學期確實有錄影涵蓋這一節，會在之後的筆記補上。</p>
+        <p>原本想依照慣例附上 CMU 15-213 對應週次的課堂影片連結，但查證後發現：目前能公開取得的 15-213 歷年課堂錄影（檢查過標示為 Fall/Spring 多個學期的版本）清一色都在 Lecture「Machine-Level Programming V」之後直接跳到「The Memory Hierarchy／Cache Memories」，完全沒有對應第 4 章 Y86-64／處理器架構／管線化的講次——這與 Architecture Lab（架構實驗）在許多學期是以自學＋習題課為主、沒有排進正式錄影課堂的開課方式一致。CMU 官方 Fall 2015 課程網站提到「15-513」有錄影，但連結指向需要 CMU 校內帳號登入的 Panopto 系統，一般讀者打不開。因此這一節誠實不附課堂影片連結，改以 HCL 原始碼與教科書章節內容為主要依據，避免附上猜測性、沒有核對過的連結。</p>
       </div>
     </div>
     </div>
@@ -239,99 +216,93 @@ setup time。如果時鐘週期短於這個下限，暫存器可能鎖存到還�
     
     <div style="margin-top:20px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#2c7357;letter-spacing:1px;">§01</div>
-      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2c7357;">Linux 核心的 /dev/mem 裝置：把實體記憶體位址空間直接攤開成一個可 mmap 的檔案</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2c7357;">C 語言的物件導向程式設計：struct + 函式指標 vtable、container_of 與方法派送（接續 /dev/mem 的 file_operations）</div>
       <div style="margin-top:12px;border-left:3px solid #2c7357;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
-        
-<p>Linux 延續「進度表 Week 13」這一週的記憶體管理主題，11/08 教過 POSIX Shared Memory、11/14 教過更全景的
-System V shm／POSIX shm／memfd_create／dma_buf 比較，今天接著 Week 13 清單上緊接在這兩者後面的下一個項目：
-<b>/dev/mem 裝置</b>。如果說前兩天在講「使用者空間程式之間怎麼合法地共享一段記憶體」，今天要講的是更底層、更
-赤裸的東西——「使用者空間程式要怎麼繞過所有抽象，直接摸到實體記憶體位址空間本身」。/dev/mem 把整個系統的實體
-位址空間，直接攤開成一個可以被 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">open</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">read</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">write</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap</code>
-的字元裝置檔案，從 Linux 最早期的版本（v0.01）就存在，是 UNIX「everything is a file」這句話被實踐到最極端的
-案例之一。</p>
+        <p>C 語言沒有 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">class</code>、沒有 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">virtual</code>、沒有內建的繼承語法，但整個 Linux 核心從頭到尾都是用物件導向的「思維」組織起來的——昨天讀 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/mem</code> 裝置時看到的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">drivers/char/mem.c</code>，裡面每個裝置節點（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/mem</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/null</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/zero</code>…）都對應一份不同的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">file_operations</code>，這正是今天要講的機制本身。延續宅色夫（jserv）「你所不知道的 C 語言」系列裡的「物件導向程式設計篇」，今天聚焦三個互相支撐的技巧：封裝（Encapsulation）、以函式指標達成的多型／方法派送（Polymorphism / Method Dispatch），以及用結構體嵌入與 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of</code> 達成的繼承（Inheritance）。</p>
 
-<p>先把它跟一般的記憶體存取路徑對比一下：平常一個行程讀寫記憶體，是透過 CPU 的 MMU 把<b>虛擬位址</b>翻譯成
-<b>實體位址</b>，這整層翻譯（page table）被核心嚴密控制，使用者完全看不到、也碰不到實體位址本身——這正是
-CS:APP 第 9 章「虛擬記憶體」花了一整章要建立的抽象：每個行程活在自己私有的位址空間裡，彼此看不到對方，也看不到
-實體記憶體真正的樣子。/dev/mem 是這層抽象刻意開的一個後門：只要有權限（通常要 root），就可以指定一段<b>實體
-位址</b>，直接要求核心把它映射進自己的虛擬位址空間，徹底跳過「這段記憶體原本屬於哪個行程」這個問題。</p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;"><b style="color:#2c7357;">實體位址 vs 虛擬位址</b>　虛擬位址是 CPU 執行指令時看到的位址，要經過 MMU／page table 翻譯才能對應到真正的記憶體晶片位置；實體位址才是硬體匯流排上真正拿去定址 DRAM／MMIO 裝置的那個號碼。/dev/mem 操作的是後者。</div>
-<p>實際使用方式很直接：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">open("/dev/mem", O_RDWR)</code> 拿到檔案描述子後，呼叫 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap(addr, length,
-prot, flags, fd, offset)</code>，這裡的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">offset</code>（第六個參數）不是檔案裡的偏移量，而是<b>你想映射
-的那段實體記憶體的起始位址本身</b>；呼叫成功後，回傳的虛擬位址範圍，讀寫起來就等同直接讀寫那段實體記憶體——
-不管它是真正的 DRAM，還是某張 PCI 裝置映射進位址空間的暫存器（MMIO），/dev/mem 一視同仁。也可以直接對
-/dev/mem 用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">read</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">write</code> 搭配 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">lseek</code> 存取，但那樣每次都要經過核心內部的
-緩衝區複製一次，效能遠不如 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap</code> 把那段實體記憶體直接映射進使用者空間後反覆存取。</p>
+<p>封裝的最小範例是「不透明指標」（opaque pointer，C++ 俗稱 pimpl idiom）：標頭檔只宣告 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct counter;</code>（不完整型別，incomplete type），完全不透露內部有哪些欄位；只有實作該結構的 .c 檔案才看得到 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct counter { ... };</code> 的完整定義。外部程式碼只能拿著 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct counter *</code> 這個指標，透過該模組提供的函式操作它，完全無法直接存取或假設內部欄位的排列——這跟 C++／Java 裡 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">private</code> 成員要做到的事情一樣，只是 C 語言用「編譯單元看不到定義」這個更粗暴但同樣有效的手段達成。</p>
 
-<p>jserv 課程筆記裡示範了幾個很具體的真實案例，很值得拿來建立直覺：其一是搭配開機參數 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mem=11G</code>
-限制核心只管理前 11GB 記憶體（讓核心完全不替超過這個範圍的記憶體建立映射與保留），之後透過
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap(0, 0x1000, ..., fd, 0x2C0000000)</code> 把核心「看不到」的那段實體記憶體直接摸出來用；其二是
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">master.c</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">slave.c</code> 這組範例，分別映射實體位址 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">0x34000000</code> 與
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">0x34004000</code>，讓兩個互不相關、原本沒有親緣關係的行程透過同一段實體記憶體交換資料，等於用
-/dev/mem 自己手刻一個最原始版本的共享記憶體；其三則示範了更危險的用法：找出某個行程的虛擬位址對應的實體
-位址後，透過 /dev/mem 直接竄改那段記憶體內容，甚至反組譯核心函式 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">devmem_is_allowed</code> 之後，直接
-用 /dev/mem 改寫它的機器碼，讓它永遠回傳「允許」。</p>
-<p>這也直接帶到安全性考量：操作 /dev/mem 需要足夠權限（一般要求 root），但光有 root 權限還不夠，核心本身還有
-一層守門機制——<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">devmem_is_allowed()</code> 這個函式，會呼叫 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">region_intersects()</code> 與
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">iomem_is_exclusive()</code> 判斷你想存取的那段實體位址，是不是被標記成一般系統記憶體（System RAM）且
-已經被某個驅動程式獨占使用；如果是，預設就拒絕讓 /dev/mem 碰它。現代核心的
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">CONFIG_STRICT_DEVMEM</code>（以及更進一步的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">CONFIG_IO_STRICT_DEVMEM</code>）選項，就是把這道守門
-機制收得更緊：開啟之後，/dev/mem 預設拒絕存取一般 RAM、甚至拒絕存取已經配給其他驅動的 MMIO 區段，只放行少數
-已知安全的例外——例如 x86 上即使開了 STRICT_DEVMEM，低於 1MB 的 System RAM 仍然允許被 mmap，這是為了相容某些
-需要讀取開機時 BIOS 資料區的傳統使用情境而保留下來的例外。另外有一個相關但不同層次的保護是
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap_min_addr</code>（可透過 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/proc/sys/vm/mmap_min_addr</code> 查看／調整）：它限制誰能映射靠近
-位址 0 附近的區域，主要是為了防堵「核心端 NULL 指標解參考」配合使用者端刻意映射位址 0 的提權攻擊手法。</p><div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;"><b style="color:#2c7357;">devmem_is_allowed() 守門函式</b>　核心裡決定「這段實體位址到底准不准被 /dev/mem 存取」的檢查函式，依靠 region_intersects／iomem_is_exclusive 判斷該段是否是被其他驅動獨占的一般系統記憶體；CONFIG_STRICT_DEVMEM 開啟後，它會拒絕絕大多數對一般 RAM 的存取請求。</div>
-<p>把 /dev/mem 放進整個「記憶體相關檔案家族」裡比較會更清楚它的定位：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/proc/iomem</code> 是「地圖」，
-列出整個實體位址空間目前被誰、用來做什麼（哪一段是 System RAM、哪一段是某張裝置的 MMIO、哪一段是保留區），
-一般使用者跟 root 看到的詳細程度不同（root 能看到完整的位址範圍，一般使用者只能看到被模糊化的資訊）；
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/kmem</code> 概念上是 /dev/mem 的「虛擬位址版本」——透過核心自己的虛擬位址而不是實體位址存取記憶體，
-但因為風險更高、實用價值又低，已經在多數現代主線核心裡被移除；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">vmcore</code>（kdump 機制產生）則是
-「崩潰當下那一刻」的靜態記憶體快照，拍完照之後內容就不會再變，跟 /dev/mem 這種「運行中系統的即時動態映像」
-在時間軸上完全是兩種東西。</p>
+<div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;">
+  <b style="color:#2c7357;">不透明指標 Opaque Pointer（Pimpl）</b>　只讓外部看到一個指向不完整型別的指標、把實際欄位藏在定義它的那個 .c 檔案裡的封裝手法；呼叫端完全無法得知、也無法依賴內部欄位排列，換取未來能自由改動內部實作而不破壞使用端程式碼的自由度。
+</div>
 
-<p>這個主題跟 CS:APP 的對照其實非常直接：CS:APP 第 9 章用整整一章建立「虛擬位址空間」這個抽象，告訴你作業系統
-怎麼用 page table 把每個行程的位址翻譯藏起來，讓每個行程以為自己獨佔一整塊連續記憶體；/dev/mem 則是這整套抽象
-故意被打開的一個後門，讓你繞過翻譯這一層，直接用實體位址操作記憶體——理解了 /dev/mem，其實也等於從反方向驗證了
-一次「虛擬記憶體這層抽象到底在隔離什麼」。實務上，/dev/mem（或包著它的工具如 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">devmem2</code>）在嵌入式
-開發、裝置驅動偵錯裡很常見，用來直接戳某個周邊裝置的 MMIO 暫存器做快速驗證；但在一般伺服器或雲端環境裡，
-/dev/mem 幾乎被視為頭號資安風險面——它等於繞過了核心所有的存取控制與行程隔離，所以是 kernel lockdown
-（安全開機模式）第一個要擋下的攻擊面之一，也是許多雲端供應商直接在 kconfig 編譯時就關掉它的原因。</p>
+<p>多型的主力是「函式指標表」：核心裡最知名的一份就是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">include/linux/fs.h</code> 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct file_operations</code>，裡面是一整排函式指標成員（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">.read</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">.write</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">.open</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">.release</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">.unlocked_ioctl</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">.mmap</code>……）。每個驅動程式或檔案系統各自宣告一份 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">static const struct file_operations</code>，用 designated initializer（例如 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">.read = my_read</code>）只填自己支援的幾個函式指標，其餘留空自動是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">NULL</code>。VFS（虛擬檔案系統）層完全不知道、也不需要知道背後是哪個驅動，呼叫時一律寫成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">file->f_op->read(file, buf, count, pos)</code>——這一行就是純 C 版本的「虛擬函式呼叫」：透過一層指標間接跳到實際型別對應的實作，跟 C++ 編譯器在背後幫你插入的 vtable 查表完全同一回事，只是 C 要自己手動排這張表、自己手動做這次間接跳轉。</p>
+
+<div style="margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;">
+  <b style="color:#2c7357;">方法派送 Method Dispatch</b>　決定「呼叫這個方法時，實際上要執行哪一段程式碼」的機制。C++／Java 靠編譯器自動產生的 vtable 做動態派送；純 C 核心則靠手動填好的函式指標表（如 file_operations）加上一次顯式的指標間接呼叫達成同樣效果。
+</div>
+
+<p>把這個機制接回昨天 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/mem</code> 的例子就會很具體：核心用一個對照表把次編號（minor number）對應到不同的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">file_operations</code>（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/mem</code> 用一份、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/null</code> 用另一份、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/zero</code> 又是另一份）；當使用者呼叫 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">open("/dev/mem", ...)</code>，核心依次編號挑出對應那一份 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">file_operations</code>，裝到新建立的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct file</code> 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">f_op</code> 欄位上。之後每一次 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">read()</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">write()</code> 系統呼叫，VFS 都是透過同一行 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">file->f_op->read(...)</code> 間接跳轉——同一段呼叫端程式碼，因為 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">f_op</code> 指向不同的表，就表現出完全不同的行為（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/null</code> 的 read 永遠回傳 0 bytes，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/zero</code> 的 read 永遠填 0，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/dev/mem</code> 的 read 真的去讀實體記憶體）。這就是純 C 物件導向「多型」的完整生命週期：從挑選實作、綁定到介面、到透過介面呼叫。</p>
+
+<p>繼承有兩種做法，取決於「基底」欄位在結構體裡的位置。第一種是把基底結構放在最前面（first-member embedding）：根據 C99 §6.7.2.1 第 13 條（common initial sequence 規則），如果 struct A 的第一個成員型別是 struct B，那麼 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">(struct B*)a_ptr</code> 這種轉型是定義明確、保證正確的——因為兩者記憶體最前面那一段版面配置完全一致。核心裡大量用這招做「向上轉型」。</p>
+
+<p>第二種是基底／成員不在最前面時，要用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of(ptr, type, member)</code>：這個巨集的語意是「已知某個成員的指標，反推出外層結構體的起始位址」，作法是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">(type*)((char*)ptr - offsetof(type, member))</code>——<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">offsetof</code> 在編譯期就能算出 member 在 type 裡的位元組位移量，整個操作是零額外執行成本的指標運算（見下方數學推導）。這是核心裡 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">list_head</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">hlist_node</code> 這類「侵入式」(intrusive) 容器能夠運作的根本機制：容器節點本身嵌在你的資料結構裡任何位置，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of</code> 讓你拿著節點指標就能找回整個物件。附帶一提，查最新版核心原始碼會發現 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of()</code> 的註解已經寫上「<i>Do not use container_of() in new code</i>」，建議改用新加入的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of_const()</code>——原因是原版 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of</code> 會不動聲色地丟掉 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ptr</code> 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">const</code> 修飾（<i>WARNING: any const qualifier of @ptr is lost</i>），這是一個容易被忽略、卻會讓「明明該是唯讀的資料被意外改寫」的真實正確性陷阱，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of_const</code> 用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">_Generic</code> 在編譯期依照傳入指標是否為 const 選擇對應版本，把這個 const 正確性補回來。</p>
+
+<p>方法派送表還牽涉到一個與資安直接相關的細節：核心的程式設計慣例與 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Documentation/security/self-protection.rst</code> 都建議把這類函式指標表宣告成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">static const</code>，讓它被放進唯讀的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">.rodata</code> 段——因為如果 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">file_operations</code> 這種表是可寫的，攻擊者只要能找到任意記憶體寫入的漏洞，就能直接覆寫表裡的函式指標，把後續對這個物件的呼叫全部劫持到攻擊者控制的位址（這是核心提權漏洞利用裡一個經典手法）；宣告成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">const</code> 之後，正常執行階段完全沒有合法路徑可以寫到這塊記憶體，大幅墊高攻擊門檔。生命週期管理也走同一套「函式指標當回呼」的思路：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct kref</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct kobject</code> 把參照計數跟一個使用者提供的 release 回呼函式綁在一起，<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">kref_put(&obj->refcount, my_release)</code> 在計數器真正歸零時才呼叫 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">my_release(obj)</code>——這就是純 C 版本的「虛擬解構子」。</p>
+
+<p>對面試準備而言，這組技巧的價值在於：只要看懂「struct + 函式指標 = 介面」、「container_of = 由成員找回整體」這兩個套路，核心裡幾乎每個子系統的程式碼（VFS 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">file_operations</code>、網路裝置的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">net_device_ops</code>、裝置模型的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">platform_driver</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">bus_type</code>）讀起來都是同一種模式反覆出現，而不是各自孤立要硬背的特例；同時也是系統設計／底層面試常見的追問：「C 語言要怎麼模擬介面與多型？」「為什麼 C++ 的虛擬函式呼叫有額外開銷？」都可以直接從這裡的 vtable 間接跳轉機制回答。</p>
       </div>
       
       
     <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
-        
-<p>jserv 筆記裡那些看起來隨意挑選的實體位址，其實都暗藏一條硬性規則：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mmap()</code> 系統呼叫規定
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">offset</code> 參數必須是系統分頁大小（絕大多數平台是 4KB = <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">0x1000</code>）的整數倍，否則呼叫會回傳
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">EINVAL</code>。原因在於 MMU 的分頁機制一次只能映射「整頁」，無法從某一頁中間開始映射——分頁是硬體位址
-翻譯的最小單位，硬體壓根沒有「半頁映射」這種操作。驗證一下筆記裡出現的數字：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">0x2C0000000</code> 換算成
-二進位，最低 12 個位元（對應 4KB = 2¹² 的頁內偏移）全部是 0，確實是 4KB 整數倍，合法；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">0x34000000</code>
-與 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">0x34004000</code> 同樣低 12 位全 0，也合法，而兩者差值 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">0x4000</code> 換算成十進位是 16384
-bytes，剛好是 4KB 的 4 倍（4 個分頁），這代表 master.c／slave.c 範例裡的兩段映射之間，剛好留了 4 個分頁的距離，
-不會互相重疊。這也是為什麼在真實情境裡，透過 /proc/iomem 或 /proc/kallsyms 找到的「想要存取的位址」，使用前
-通常得先手動對齊到最近的頁邊界（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">addr &amp; ~(PAGE_SIZE-1)</code>），再用頁內偏移量去修正最終要讀寫的
-位置，否則 mmap 這一步會直接失敗。</p>
+        <p><code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of(ptr, type, member)</code> 的位址運算：若 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">member</code> 在 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">type</code> 裡的位元組位移量是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">offsetof(type, member)</code>（由編譯器在編譯期用「假設一個位址 0 的 type 物件，取 member 的位址，這個位址數值就是位移量」的經典技巧算出，等價於 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">(size_t)&(((type*)0)->member)</code>），那麼外層結構體的起始位址就是 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">member</code> 的位址減掉這個位移量：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">container_of_addr = member_addr − offsetof(type, member)</code>。整個運算只是一次指標減法，不需要任何執行期的型別資訊（RTTI）、不需要任何表查詢——這也是為什麼 C 語言「模擬繼承」的執行期成本可以做到完全是 0，真正的開銷只發生在編譯期算 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">offsetof</code> 這個常數的時候。</p>
       </div>
     </div>
       
+    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
+      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://github.com/torvalds/linux/blob/master/include/linux/container_of.h" style="color:#a39d90;text-decoration:underline;">torvalds/linux · include/linux/container_of.h</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">/* SPDX-License-Identifier: GPL-2.0 */
+#ifndef _LINUX_CONTAINER_OF_H
+#define _LINUX_CONTAINER_OF_H
+
+#include &lt;linux/build_bug.h&gt;
+#include &lt;linux/stddef.h&gt;
+
+#define typeof_member(T, m)	typeof(((T*)0)-&gt;m)
+
+/**
+ * container_of - cast a member of a structure out to the containing structure
+ * @ptr:	the pointer to the member.
+ * @type:	the type of the container struct this is embedded in.
+ * @member:	the name of the member within the struct.
+ *
+ * WARNING: any const qualifier of @ptr is lost.
+ * Do not use container_of() in new code.
+ */
+#define container_of(ptr, type, member) ({				\
+	static_assert(__same_type(*(ptr), typeof_member(type, member)) || \
+		      __same_type(*(ptr), void),			\
+		      "pointer type mismatch in container_of()");	\
+	(type *)((void *)(ptr) - offsetof(type, member)); })
+
+/**
+ * container_of_const - cast a member of a structure out to the containing
+ *			structure and preserve the const-ness of the pointer
+ * @ptr:		the pointer to the member
+ * @type:		the type of the container struct this is embedded in.
+ * @member:		the name of the member within the struct.
+ *
+ * Always prefer container_of_const() instead of container_of() in new code.
+ */
+#define container_of_const(ptr, type, member)				\
+	_Generic(ptr,							\
+		const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
+		default: ((type *)container_of(ptr, type, member))	\
+	)
+
+#endif	/* _LINUX_CONTAINER_OF_H */</pre>
+    </div>
       
     <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
       <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#2c7357;text-transform:uppercase;">NOTE · 補充</div>
       <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
-        
-<p>誠實補充一下今天查證資料來源的過程：找到的是 sysprog 帳號下、標題為「Linux 核心的 /dev/mem 裝置」的
-HackMD 筆記，內容開頭標明是改寫自一篇 CSDN 文章（CC BY-SA 授權），無法確認是 jserv 本人撰寫，但內容確實對應
-今天的主題，且引用了具體、可信的範例程式碼與指令（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">mem=</code> 開機參數、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">stap</code> 動態追蹤、
-<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">crash</code> 工具的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">vtop</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rd -p</code> 指令），所以採用為今天的課程筆記來源。這次沒有
-找到 jserv 本人或成大課程針對「/dev/mem」這個子主題單獨錄製的教學影片，查證後誠實記錄落空，不附影片連結。
-另外值得一提：今天跟 11/08、11/14 教的 POSIX／System V 共享記憶體，其實是同一條「開放部分實體記憶體給使用者
-層直接存取」光譜上的兩端——共享記憶體機制是核心幫你管理、有生命週期與存取控制的「合法版本」，/dev/mem 則是
-「完全不設防、你要自己承擔一切後果」的原始版本。</p>
+        <p>jserv 這篇講義其實還示範了幾個更進階的設計模式如何用純 C 實作（Observer、Strategy、Visitor，主要靠介面 struct + 函式指標切換），以及用 Designated Initializer 搭配 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">NULL</code> 表示「這個行為維持預設」的慣例；對應的兩段直播錄影（上／下集）就收錄在講義最上方，有興趣深入可以直接對照原始碼逐段看。</p>
       </div>
     </div>
     </div>
-              <div style="margin-top:34px;padding-top:14px;border-top:1px solid #e2ddd0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:2;color:#7a766b;"><a href="https://github.com/wisdompeak/LeetCode" style="color:#7a766b;text-decoration:underline;">LeetCode 題目彙整</a>　·　<a href="https://cp-algorithms.com/string/z-function.html" style="color:#7a766b;text-decoration:underline;">cp-algorithms：Z-function</a>　·　<a href="https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw" style="color:#7a766b;text-decoration:underline;">owlfox CS:APP 中文筆記</a>　·　<a href="https://hackmd.io/@sysprog/CSAPP-ch4" style="color:#7a766b;text-decoration:underline;">jserv CS:APP 第4章重點筆記</a>　·　<a href="https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/schedule.html" style="color:#7a766b;text-decoration:underline;">CMU 15-213（Fall 2015）課程進度表（查證：本節無對應錄影）</a>　·　<a href="https://hackmd.io/@sysprog/linux-mem-device" style="color:#7a766b;text-decoration:underline;">jserv Linux 核心課程筆記：/dev/mem 裝置</a>　·　<a href="https://wiki.csie.ncku.edu.tw/linux/schedule" style="color:#7a766b;text-decoration:underline;">成大 Linux 核心課程進度表（Week 13）</a>　·　<a href="https://lkml.iu.edu/hypermail/linux/kernel/2504.1/06277.html" style="color:#7a766b;text-decoration:underline;">LKML：devmem 存取限制討論（STRICT_DEVMEM 行為）</a></div>
+              <div style="margin-top:34px;padding-top:14px;border-top:1px solid #e2ddd0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:2;color:#7a766b;"><a href="https://github.com/wisdompeak/LeetCode/tree/master/Design" style="color:#7a766b;text-decoration:underline;">wisdompeak/LeetCode · LFU/LRU/All O‘one/Max Frequency Stack 題解</a>　·　<a href="https://leetcode.com/problems/lfu-cache/" style="color:#7a766b;text-decoration:underline;">LeetCode 460. LFU Cache</a>　·　<a href="https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw" style="color:#7a766b;text-decoration:underline;">owlfox CS:APP 中文筆記</a>　·　<a href="https://hackmd.io/@sysprog/CSAPP" style="color:#7a766b;text-decoration:underline;">CS:APP 筆記（章節架構參考）</a>　·　<a href="https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/index.html" style="color:#7a766b;text-decoration:underline;">CMU 15-213 Fall 2015 課程網站</a>　·　<a href="https://hackmd.io/0FiEdsGERFKD-fPTrUK0HA" style="color:#7a766b;text-decoration:underline;">jserv《你所不知道的C語言》物件導向程式設計篇</a>　·　<a href="https://youtu.be/luOQh7VgBis" style="color:#7a766b;text-decoration:underline;">jserv 直播錄影：物件導向程式設計篇（上）</a>　·　<a href="https://youtu.be/zbs0G5-E3Jk" style="color:#7a766b;text-decoration:underline;">jserv 直播錄影：物件導向程式設計篇（下）</a>　·　<a href="https://wiki.csie.ncku.edu.tw/linux/schedule" style="color:#7a766b;text-decoration:underline;">成大 Linux 核心課程進度表 第13週</a>　·　<a href="https://github.com/torvalds/linux/blob/master/include/linux/container_of.h" style="color:#7a766b;text-decoration:underline;">torvalds/linux · include/linux/container_of.h</a></div>
             </td>
           </tr>
         </table>

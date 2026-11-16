@@ -62,4 +62,5 @@
 2026-11-08 | 演算法: Sliding Window 滑動視窗，固定窗與可變窗兩種模板（3/76/1004/567/438）| CS:APP: Ch.3 §3.12 Summary（第三章總結） | Linux: 進度表 Week 13 POSIX Shared Memory（POSIX 共享記憶體機制，shm_open／mmap／ftruncate，接續 11/07 的 jserv linux-memory 筆記）
 2026-11-14 | 演算法: 加權區間排程 Weighted Interval Scheduling，DP＋二分搜尋（1235/1751/2008）| CS:APP: Ch.4 §4.1 The Y86-64 Instruction Set Architecture | Linux: 進度表 Week 13 解析 Linux 共享記憶體機制（System V shm／POSIX shm／memfd_create／dma_buf 全景比較，接續 11/08 的 POSIX Shared Memory）
 2026-11-15 | 演算法: Z 函式（Z-function）字串比對，全新分類（2223/459/1392）| CS:APP: Ch.4 §4.2 Logic Design and the Hardware Control Language HCL | Linux: 進度表 Week 13 /dev/mem 裝置（接續 11/14 的 Linux 共享記憶體機制全景）
+2026-11-16 | 演算法: LFU Cache 設計，雙層雜湊 + 頻率桶達成 O(1) 存取與淘汰（460/146/432/895）| CS:APP: Ch.4 §4.3 Sequential Y86-64 Implementations | Linux: 進度表 Week 13 C 語言的物件導向程式設計（struct + 函式指標 vtable／container_of，接續 11/15 的 /dev/mem 裝置）
 <!-- LOG END -->
