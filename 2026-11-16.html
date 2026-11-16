@@ -53,7 +53,13 @@
 
 <p>Edge case：容量為 0 時 put 應該什麼都不做（不能真的塞進去又立刻淘汰，會動到不該動的狀態）；key 重複 put 時必須更新 value 同時仍要走 freq 遞增的路徑，不能只是單純覆寫；<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">minFreq</code> 只會因為「某個頻率鏈被清空且清空的正好是目前最小」而遞增，絕不會因為舊資料而遞減——因為每次 put 新 key 時會把 minFreq 直接重設成 1，這個不變量（只升不因舊資料降，但會被新資料重置）正是正確性證明的核心。</p>
 
-<p>複雜度對照：暴力掃描版 get O(1)／put 最壞 O(n)（n=容量）；雙層雜湊+頻率桶版 get／put 都是嚴格 O(1)，額外空間 O(capacity)（每個 key 恰好活在一條頻率鏈與一個 Map entry 裡）。另一種常見但較差的做法，是用一個以 freq 為鍵的最小堆（min-heap）取代頻率桶，淘汰時 pop 堆頂——程式碼更短，但每次 get/put 要做 O(log n) 的堆調整，回不到 O(1)，面試官通常會追問「能不能做到比 O(log n) 更好」來引導到頻率桶解法。</p>
+<p>複雜度對照（三種做法一次比較）：</p>
+<ul>
+<li><b>暴力掃描版</b>：get O(1)；put 最壞情況 O(n)（n＝容量，淘汰時要掃過所有 key 找最小 freq）；額外空間 O(n)。</li>
+<li><b>最小堆（min-heap）版</b>：用一個以 freq 為鍵的最小堆取代頻率桶，淘汰時 pop 堆頂；程式碼比頻率桶版短，但 get／put 都要做 O(log n) 的堆調整，回不到 O(1)；額外空間 O(n)。</li>
+<li><b>雙層雜湊＋頻率桶版（本題採用）</b>：get／put 都是嚴格 O(1)；額外空間 O(capacity)（每個 key 恰好活在一條頻率鏈與一個 Map entry 裡）。</li>
+</ul>
+<p>面試官通常會先丟出暴力版，看你能不能自己意識到「用堆」可以把 put 從 O(n) 壓到 O(log n)，再追問「能不能做到比 O(log n) 更好」，引導到頻率桶解法。</p>
 
 <p>兩個常見變形：第一種是 432《All O‘one Data Structure》——不只要淘汰最少頻率，還要能 O(1) 回答「目前頻率最大的 key」與「目前頻率最小的 key」兩種查詢。這逼得頻率桶本身也要串成一條雙向鏈結串列（而不只是用 hashmap 存 freq→list），因為「最大/最小頻率是誰」若只靠 hashmap 無法 O(1) 取得，必須靠鏈結串列的頭尾指標直接拿到；第二種是 895《Maximum Frequency Stack》——把「同一頻率內的次序」從 LRU 改成 Stack（後進先出）：pop 永遠回傳目前最高頻率裡「最後被 push 進去」的那個元素。這題的頻率桶幾乎跟 LFU 一模一樣，只是每條頻率鏈改用 stack 語意（push/pop 都從尾端），很適合用來驗證自己是不是真的理解頻率桶這個資料結構，而不是背下 LFU 的程式碼。</p>
 
