@@ -64,4 +64,5 @@
 2026-11-15 | 演算法: Z 函式（Z-function）字串比對，全新分類（2223/459/1392）| CS:APP: Ch.4 §4.2 Logic Design and the Hardware Control Language HCL | Linux: 進度表 Week 13 /dev/mem 裝置（接續 11/14 的 Linux 共享記憶體機制全景）
 2026-11-16 | 演算法: LFU Cache 設計，雙層雜湊 + 頻率桶達成 O(1) 存取與淘汰（460/146/432/895）| CS:APP: Ch.4 §4.3 Sequential Y86-64 Implementations | Linux: 進度表 Week 13 C 語言的物件導向程式設計（struct + 函式指標 vtable／container_of，接續 11/15 的 /dev/mem 裝置）
 2026-11-17 | 演算法: 歐拉路徑與 Hierholzer's Algorithm（332/753/2097）| CS:APP: Ch.4 §4.4 General Principles of Pipelining | Linux: 進度表 Week 13 Linux Kernel 的物件導向設計模式：Method Dispatch 與 Data Inheritance（LWN 文章，接續 11/16 的 C 語言物件導向程式設計）
+主線: 三個領域今天都在重新安排「狀態該被放在哪裡、用什麼寬度表示」 | 2026-11-18 | 演算法: Aho-Corasick 自動機，多模式字串匹配，全新分類（1032/616/1065）| CS:APP: Ch.4 §4.5.1 SEQ+: Rearranging the Stages of SEQ | Linux: 進度表 Week 13 C 語言的 Stream I/O、EOF 判斷與例外處理（接續 11/17 的 Method Dispatch 與 Data Inheritance）
 <!-- LOG END -->
