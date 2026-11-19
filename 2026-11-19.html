@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · 2026-11-19</title></head>
+<body style="margin:0;padding:0;background-color:#f4f1ea;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang TC','Microsoft JhengHei',sans-serif;"><!--nav--><nav style="max-width:820px;margin:0 auto;padding:10px 12px;display:flex;gap:8px;align-items:center;justify-content:space-between;background-color:#f4f1ea"><a href="2026-11-18.html" style="font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;border:1px solid #e2ddd0;border-radius:4px;padding:6px 10px;text-decoration:none;color:#22252b;background-color:#fffefb">◀ 前一天</a><select aria-label="選擇日期" onchange="location.href=this.value" style="font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;color:#22252b;background-color:#fffefb;border:1px solid #e2ddd0;border-radius:4px;padding:6px 8px;min-width:9em"><option value="2026-11-19.html" selected>11/19（四）</option><option value="2026-11-18.html">11/18（三）</option><option value="2026-11-17.html">11/17（二）</option><option value="2026-11-16.html">11/16（一）</option><option value="2026-11-15.html">11/15（日）</option><option value="2026-11-14.html">11/14（六）</option></select><span style="font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:12px;border:1px solid #e2ddd0;border-radius:4px;padding:6px 10px;text-decoration:none;color:#7a766b;background-color:#fffefb;opacity:.45">後一天 ▶</span></nav><!--/nav-->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f1ea;padding:28px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:820px;background-color:#fffefb;border:1px solid #e2ddd0;">
+          <tr>
+            <td style="padding:32px 24px 36px 24px;">
+              <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#7a766b;text-transform:uppercase;">DAILY LEARNING NOTE</div>
+              <div style="margin-top:8px;font-family:Georgia,'Noto Serif TC',serif;font-size:28px;font-weight:700;color:#22252b;line-height:1.25;">每日東東</div>
+              <div style="margin-top:10px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#7a766b;">2026-11-19（週四）</div>
+              <div style="margin-top:14px;border-left:2px solid #22252b;padding-left:12px;font-family:Georgia,'Noto Serif TC',serif;font-size:14.5px;line-height:1.8;color:#22252b;font-style:italic;">三個領域今天都在示範同一招——在本來耦合在一起的兩個步驟之間，插入一層中間結構來解耦合：回文分割 DP 先建好「是否為回文」查詢表再做分割決策、CS:APP 在 SEQ+ 的五個階段之間插入 pipeline register 把時序切開、Unix I/O 用「檔案描述字」這層間接把「怎麼存取」與「資料實際放在哪」切開。</div>
+              <div style="margin-top:22px;border-bottom:3px double #22252b;"></div>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:20px;">
+      <tr>
+        <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#2f5f9e;"></div></td>
+        <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">演算法</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">回文分割動態規劃 Palindrome Partitioning DP（全新分類）</td>
+      </tr>
+      <tr>
+        <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#b0561a;"></div></td>
+        <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">CS:APP</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">Ch.4　4.5.2 Inserting Pipeline Registers</td>
+      </tr>
+      <tr>
+        <td width="14" style="padding:5px 0;"><div style="width:9px;height:9px;background-color:#2c7357;"></div></td>
+        <td width="96" style="padding:5px 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;color:#7a766b;">Linux Kernel</td>
+        <td style="padding:5px 0;font-size:14px;color:#22252b;">CS:APP 第 10 章重點提示：Unix I/O 與「一切皆為檔案描述字」</td>
+      </tr></table>
+              
+    
+    <div style="margin-top:28px;border-bottom:2px solid #2f5f9e;">
+      <span style="display:inline-block;background-color:#2f5f9e;color:#ffffff;padding:4px 12px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">A · 演算法 · LeetCode</span>
+    </div>
+    
+    <div style="margin-top:20px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#2f5f9e;letter-spacing:1px;">§01</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2f5f9e;">回文分割動態規劃 Palindrome Partitioning DP（全新分類）</div>
+      <div style="margin-top:12px;border-left:3px solid #2f5f9e;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
+        <p>給定一個字串，要求把它切成幾段，使每一段都是回文（正讀反讀相同），這一整個題目家族統稱「回文分割」。LeetCode 131、132、1278、1745 是這個家族由淺到深的四個代表：131 要求列出所有合法切法、132 要求最少切幾刀即可讓每段都是回文、1278 放寬成「允許改一些字元」再求最少修改數、1745 則只問「能不能剛好切成 3 段回文」。這四題看似各自獨立，但都建立在同一個基礎工具上：快速判斷任意子字串 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s[i..j]</code> 是不是回文。</p>
+      </div>
+      
+    <div style="margin-top:10px;">
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">131</span>
+      <a href="https://leetcode.com/problems/palindrome-partitioning/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Palindrome Partitioning</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">列出所有合法回文切法：在 isPal 表上做 DFS/backtracking 枚舉切點，時間 O(n·2^n)（輸出本身就是指數量級），isPal 預處理 O(n^2)。</div>
+    </div>
+    <div style="margin-top:10px;">
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">132</span>
+      <a href="https://leetcode.com/problems/palindrome-partitioning-ii/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Palindrome Partitioning II</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">最少切幾刀：一維 DP，minCut[i] = s[0..i] 切成全回文段所需最少刀數，時間 O(n^2)，空間 O(n^2)（isPal 表）+O(n)（minCut 陣列）。</div>
+    </div>
+    <div style="margin-top:10px;">
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1278</span>
+      <a href="https://leetcode.com/problems/palindrome-partitioning-iii/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Palindrome Partitioning III</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">允許改字元、切成剛好 k 段，求最少修改數：先用 O(n^2) DP 算出 cost[i][j]（把 s[i..j] 改成回文所需最少改動），再用 O(n^2·k) 的第二層 DP 選切點。</div>
+    </div>
+    <div style="margin-top:10px;">
+      <span style="display:inline-block;min-width:44px;text-align:center;border:1px solid #2f5f9e;border-radius:3px;padding:0 6px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12px;color:#2f5f9e;">1745</span>
+      <a href="https://leetcode.com/problems/palindrome-partitioning-iv/" style="margin-left:8px;color:#22252b;font-size:15px;text-decoration:underline;">Palindrome Partitioning IV</a>
+      <div style="margin-top:2px;color:#7a766b;font-size:13px;line-height:1.6;padding-left:2px;">判斷能否剛好切成 3 段回文：固定 isPal 表後，對兩個切點 i&lt;j 做 O(n^2) 枚舉（或雙指標收斂），時間 O(n^2)。</div>
+    </div>
+      
+    <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
+        <p>先看暴力解法的代價：長度 n 的字串在相鄰字元之間一共有 n-1 個「縫」，每個縫可以選擇切或不切，所以總共有 2^(n-1) 種切法；每種切法還要花 O(n) 檢查每段是否回文，暴力枚舉的總時間是 O(n·2^n)，字串長度一到 30 左右就幾乎跑不完。</p><p>關鍵的省錢技巧是：把「某段是不是回文」獨立拆成一張二維表 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">isPal[i][j]</code> 事先算好，而不是每次切法都重新檢查。回文有一個遞迴結構：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s[i..j]</code> 是回文，當且僅當頭尾字元相同（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s[i]==s[j]</code>）且中間那一段 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">s[i+1..j-1]</code> 也是回文（或根本不存在，即 j-i&lt;2 的邊界情形）。這代表 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">isPal[i][j]</code> 可以只由「更短、範圍包含在 [i,j] 內部」的子問題推出，因此只要讓 j-i 由小到大遞推（或等價地讓 i 由大到小、j 由小到大），就能在 O(n^2) 個子問題、每個 O(1) 轉移的情況下，把整張表填滿——總共 O(n^2) 時間、O(n^2) 空間，查一次是否回文從攤還 O(n) 直接降到 O(1)。這張表填好之後，131/132/1278/1745 全部都只是在這張表之上做不同的第二層決策。</p>
+      </div>
+    </div>
+      
+      
+    <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#2f5f9e;text-transform:uppercase;">NOTE · 補充</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
+        <p><b>面試官常見追問：</b></p><ul><li>「如果不是求最少刀數，而是要求列出『刀數最少的所有切法』怎麼辦？」——這題等於把 132 的最佳值 DP 與 131 的枚舉結合：先用 132 的 DP 算出每個前綴的最小刀數，再從後往前只沿著「真的能達到最小值」的轉移邊做 131 式的 DFS 還原路徑。</li><li>「字串長度到 10^5、10^6 時 O(n^2) 還跑得動嗎？」——跑不動。這時需要換成 O(n) 求所有回文子結構的 <b style="color:#2f5f9e;">Manacher's Algorithm</b>（本頻道 09-20 教過，用「已知的對稱資訊」線性時間求出每個中心的最長回文半徑），或是維護一棵 <b style="color:#2f5f9e;">Eertree（回文自動機）</b>，兩者都能把「這段是不是回文」的判斷壓到 O(1) 或攤還 O(1)，但要額外處理切分 DP 怎麼跟這些結構對接，是更進階的追問。</li><li>「132 的 DP 轉移要枚舉所有 j，是 O(n) 的，能不能更快？」——如果把內層「找出所有以 i 結尾、且 [j..i] 是回文」的 j 集合，用 Manacher 或 PAM 先攤還列出來，轉移可以降到攤還 O(1)，使 132 整體逼近 O(n)。</li></ul><p><b>邊界陷阱：</b>isPal 遞迴式裡 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">j-i&lt;2</code> 這個邊界條件最容易寫錯——單字元（j==i）與長度 2 的子字串（j==i+1，只需頭尾相等）都不能真的去存取 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">isPal[i+1][j-1]</code>，否則會讀到尚未初始化或範圍錯誤的格子。</p>
+      </div>
+    </div>
+    </div>
+              
+    <div style="margin-top:34px;border-top:1px solid #e2ddd0;"></div>
+    <div style="margin-top:28px;border-bottom:2px solid #b0561a;">
+      <span style="display:inline-block;background-color:#b0561a;color:#ffffff;padding:4px 12px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">B · CS:APP</span>
+    </div>
+    
+    <div style="margin-top:20px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#b0561a;letter-spacing:1px;">§01</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#b0561a;">Ch.4　4.5.2 Inserting Pipeline Registers</div>
+      <div style="margin-top:12px;border-left:3px solid #b0561a;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
+        <p>上一次（11/18）教到 4.5.1 SEQ+：把 SEQ 單週期處理器的邏輯重新排列，把「決定下一個 PC」這件事從一個週期的尾端概念上搬到開頭，但完全不改變處理器的行為——這只是為了方便後續插入管線暫存器所做的鋪路工作。4.5.2 才是真正動手「管線化」的第一步：在 SEQ+ 原本五個邏輯階段（Fetch 取指、Decode 解碼、Execute 執行、Memory 存取記憶體、Write-back 寫回）的邊界上，各插入一個時脈控制的暫存器，把一條很長的組合邏輯路徑切成五段較短的路徑。</p><p><b style="color:#b0561a;">PIPE-</b>　書中對「剛插入暫存器、但尚未處理資料/控制相依性」這個中間版本的硬體設計取的名字，之所以加一個負號，是提醒讀者這個版本的行為還不正確，要到 4.5.5 節處理危障（hazard）之後才會變成真正可用的 PIPE。</p><p>具體做法是：在 Fetch 與 Decode 之間、Decode 與 Execute 之間、Execute 與 Memory 之間、Memory 與 Write-back 之間，各放一個暫存器，依慣例分別命名為 F、D、E、M、W。每個暫存器在每個時脈上升緣，把左邊那一階段算出來、右邊那一階段會用到的所有訊號都鎖存起來，直到下一個時脈週期才釋放給右邊的階段使用。這個改動帶來一個關鍵的質變：SEQ 裡只有一個 PC 暫存器，代表任何時刻只有一條指令在被處理；而 PIPE 裡同時有五個暫存器，意味著同一時刻最多可以有五條指令分別處於五個不同階段、同時被處理——這正是管線化能提高吞吐量的根本原因。</p><p>用一個具體例子說明：假設 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">irmovq</code> 指令在時脈週期 1 進入 Fetch 階段，週期 2 進入 Decode、週期 3 進入 Execute、週期 4 進入 Memory、週期 5 進入 Write-back；而緊接著的下一條指令會在週期 2（也就是第一條指令離開 Fetch、進入 Decode 的同一個週期）就進入 Fetch 階段開始被處理，不必等第一條指令整個跑完五個階段才開始。把「指令」畫在縱軸、「時間（週期）」畫在橫軸，可以看到每條指令畫出一條往右下方斜的對角線——這張圖在教材與各校投影片裡通常稱為 <b style="color:#b0561a;">管線時空圖（Pipeline Diagram / Space-Time Diagram）</b>，是理解管線化吞吐量提升最直觀的工具。</p><p>書中同時引入一套訊號命名慣例：凡是跨過某個管線暫存器之後的訊號，會在名稱前加上代表「目前所在階段」的字母當作字首（例如某個值在 Decode 階段叫一個名字，被 D 暫存器鎖存、傳到 Execute 階段後會換成帶 E 字首的名字），這套命名法讓後面幾節（4.5.3 重新排列訊號、4.5.4 下一個 PC 的預測、4.5.5 管線危障）在討論「某個值現在在哪個階段、下一步要傳到哪裡」時，可以一眼從名稱判斷，不必每次回頭查硬體圖。</p><p>4.5.2 刻意只處理「怎麼機械式地插入暫存器」，先假設所有指令之間彼此沒有相依性、分支與返回指令的結果總是能被正確預測——這個假設其實是錯的。例如：一條指令要讀的暫存器，如果剛好是前一條還沒寫回的指令要寫的同一個暫存器，PIPE- 這個中間版本會讀到舊值而出錯（資料危障）；又例如一條還在管線中、尚未真正執行完的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">jmp</code> 或 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">ret</code>，PIPE- 必須「猜」下一個要抓取的指令位址，猜錯了就會抓進錯誤的指令（控制危障）。<b style="color:#b0561a;">資料危障／控制危障（Data Hazard / Control Hazard）</b>　正是接下來 4.5.4、4.5.5 節要解決的核心問題，4.5.2 只負責把舞台（五個暫存器、五個階段）搭好。</p><p>另一個容易被忽略的細節是：每個管線暫存器的「寬度」必須夠大，足以容納右側所有階段未來可能需要用到的每一個訊號，而不只是這一階段「看起來重要」的輸出——漏存任何一個訊號，後面的階段就會永久失去那個資訊，沒有辦法回頭去問前一階段，因為前一階段這時已經在處理別的指令了。這也是教材圖裡每個管線暫存器旁都畫著一長串訊號線的原因。</p><p>管線化是處理器與系統設計面試裡最常被問到的主題之一：為什麼管線化能提升「吞吐量」（單位時間完成的指令數）卻不能縮短、甚至會略微拉長「單一指令的延遲」（因為多了暫存器的建立/保持時間 overhead）？為什麼單純插入暫存器還不夠、還需要資料前送（forwarding）、暫停（stall/bubble）與分支預測？這些問題的答案，骨架都在 4.5.2 這一節先立好——之後軟體層面（編譯器指令排程、GPU warp 排程）、甚至系統層面（HTTP/2 的 pipelining、資料庫連線的 pipelining）會重複用到同一個原理：用「緩衝（暫存器／佇列）＋重疊處理」把吞吐量和單次操作延遲解耦。</p>
+      </div>
+      
+      
+    <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
+        <p>管線化理想加速比的推導：在 SEQ 裡，整個時脈週期長度 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">T_SEQ</code> 必須長到足以讓訊號跑完「取指→解碼→執行→存取記憶體→寫回」這一整條組合邏輯路徑並穩定下來，所以 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">T_SEQ ≥ d_F + d_D + d_E + d_M + d_W</code>（五個階段各自的邏輯延遲之和）。在 PIPE 裡，因為每個階段之間都用暫存器隔開，時脈週期只需要長到讓「最慢的那一個階段」算完即可，再加上暫存器本身的建立/保持時間（setup/hold）開銷 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Δreg</code>：<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">T_PIPE ≈ max(d_F, d_D, d_E, d_M, d_W) + Δreg</code>。</p><p>如果五個階段的延遲剛好被設計得很平均，各約為 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">T_SEQ / 5</code>，則 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">T_PIPE ≈ T_SEQ/5 + Δreg</code>，吞吐量（每秒完成的指令數）在忽略 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Δreg</code> 時理想上逼近 5 倍——也就是「加速比 ≈ 管線的階段數」這個經典結論。但要特別注意，這個 5 倍講的是「吞吐量」，不是「單一指令從頭跑到尾的延遲」：每條指令還是要依序經過 5 個週期才算完成，而且因為多了 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">Δreg</code> 的 overhead，單一指令的絕對延遲其實還比在 SEQ 裡略高一點。等到 4.5.5 節開始處理資料與控制危障後，實際可達的加速比會因為 stall/bubble 而低於這個理想值 5 倍——這正是之後幾節要量化討論的重點。</p>
+      </div>
+    </div>
+      
+      
+    <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#b0561a;text-transform:uppercase;">NOTE · 補充</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
+        <p><b>關於今天附帶的課程影片——誠實說明查證結果：</b>依規定優先查證 CMU 15-213 (Fall 2015) 對應講次影片，但直接核對該學期官方課程進度表（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">15213-f15/www/schedule.html</code>）後發現，這學期的課程清單裡<b>完全沒有</b> Y86-64、SEQ、PIPE 或 Architecture Lab 的任何字樣——連作業清單（L1–L7：datalab/bomblab/attacklab/cachelab/tshlab/malloclab/proxylab）裡也沒有 archlab。也就是說 Fall 2015 這個學期的 15-213 根本沒有開設 Y86-64 管線處理器這個單元，自然也不會有對應的課堂錄影。另外核對過一份列出完整 35 集逐講標題（Lecture 01–28 + Recitation）的 15-213 錄影清單，裡面同樣沒有任何一講標題包含 Y86/SEQ/PIPE。因此這裡不附任何 CMU 15-213 課堂錄影連結，避免附上錯誤或臆測的連結；改以下方 sources 中的章節架構核對筆記與 sysprog CS:APP 筆記總覽作為補充閱讀。</p>
+      </div>
+    </div>
+    </div>
+              
+    <div style="margin-top:34px;border-top:1px solid #e2ddd0;"></div>
+    <div style="margin-top:28px;border-bottom:2px solid #2c7357;">
+      <span style="display:inline-block;background-color:#2c7357;color:#ffffff;padding:4px 12px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;">C · Linux Kernel</span>
+    </div>
+    
+    <div style="margin-top:20px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:#2c7357;letter-spacing:1px;">§01</div>
+      <div style="margin-top:4px;font-family:Georgia,'Noto Serif TC',serif;font-size:20px;font-weight:700;line-height:1.4;color:#2c7357;">CS:APP 第 10 章重點提示：Unix I/O 與「一切皆為檔案描述字」</div>
+      <div style="margin-top:12px;border-left:3px solid #2c7357;padding-left:14px;font-size:14.5px;line-height:1.85;color:#22252b;">
+        <p>成大 Linux 核心課程進度表 Week 13 在教完「C 語言的物件導向設計」「Stream I/O、EOF 與例外處理」（11/17、11/18 已教過）之後，緊接著的下一個條目是「CS:APP 第 10 章重點提示」——把焦點從 C 標準函式庫的 stream I/O 往下拉一層，看作業系統核心實際提供的 Unix I/O 介面，以及這個介面背後「everything is a file」這句話更精確的講法：<b style="color:#2c7357;">「everything is a file descriptor」</b>。</p><p>核心概念是：Linux 核心把裝置（終端機、磁碟分割）、管線（pipe）、網路 socket，甚至 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/proc</code>、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">/sys</code> 底下的虛擬檔案，全部統一抽象成一組很小的非負整數——檔案描述字（file descriptor，簡稱 fd）。不管你背後實際存取的是真實磁碟上的檔案、一條匿名管線，還是一條 TCP 連線，使用者空間程式一律用同樣的四個系統呼叫 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">open/read/write/close</code>（socket 則用 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">socket()</code> 取得 fd 後同樣可以 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">read/write</code>）去操作它，完全不需要知道背後的實作細節。這是一種經典的「插入一層間接」的設計：fd 這個小整數本身不是資料，而是核心內部一張表的索引，指向真正描述這個檔案狀態（讀寫位置、旗標、底層 inode 或 socket 結構）的資料結構。</p><p><b style="color:#2c7357;">檔案描述字（File Descriptor）</b>　使用者空間看到的只是一個小整數；核心內部每個行程都有一張 fd 表（fd table），表裡每一格存著一個指向 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct file</code> 的指標，而 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">struct file</code> 又指向真正的 inode／socket／管線緩衝區等底層物件——這一層間接，讓同一個 fd 數字在不同行程裡可以指向完全不同的實體，也讓 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dup2()</code>、重新導向（redirection）這類操作只需要改表裡的指標，不必搬動任何實際資料。</p><p>依照慣例（但核心並不強制），每個行程啟動時 fd 0、1、2 分別對應標準輸入、標準輸出、標準錯誤輸出，這也是為什麼 shell 做 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">2>&1</code> 這種重新導向語法時操作的就是這三個固定編號。更重要的是 POSIX 規定的 fd 配置規則：每次 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">open()</code> 成功時，核心一定會回傳「目前這個行程尚未使用的、數值最小的非負整數」。這個規則本身是今天內容裡少見但很值得講清楚的「數字規則」，詳見下方數學推導區塊。</p><p>CS:APP 第 10 章也介紹了 <b style="color:#2c7357;">RIO 套件（Robust I/O）</b>——課本作者自己包的一層薄 wrapper，用來正確處理 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">read/write</code> 系統呼叫常見的「short count」問題：這兩個系統呼叫並不保證一次呼叫就能讀/寫滿你要求的位元組數（可能被訊號中斷、管線緩衝區暫時滿了等），正確的程式必須用迴圈不斷重試、累加已經完成的位元組數，直到湊滿或遇到真正的錯誤／EOF 為止；RIO 把這個迴圈包好成 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rio_readn</code>／<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rio_writen</code>，並額外提供帶內部緩衝區的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">rio_readlineb</code>（逐行讀取），是日後寫網路程式（第 11 章 Network Programming）時每個範例程式都會用到的基礎工具。</p><p>今天的筆記也特別點出一個常被忽略的作業系統面觀念：<b style="color:#2c7357;">Reentrant（可重進入）與 Thread-safe（執行緒安全）</b>　是兩個經常被混用、但定義並不相同的性質——一個函式是 reentrant，通常代表它不依賴任何共享的可變狀態（沒有靜態變數、沒有修改全域狀態），因此同一個函式可以被同一個執行緒在訊號處理器裡「重新進入」而不出錯；thread-safe 則是指多個執行緒同時呼叫這個函式仍能得到正確結果，可能是透過加鎖做到，但加鎖的函式通常反而不是 reentrant（因為訊號處理器裡再次呼叫同一把鎖會死鎖）。這組區分在之後的訊號處理（signal handler 只能呼叫 async-signal-safe 函式）與並行程式設計裡都會再用到。</p><p>另一個系統面的細節是跨平台的換行字元（EOL）差異：Linux／macOS 用單一字元 LF（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">\n</code>，0x0a）代表換行，而 Windows 與大多數網際網路協定（HTTP、SMTP 等）用 CR+LF（<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">\r\n</code>，0x0d 0x0a）兩個字元。這個差異直接影響「跨平台讀文字檔」與「寫網路程式時手動組 HTTP 標頭」兩個場景，若把 Linux 下產生的純 LF 檔案直接丟給某些嚴格遵守協定的網路服務解析，可能因為行尾格式不符而解析失敗。</p><p>Unix I/O／檔案描述字這套抽象的優點是介面極其一致、簡單，缺點是「事件通知」天生偏向同步阻塞：一個 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">read()</code> 在沒有資料時預設會讓呼叫的執行緒整個卡住，這正是後續 11/06 筆記提到的「Linux 核心設計：針對事件驅動的 I/O 模型演化」（select/poll/epoll/io_uring）要解決的問題，也是這個主題在系統設計面試裡反覆出現的原因：理解「fd 是什麼、為什麼要這樣設計」是理解 epoll、io_uring、甚至是資料庫連線池、網路程式 I/O 多工模型的共同起點。</p>
+      </div>
+      
+      
+    <div style="margin-top:14px;border:1px solid #6b4a9a;background-color:#f6f2fb;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#6b4a9a;text-transform:uppercase;">🔢 數學推導</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#22252b;">
+        <p>為什麼 POSIX 規定 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">open()</code> 一定要回傳「目前未使用、數值最小的非負整數」fd，而不是隨便給一個空位？推導如下：如果允許核心任意分配 fd，那麼像 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">dup2(oldfd, 1)</code>（把 fd 1，也就是標準輸出，重新指向 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">oldfd</code> 所指的檔案）這類「把某個特定編號的 fd 換成另一個檔案」的操作就無法保證語意一致——很多程式（尤其是 shell 的重新導向、<code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">posix_spawn</code> 的 file actions）依賴的正是「關掉 fd 1 再開一個新檔案，新檔案一定會拿到 fd 1」這個確定性。數值最小優先的規則，保證了「關閉某個 fd 後，下一次 open 極大機率會重用那個剛釋放的號碼」，這在 fork/exec 模式下組合出標準輸出、輸入重新導向時是不可或缺的前提：子行程只要先 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">close(1)</code> 再 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">open(file)</code>，不需要知道任何額外資訊，就能確定新檔案一定頂替到 fd 1 的位置。這也解釋了一個常見陷阱：如果程式不小心把 fd 0/1/2 其中之一關掉卻忘了重新開，之後任何一次不指定 fd 的 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">open()</code> 都可能意外拿到 0、1 或 2 這三個「保留」編號，導致後續對 <code style="background-color:#22252b;color:#ece8dd;padding:1px 6px;border-radius:4px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:0.92em;">stdin/stdout/stderr</code> 的操作實際上讀寫到完全不相關的檔案——這類 bug 在正式程式碼審查中屬於經典的資安／正確性地雷。</p>
+      </div>
+    </div>
+      
+    <div style="margin-top:14px;border-radius:4px;padding:14px 16px;background-color:#22252b;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#a39d90;text-transform:uppercase;">📄 原始碼</div>
+      <div style="margin-top:8px;font-size:12px;color:#a39d90;"><a href="https://github.com/torvalds/linux/blob/master/include/linux/fdtable.h#L26-L33" style="color:#a39d90;text-decoration:underline;">Linux kernel · include/linux/fdtable.h#L26-L33</a></div><pre style="margin:8px 0 0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;color:#ece8dd;white-space:pre-wrap;word-break:break-word;">struct fdtable {
+	unsigned int max_fds;
+	struct file __rcu **fd __counted_by_ptr(max_fds);      /* current fd array */
+	unsigned long *close_on_exec;
+	unsigned long *open_fds;
+	unsigned long *full_fds_bits;
+	struct rcu_head rcu;
+};</pre>
+    </div>
+      
+    <div style="margin-top:14px;border:1px dashed #e2ddd0;border-radius:4px;padding:12px 16px;">
+      <div style="font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;letter-spacing:1.5px;color:#2c7357;text-transform:uppercase;">NOTE · 補充</div>
+      <div style="margin-top:6px;font-size:13.5px;line-height:1.75;color:#7a766b;">
+        <p>查證紀錄：今天這個主題本身就是 jserv（成大 Linux 核心課程 @sysprog）在 hackmd 上的原生筆記（見下方 sources「CS:APP 第 10 章重點提示」），已直接核對內容確實對應今天的主題，故不需要另找對應筆記。另外搜尋過 jserv 是否有對應此主題（Unix I/O／檔案描述字本身，而非 EOF／stream I/O）的獨立課堂錄影，沒有找到可信、經核對標題相符的影片連結，因此這裡不附影片，只附上筆記本身與成大課程進度表 Week 13 的原始條目。</p>
+      </div>
+    </div>
+    </div>
+              <div style="margin-top:34px;padding-top:14px;border-top:1px solid #e2ddd0;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:2;color:#7a766b;"><a href="https://github.com/wisdompeak/LeetCode" style="color:#7a766b;text-decoration:underline;">LeetCode 題目彙整（wisdompeak/LeetCode）</a>　·　<a href="https://leetcode.com/problems/palindrome-partitioning/" style="color:#7a766b;text-decoration:underline;">LeetCode 131. Palindrome Partitioning</a>　·　<a href="https://leetcode.com/problems/palindrome-partitioning-ii/" style="color:#7a766b;text-decoration:underline;">LeetCode 132. Palindrome Partitioning II</a>　·　<a href="https://leetcode.com/problems/palindrome-partitioning-iii/" style="color:#7a766b;text-decoration:underline;">LeetCode 1278. Palindrome Partitioning III</a>　·　<a href="https://leetcode.com/problems/palindrome-partitioning-iv/" style="color:#7a766b;text-decoration:underline;">LeetCode 1745. Palindrome Partitioning IV</a>　·　<a href="https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw" style="color:#7a766b;text-decoration:underline;">owlfox CS:APP 中文筆記</a>　·　<a href="https://rubbish-and-world.github.io/2021/08/28/CSAPP/Ch4PartII" style="color:#7a766b;text-decoration:underline;">CS:APP 第4章章節架構核對（4.5.1 SEQ+ → 4.5.2 Inserting Pipeline Registers）</a>　·　<a href="https://hackmd.io/@sysprog/CSAPP" style="color:#7a766b;text-decoration:underline;">sysprog CS:APP 筆記總覽</a>　·　<a href="https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/schedule.html" style="color:#7a766b;text-decoration:underline;">CMU 15-213 (Fall 2015) 課程進度表核對：該學期未開設 Y86-64/Architecture Lab</a>　·　<a href="https://hackmd.io/@sysprog/CSAPP-ch10" style="color:#7a766b;text-decoration:underline;">jserv Linux 核心課程筆記：CS:APP 第 10 章重點提示（Unix I/O／檔案描述字）</a>　·　<a href="https://hackmd.io/s/Sy8pJ0x9G" style="color:#7a766b;text-decoration:underline;">你所不知道的C語言：Stream I/O, EOF 和例外處理（延伸閱讀，接續 11/18）</a>　·　<a href="https://github.com/torvalds/linux/blob/master/include/linux/fdtable.h#L26-L33" style="color:#7a766b;text-decoration:underline;">Linux kernel struct fdtable（include/linux/fdtable.h）</a>　·　<a href="https://wiki.csie.ncku.edu.tw/linux/schedule" style="color:#7a766b;text-decoration:underline;">成大 Linux 核心課程進度表 Week 13</a></div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
