@@ -66,4 +66,5 @@
 2026-11-17 | 演算法: 歐拉路徑與 Hierholzer's Algorithm（332/753/2097）| CS:APP: Ch.4 §4.4 General Principles of Pipelining | Linux: 進度表 Week 13 Linux Kernel 的物件導向設計模式：Method Dispatch 與 Data Inheritance（LWN 文章，接續 11/16 的 C 語言物件導向程式設計）
 主線: 三個領域今天都在重新安排「狀態該被放在哪裡、用什麼寬度表示」 | 2026-11-18 | 演算法: Aho-Corasick 自動機，多模式字串匹配，全新分類（1032/616/1065）| CS:APP: Ch.4 §4.5.1 SEQ+: Rearranging the Stages of SEQ | Linux: 進度表 Week 13 C 語言的 Stream I/O、EOF 判斷與例外處理（接續 11/17 的 Method Dispatch 與 Data Inheritance）
 主線: 三個領域今天都在示範「插入一層中間結構來解耦合」（回文分割 DP 先建回文查詢表、SEQ+ 插入 pipeline register 切開階段時序、Unix I/O 用檔案描述字做間接層） | 2026-11-19 | 演算法: 回文分割動態規劃 Palindrome Partitioning DP，全新分類（131/132/1278/1745）| CS:APP: Ch.4 §4.5.2 Inserting Pipeline Registers | Linux: 進度表 Week 13 CS:APP 第 10 章重點提示：Unix I/O 與「一切皆為檔案描述字」（接續 11/18 的 Stream I/O、EOF 判斷與例外處理）
+主線: 三個領域今天都在示範同一招——用一套固定、系統化的編碼／命名規則馴服原本雜亂的異質狀況 | 2026-11-20 | 演算法: 差分陣列 Difference Array，區間加值的 O(1) 攤還技巧，全新分類（370/1109/1854/2251）| CS:APP: Ch.4 §4.5.3 Rearranging and Relabeling Signals | Linux: 進度表 Week 13 裝置驅動程式介面和模型（Driver Model：struct device／device_driver／bus_type，接續 11/19 的 CS:APP 第 10 章重點提示）
 <!-- LOG END -->
