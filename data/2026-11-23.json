@@ -1,0 +1,123 @@
+{
+  "date": "2026-11-23",
+  "is_review": false,
+  "theme": "三個領域今天都在示範「順道完成」——不必等到流程終點才處理某件事，而是在既有的必經步驟裡「順路」就做完它：forwarding 不等寫回階段完成，就把值借用給前面的階段；合併排序在合併兩個子陣列的同時，順便數出跨越兩邊的逆序對；Device Tree 的 compatible 字串配對在驅動程式真正探測硬體之前，先用一次字串掃描順道算出比對分數，決定該由哪個驅動接管。",
+  "algo": [
+    {
+      "topic": "分治法 Divide and Conquer：合併排序的分治應用——逆序對計數 Counting Inversions（912/315/493/327），全新分類",
+      "explanation_html": "<p>過去這幾週我們教過很多「專用」技巧——單調堆疊只管「找下一個更大/更小元素」、KMP 只管「單一模式字串比對」、Fenwick Tree 只管「動態區間和」。今天要教的是另一種性質完全不同的工具：<b>分治法（Divide and Conquer）</b>的一個經典延伸應用——<b>用合併排序（Merge Sort）的合併步驟，順手算出陣列裡的「逆序對」數量</b>。這個技巧的重要性不在於它解某一題，而在於它是一個「框架」：只要你的計數條件跟排序順序相容，幾乎都能套用同一套合併時計數的手法，這正是 LeetCode 315、493、327 這些看起來完全不同的題目背後共用的同一把鑰匙。</p>\n<p>先定義問題本身：給定陣列 <code>nums</code>，一對下標 <code>(i, j)</code> 滿足 <code>i &lt; j</code> 且 <code>nums[i] &gt; nums[j]</code>，就稱為一個<b>逆序對（Inversion）</b>。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2f5f9e;\">逆序對（Inversion）</b>　陣列中「前面的元素比後面的元素大」的一對下標；逆序對數量為 0 代表陣列已經完全遞增排序，數量越多代表陣列越「亂序」。</div>直覺的暴力解法就是雙層迴圈，對每一對 <code>(i, j)</code> 都檢查一次，時間複雜度 O(n&sup2;)，額外空間 O(1)。對 LeetCode 常見的 n ~ 10&#8309; 規模，O(n&sup2;) 几乎必定超時，這就是我們要打敗的基準。</p>\n<p>分治法的切入點是：如果陣列已經被切成左右兩半，而且兩半<b>各自都已經排好序</b>，那麼要數「左半某個元素 &gt; 右半某個元素」這種「跨越兩半」的逆序對，根本不需要真的逐一比較——因為兩邊都排好序了，比較的過程可以跟「合併兩個有序陣列」這個本來就要做的動作完全重疊，一次掃描 O(n) 就能順便數完。這正是今天主線想強調的「順道完成」：不必為了計數另開一輪迴圈，而是在既有必經的合併步驟裡，順路就把答案算出來。</p>\n<p>具體怎麼合併時順便計數？用兩個指標 <code>i</code>（指向左半 <code>L</code>）、<code>j</code>（指向右半 <code>R</code>），比較 <code>L[i]</code> 與 <code>R[j]</code>：如果 <code>L[i] &lt;= R[j]</code>，代表 <code>L[i]</code> 不會跟 <code>R[j]</code>（也不會跟 <code>R</code> 裡任何還沒走到的元素，因為 <code>R</code> 遞增排序）形成逆序對，直接把 <code>L[i]</code> 放進結果、<code>i++</code>；如果 <code>L[i] &gt; R[j]</code>，因為 <code>L</code> 已經排好序，<code>L[i], L[i+1], …</code> 一路到 <code>L</code> 結尾全部都會比 <code>R[j]</code> 大，所以一次性把「左半剩餘元素個數」<code>len(L) - i</code> 累加進答案，然後把 <code>R[j]</code> 放進結果、<code>j++</code>。等任一邊走完，把另一邊剩下的元素原樣接上去即可。</p>\n<p>用一個具體例子走一遍：陣列 <code>[8, 4, 2, 1]</code>。先切成 <code>[8, 4]</code> 與 <code>[2, 1]</code>，遞迴下去各自排序並計數：<code>[8,4]</code> 排序後變 <code>[4,8]</code>，期間數到 1 個逆序對（8 在 4 前面）；<code>[2,1]</code> 排序後變 <code>[1,2]</code>，數到 1 個逆序對。接著合併 <code>[4,8]</code> 與 <code>[1,2]</code>：比較 4 與 1，<code>4 &gt; 1</code>，左半剩餘 2 個（4、8），逆序對 +2，放入 1；比較 4 與 2，<code>4 &gt; 2</code>，左半剩餘仍是 2 個，逆序對再 +2，放入 2；右半走完，把 4、8 原樣接上。合併階段共數到 4 個跨越逆序對，加上左右兩邊各自的 1 個，總共 <b>6 個</b>。驗證一下：<code>[8,4,2,1]</code> 是嚴格遞減的 4 個相異數，任兩個下標都構成逆序對，應該是 C(4,2) = 6，跟我們算出來的完全一致。</p>\n<p>跟暴力解法的複雜度對照：暴力法時間 O(n&sup2;)、空間 O(1)；合併排序計數法時間 O(n log n)、空間 O(n)（遞迴過程需要暫存陣列）。這是典型的「拿空間換時間」取捨——面試官常會追問「可不可以不用額外陣列、原地合併？」答案是理論上可行（in-place merge），但實作複雜度大幅上升、常數因子變差，實務上幾乎不會為了省那 O(n) 空間去冒這個風險，這個取捨本身就是常見的追問重點。另一個常見追問是「如果陣列幾乎已經排好序，有沒有更快的做法？」——這時插入排序的逆序對計數（每插入一個元素時數一次反轉）在近乎排序的輸入下會退化成接近 O(n)，是合併排序法比不上的特例，值得提一句展示你對輸入分佈的敏感度。</p>\n<p><b>變形模式一</b>：LeetCode 315「Count of Smaller Numbers After Self」要的不是全域總數，而是<b>每個元素各自</b>的「右邊有幾個比它小的元素」。做法是把每個值跟它的<b>原始下標</b>一起搬運（例如存成 <code>(value, original_index)</code> 的 pair），合併時原本「一次性加總」的邏輯要改成「把 <code>len(L)-i</code> 這個數字，記錄到 <code>L[i]</code> 對應的原始下標的答案陣列裡」——因為這裡要的是「歸屬到特定元素」的計數，不是全域累加。這也是為什麼需要<b>穩定（stable）</b>的合併：下標的對應關係不能因為排序過程亂掉。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2f5f9e;\">穩定排序（Stable Sort）</b>　排序後，原本相等（或在此處是「帶著原始下標搬運」）的元素相對順序不會被打亂；合併排序天生穩定，這也是它比快速排序更適合拿來做「歸屬到原始位置」計數的原因之一。</div></p>\n<p><b>變形模式二</b>：LeetCode 493「Reverse Pairs」把條件從 <code>nums[i] &gt; nums[j]</code> 改成 <code>nums[i] &gt; 2 * nums[j]</code>——多了一個縮放係數。這裡有個很容易踩的陷阱：如果直接把「<code>2*R[j]</code>」塞進原本合併用的雙指標比較裡，會破壞合併排序「邊比較邊搬移」的單調性，因為 <code>2*R[j]</code> 這個被比較的值跟實際要搬進結果陣列的 <code>R[j]</code> 不是同一個東西，兩個指標前進的條件會互相干擾。正確做法是把「計數」跟「合併」拆成兩個獨立的指標掃描：先用一輪左右指標各自單向移動（因為兩邊都排好序，仍然可以在 O(n) 內完成）只做計數、完全不搬動資料，計數結束後才執行一次乾淨、不受計數邏輯汙染的標準合併。這正是「分治計數」框架裡最容易出錯、也最常被拿來考較深入的那一步——當比較條件跟合併條件不一致時，必須解耦。</p>\n<p><b>變形模式三</b>：LeetCode 327「Count of Range Sum」要數「有多少個子陣列的區間和落在 <code>[lower, upper]</code> 之間」。關鍵轉換是先把原陣列換成<b>前綴和陣列</b> <code>prefix[0..n]</code>（<code>prefix[0]=0</code>），子陣列 <code>(i, j]</code> 的區間和就等於 <code>prefix[j] - prefix[i]</code>，問題就變成「數有多少對 <code>i &lt; j</code> 滿足 <code>lower &lt;= prefix[j] - prefix[i] &lt;= upper</code>」——這其實就是「帶著一個區間條件」的廣義逆序對計數。合併兩個已排序的 <code>prefix</code> 子陣列時，對每個固定的 <code>prefix[j]</code>，滿足條件的 <code>prefix[i]</code> 落在一段連續區間 <code>[prefix[j]-upper, prefix[j]-lower]</code> 內，可以用兩根會<b>單向移動、不回頭</b>的指標分別標出這段區間的左右邊界（因為 <code>prefix[j]</code> 遞增時，這段區間的上下界也單調右移），整體仍是 O(n) 完成一層合併，O(n log n) 總複雜度。</p>\n<p>這題組最常見的面試官追問，除了前面提到的「能不能原地合併」，還有：「這個技巧跟用 Fenwick Tree／Binary Indexed Tree + 座標壓縮來解一樣的題目相比，優劣在哪？」<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2f5f9e;\">座標壓縮（Coordinate Compression）</b>　把一群可能很大、很分散的數值，依照相對大小重新映射成 0..k-1 的連續整數，讓原本需要開很大陣列的資料結構（如 Fenwick Tree）可以用「排名」而不是「數值本身」當索引。</div>——答案是兩者都是 O(n log n)，分治法不需要額外的座標壓縮步驟、邏輯上更直接，但 Fenwick Tree 的版本在「資料是一邊讀入一邊要即時查詢」的線上（online）情境下更有優勢，因為它天生支援動態插入與即時前綴查詢，而分治法必須先拿到完整陣列才能遞迴切分，是離線（offline）算法。能講清楚這個「離線 vs 線上」的差異，通常是這類題目能不能拿到更高評價的分水嶺。</p>",
+      "derivation_html": "<p>為什麼合併排序計數逆序對的總複雜度是 O(n log n)，而不是看起來「每層都要做事」所以更慢？用遞迴關係式來看：設 <code>T(n)</code> 是處理長度 <code>n</code> 陣列（排序＋計數）所需時間。每次呼叫會把問題切成兩個長度 <code>n/2</code> 的子問題，遞迴求解各需要 <code>T(n/2)</code>，再花 O(n) 做一次合併（雙指標掃描，每個元素只被放進結果陣列一次，所以合併本身是線性的）。所以 <code>T(n) = 2T(n/2) + O(n)</code>。</p>\n<p>這是 Master Theorem 的標準形式 <code>T(n) = aT(n/b) + O(n^d)</code>，其中 <code>a=2, b=2, d=1</code>。因為 <code>a = b^d</code>（<code>2 = 2^1</code>），落在 Master Theorem 的「臨界情況」，解為 <code>T(n) = O(n^d log n) = O(n log n)</code>。換成更直白的講法：遞迴樹總共有 <code>log&sub2; n</code> 層（因為每層把問題規模除以 2，要除到剩 1 需要 log&sub2; n 次），每一層所有子問題的合併工作量加總起來都是 O(n)（因為每層的子問題雖然數量變多，但每個子問題的大小也成比例變小，乘積總是 n），<code>log&sub2; n</code> 層乘上每層 O(n)，就是 O(n log n)。這跟暴力雙層迴圈「C(n,2) ≈ n&sup2;/2 次比較」的 O(n&sup2;) 相比，當 n = 10&#8308; 時，n&sup2; 是 10&#8312;，n log&sub2;n 大約只有 10&#8308;&times;13 &asymp; 1.3&times;10&#8309;，差了接近四個數量級，這也是為什麼這類題目在 n 稍大時暴力解法必定超時、分治法才是正解的量化理由。</p>",
+      "source_label": "自製 Python 參考實作（通用分治演算法邏輯，附逐步複雜度註解，非特定來源引用）",
+      "source_code": "def count_inversions(nums):\n    # 回傳 (排序後的陣列, 逆序對總數)；時間 O(n log n)，空間 O(n)\n    n = len(nums)\n    if n <= 1:\n        return nums, 0\n    mid = n // 2\n    left, inv_left = count_inversions(nums[:mid])\n    right, inv_right = count_inversions(nums[mid:])\n\n    merged = []\n    i = j = 0\n    cross = 0\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            merged.append(left[i])\n            i += 1\n        else:\n            # left[i] > right[j]：left 這之後的所有元素（已排序）都比 right[j] 大\n            cross += len(left) - i\n            merged.append(right[j])\n            j += 1\n    merged.extend(left[i:])\n    merged.extend(right[j:])\n    return merged, inv_left + inv_right + cross\n\n\n# 範例：count_inversions([8, 4, 2, 1]) -> ([1, 2, 4, 8], 6)\n",
+      "problems": [
+        {
+          "id": "912",
+          "title": "Sort an Array",
+          "url": "https://leetcode.com/problems/sort-an-array/",
+          "note": "合併排序的基礎實作練習，今天所有變形都建立在這個合併步驟上，時間 O(n log n) 空間 O(n)"
+        },
+        {
+          "id": "315",
+          "title": "Count of Smaller Numbers After Self",
+          "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/",
+          "note": "逆序對計數的「歸屬到每個原始下標」變形，合併時需攜帶原始索引，O(n log n)"
+        },
+        {
+          "id": "493",
+          "title": "Reverse Pairs",
+          "url": "https://leetcode.com/problems/reverse-pairs/",
+          "note": "比較條件帶縮放係數 nums[i] > 2*nums[j]，需把計數掃描跟合併掃描拆開，O(n log n)"
+        },
+        {
+          "id": "327",
+          "title": "Count of Range Sum",
+          "url": "https://leetcode.com/problems/count-of-range-sum/",
+          "note": "轉換成前綴和陣列後，用雙指標劃出區間邊界的廣義逆序對計數，O(n log n)"
+        }
+      ],
+      "tip_html": "<p>這四題的共同骨架都是「合併兩個已排序子陣列時，順便用 O(n) 算出跨越兩邊的某種配對數量」——判斷能不能套用這個框架的關鍵，是先確認你要數的配對條件，是不是跟「排序後的相對順序」相容（313 跟 912 可以直接在合併迴圈裡算；493 的縮放係數會破壞合併單調性，必須拆成獨立計數掃描再合併）。下次遇到「數滿足某條件的下標對」類型的題目，先問自己這個問題，往往就能判斷能不能用分治法壓到 O(n log n)。</p>"
+    }
+  ],
+  "csapp": [
+    {
+      "chapter": "Ch.4",
+      "section": "4.5.6 Avoiding Data Hazards by Forwarding",
+      "explanation_html": "<p>上週（§4.5.5）我們教完了 <b>Pipeline Hazards（管線危障）</b>：把 SEQ+ 拆成 F/D/E/M/W 五個階段重疊執行後，會冒出三種危障——control hazard（分支/跳轉指令還沒決定下一條 PC 前，後面的指令已經被抓進管線）、data hazard（一個暫存器的新值還沒真正「寫回」暫存器檔案，後面的指令卻已經要讀它）。今天這一節（§4.5.6）要解決的正是 data hazard 裡最常見、也最值得解決的那一種——<b>用 Forwarding（前送／旁路）技巧，不等寫回階段完成，就把「已經算出來、但還沒正式寫回」的值直接送給前面階段用。</b>這正是今天主線「順道完成」的另一個具體案例：不必等到流程終點（Write-back），而是在值產生的當下就「順路」把它借出去。</p>\n<p>先精確定義問題：PIPE（Y86-64 的五階段管線）在 Decode 階段需要讀取 <code>srcA</code>、<code>srcB</code> 兩個暫存器的值，而真正把計算結果寫回暫存器檔案的動作，要等到該指令走到 <b>Write-back（W）</b>階段才會發生。如果嚴格照「先寫回、才能讀」的規矩，一條指令要等到前一條指令完全走完全部五個階段才能開始讀它要用的暫存器——這樣管線幾乎等於白做了，吞吐率會退化回接近 SEQ 的程度。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#b0561a;\">Data Hazard（資料危障）</b>　後面的指令需要讀取一個暫存器，而這個暫存器應有的新值，是前面某條還在管線裡、尚未真正寫回的指令算出來的——如果什麼都不做，後面的指令會讀到「舊值」而出錯。</div></p>\n<p>Forwarding 的核心想法很直接：既然值已經被算出來了（例如 ALU 在 Execute 階段算出 <code>valE</code>），就不必死等它走完 Memory、Write-back 兩個階段、正式寫進暫存器檔案，而是直接把這個「還在管線register裡飄著」的值，用額外的線路「抄一份」送到 Decode 階段，當作 <code>valA</code>／<code>valB</code> 的來源。這條額外線路在硬體上就是一條從後面階段繞回 Decode 階段輸入端的訊號路徑，配合一個多工器（selection logic）依照「這個值是不是我現在需要的那個暫存器」來選擇正確的來源——這也是為什麼這個技巧在很多教材裡也被稱為 <b>bypassing（旁路）</b>：訊號繞過了原本「必須先寫回才能讀」的正規路徑。</p>\n<p>關鍵在於：到底該選哪一條線路送回去？因為管線裡同時可能有好幾條指令都要寫同一個暫存器（雖然少見但要處理），所以 PIPE 設計了一份<b>依優先順序排列</b的轉送來源清單，從「最新鮮（最近算出來）」排到「最陳舊（已經要寫回）」：(1) <code>e_valE</code>——此刻正在 Execute 階段、剛算出來的 ALU 結果；(2) <code>m_valM</code>——此刻正在 Memory 階段、剛從記憶體讀出來的 load 結果；(3) <code>M_valE</code>——上一輪已經算出、目前存在 M 號管線暫存器裡、即將進入 Memory 階段的 ALU 結果；(4) <code>W_valE</code>——存在 W 號管線暫存器裡、即將真正寫回的 ALU 結果；(5) <code>W_valM</code>——存在 W 號管線暫存器裡、即將真正寫回的 load 結果；如果以上條件都不符合，才 (6) 退回預設值 <code>d_rvalA</code>／<code>d_rvalB</code>，也就是乾脆從暫存器檔案正常讀取（代表這個暫存器真的沒有危障，直接讀舊值也是對的，因為它本來就沒被管線裡任何指令修改過）。</p>\n<p>為什麼清單要按這個順序檢查、而不是隨便挑一個？因為管線裡可能同時有兩條指令都要寫入同一個目的暫存器（例如相鄰兩條都寫 <code>%rax</code>），這時「正確性」要求 Decode 階段一定要拿到<b>最年輕（最晚被 fetch、但已經算出結果）</b>那條指令的值，而不是比較舊的那條——否則會違反「程式順序語意」。把 <code>e_valE</code>（最年輕，剛算出來）排在最前面檢查，一路排到 <code>W_valE</code>／<code>W_valM</code>（最老、快要離開管線），正是用「優先權」機制自動確保「拿到的一定是最新鮮的那個值」，不需要額外的時間戳記或版本號比較邏輯，單純靠檢查順序就能保證正確。</p>\n<p>用一個具體例子走一遍管線時序：假設有三條相鄰指令 <code>irmovq $10, %rax</code>、<code>addq %rax, %rbx</code>、<code>rmmovq %rbx, 0(%rcx)</code>。在某個 cycle，<code>irmovq</code> 剛好在 Execute 階段算出 <code>valE = 10</code>（即將寫入 <code>%rax</code>），同一個 cycle，<code>addq</code> 剛好在 Decode 階段，正要讀 <code>%rax</code> 當作 <code>valB</code>。檢查轉送清單：第一條件 <code>e_dstE == %rax</code> 成立，於是 Decode 直接拿到 <code>e_valE = 10</code> 當作 <code>valB</code>，完全不用等 <code>irmovq</code> 走到 Write-back（還要再等兩個 cycle）。再過一個 cycle，<code>addq</code> 走到 Execute、<code>rmmovq</code> 走到 Decode 要讀 <code>%rbx</code>——這時 <code>addq</code> 的結果剛好也還在 Execute 階段，同樣靠 <code>e_valE</code> 轉送拿到，管線完全不需要插入任何 bubble（空泡/停頓週期）就能正確執行這三條連續、彼此依賴的指令。</p>\n<p>Forwarding 並不是萬能的：如果 producer 是一條 <b>load</b> 指令（例如 <code>mrmovq 0(%rbx), %rax</code>），而緊接著下一條指令就要用 <code>%rax</code>（也就是中間完全沒有其他指令隔開），這時 consumer 的 Decode 階段跟 producer 的 Execute 階段是同一個 cycle——但 load 的 <code>valM</code> 要等到 producer 走到 <b>Memory</b> 階段才算得出來，此刻它還沒被算出來，<code>e_valE</code> 這個通道對 load 指令根本不適用（load 指令沒有 ALU 結果可轉送）。這個「相鄰 load 緊接著被使用」的特例叫做 <b>load/use hazard（載入使用危障）</b>，forwarding 救不了它，必須插入一個 cycle 的 bubble 讓時序對齊——這正好是下一節（§4.5.7）要教的內容，也是今天內容裡刻意留白、銜接下一次教學的地方。</p>\n<p>這一節在面試／實務上的意義在於：現代真實 CPU（x86、ARM 的 out-of-order 核心）的 forwarding／bypass network 遠比 PIPE 這個教學用五階段管線複雜得多（要處理亂序執行、多個執行單元、暫存器重命名），但「偵測到後面階段需要一個還沒正式寫回的值，就用額外線路直接轉送」這個核心原理完全一致。面試官常見的追問包括：「為什麼不是所有 data hazard 都能靠 forwarding 解決？」（答案就是 load/use hazard，需要額外停頓）、「forwarding 的硬體代價是什麼？」（答案是額外的多工器與走線、以及隨管線深度增加而變多的轉送來源組合，會拉長 Decode 階段的關鍵路徑延遲，這是真實處理器設計中「管線深度 vs. 轉送網路複雜度」的經典 trade-off）、以及「如果兩個轉送來源同時符合條件怎麼辦？」（答案就是靠今天教的優先順序清單解決）。</p>",
+      "derivation_html": "<p>為什麼轉送清單剛好需要列出 (<code>e_valE</code>、<code>m_valM</code>、<code>M_valE</code>、<code>W_valE</code>、<code>W_valM</code>) 這五條、而不是更多或更少？這個數字是從「管線深度」跟「producer／consumer 間最多可能相隔幾條指令」直接推出來的。PIPE 是 5 級管線（F/D/E/M/W），一條指令從 Decode 走到「正式寫回」要經過 E、M、W 三個階段、共 2 個 cycle 的延遲（D 之後、E 這個 cycle，再 M 這個 cycle，再 W 這個 cycle，相對 D 已經過了 3 個 cycle，也就是中間最多可以插入 2 條其他指令）。所以 producer 跟 consumer 之間可能相隔 0、1、2 條指令，對應到 producer 在 consumer 做 Decode 的那個 cycle，恰好分別落在 Execute（0 條指令間隔，即 <code>e_valE</code>／沒有 <code>e_valM</code> 因為 load 此時還沒算出值）、Memory（1 條指令間隔，load 恰好這個 cycle 算出 <code>m_valM</code>，ALU 結果則已經在上一 cycle 算完、現在存在 M 暫存器裡成為 <code>M_valE</code>）、或 Write-back（2 條指令間隔，對應 <code>W_valE</code>／<code>W_valM</code>）三個位置之一——剛好就是這 5 種（ALU 結果 3 種時機、load 結果 2 種時機，因為 load 在 Execute 那個時機點根本還沒有值可轉送）組合，一個都不多、一個都不少。</p>\n<p>換一個角度看，這也解釋了「為什麼 load/use hazard 沒辦法用轉送解決」：它對應的正是「0 條指令間隔、但 producer 是 load」這個組合——而這個組合在上面的推導裡完全不存在對應的轉送來源（<code>e_valE</code> 只適用 ALU 指令，load 在 Execute 階段還沒讀記憶體），所以唯一的解法只能是讓管線「多等一個 cycle」，用一次 bubble 把這個不存在的組合，轉換成清單裡已經覆蓋、存在對應來源的「1 條指令間隔」情形（<code>m_valM</code>）——這也是為什麼 §4.5.7 的標準解法剛好只需要插入「1 個 cycle」的 stall，而不是更多：差距正好是「0 條間隔」跟「1 條間隔」這兩個相鄰狀態之間的落差。</p>",
+      "tip_html": "<p>查證過程中特別搜尋過 CMU 15-213（Introduction to Computer Systems）2015 Fall 學期的正式課程講次清單（27 講，從 Overview 一路到 The Future of Computing），發現 Y86-64 的 SEQ／PIPE 處理器設計（CS:APP 第 4 章）在這個學期的正式課表裡<b>並沒有被排成一堂獨立的錄影講座</b>——它在 15-213 的教學安排裡，向來是配合 Architecture Lab （學生實際動手把 PIPE 擴充、優化成 PIPE+）的自學投影片與習題，而不是課堂錄影的內容；查了其他幾個學期的公開課表與鄰校沿用的同一份投影片（Williams College、CMU 18-600 等），也都只找到投影片，找不到任何一份可信、可對應到今天這個子主題的 15-213 正式課堂錄影連結。為了不編造不存在的影片連結，這裡誠實說明：今天沒有附上 CMU 15-213 的講座影片，附上的是 CS:APP 官方教科書網站（課程投影片與 Architecture Lab 的原始資料來源）取代。</p>"
+    }
+  ],
+  "linux": [
+    {
+      "topic": "Device Tree（裝置樹）：嵌入式 Linux 的硬體描述機制與 compatible 字串配對",
+      "explanation_html": "<p>延續上週「如何避免為嵌入式 Linux 撰寫裝置驅動程式（UIO）」與「用 GDB 除錯嵌入式裝置」這兩個主題——它們解決的都是「硬體已經被核心認出來之後」的問題。今天要往前退一步，教一個更根本的問題：<b>核心一開始是怎麼知道這個嵌入式開發板上到底有哪些硬體、它們接在哪裡、該用哪個驅動程式去接管？</b>答案就是 <b>Device Tree（裝置樹，常簡稱 DT）</b>。這是成大進度表第 13 週「記憶體管理＋裝置驅動程式」這個區塊裡，跟記憶體管理並列的另一條主線。</p>\n<p>在 x86 PC 的世界，硬體資訊大多可以靠 BIOS/UEFI 配合 ACPI、PCI 的 enumeration（列舉）機制在開機時動態探測出來——匯流排會回報「這裡接了一張什麼裝置」。但嵌入式 SoC（System on Chip）上大量的周邊（UART、I2C 控制器、GPIO、特定的感測器）是直接焊在電路板上、沒有任何「自我介紹」機制的，核心光靠掃描匯流排完全不知道這些硬體存在。早期 Linux 的做法是把這些資訊寫死在 C 語言的 <code>arch/arm/mach-*/board-*.c</code> 這類「board file」裡，每一款開發板都要寫一份、編譯進核心映像檔——板子一多，這些 board file 的數量爆炸性成長，變成 ARM 核心程式碼裡最難維護的部分之一。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">Board File（板級描述檔）</b>　早期 ARM Linux 用純 C 程式碼寫死描述一塊特定開發板上有哪些硬體、接在哪個位址——每新增一款板子就要新增一份原始碼並重新編譯核心，無法在開機時動態替換。</div></p>\n<p>Device Tree 的解法是把「硬體長什麼樣子」這件事，從 C 原始碼裡抽出來，變成一份<b>獨立的資料檔案</b>（<code>.dts</code>，Device Tree Source），用一種類似巢狀大括號的宣告式語法描述整棵硬體樹：根節點代表整個開發板，底下的子節點對應記憶體、匯流排、各個周邊裝置，每個節點用一組 <code>key = value;</code> 的 property 描述它的位址範圍、中斷號、時鐘來源等等。這份 <code>.dts</code> 會被 <code>dtc</code>（Device Tree Compiler）編譯成二進位格式 <b>DTB（Device Tree Blob）</b>，開機時由 bootloader 傳給核心——同一份核心映像檔，只要換一個 DTB，就能支援不同的開發板，不需要重新編譯核心本身。這正是今天主線「順道完成」的另一面體現：硬體描述跟核心二進位解耦之後，「換板子」這件事從「重新編譯」變成「換一個設定檔」，是一種結構性的簡化。</p>\n<p>來看一段真實存在、來自核心原始碼樹的 <code>.dts</code> 範例（<code>arch/arm/boot/dts/rockchip/rk3066a-marsboard.dts</code>，MarsBoard RK3066 開發板）：</p>\n<pre>/dts-v1/;\n#include \"rk3066a.dtsi\"\n\n/ {\n\tmodel = \"MarsBoard RK3066\";\n\tcompatible = \"haoyu,marsboard-rk3066\", \"rockchip,rk3066a\";\n\n\taliases {\n\t\tmmc0 = &amp;mmc0;\n\t};\n\n\tmemory@60000000 {\n\t\tdevice_type = \"memory\";\n\t\treg = &lt;0x60000000 0x40000000&gt;;\n\t};\n};</pre>\n<p>這段真實範例裡最關鍵的一行是根節點的 <code>compatible</code> property：<code>\"haoyu,marsboard-rk3066\", \"rockchip,rk3066a\"</code>。這是一份<b>由精確到寬泛排列</b>的字串列表——第一個字串 <code>haoyu,marsboard-rk3066</code> 精確指名「這塊板子正是 MarsBoard」，第二個字串 <code>rockchip,rk3066a</code> 則退一步說「如果找不到專屬驅動，至少這塊板子相容於 RK3066A 這款 SoC 的通用支援」。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">compatible 屬性</b>　Device Tree 節點最重要的一個 property：一份字串陣列，依「最精確」到「最通用」排序，核心與驅動程式都用它來做字串比對，決定這個節點該由哪個驅動程式接管。</div>核心開機早期的 <code>unflatten_device_tree()</code> 會把這份扁平化的 DTB 解析回一棵樹狀的 <code>struct device_node</code> 結構，之後整個核心都透過這棵樹來查詢硬體資訊，而不是靠任何寫死的 C 常數。</p>\n<p>真正決定「這個硬體節點該配對到哪個驅動程式」的，是一套<b>字串比對打分</b>機制。核心原始碼 <code>drivers/of/base.c</code> 裡的 <code>__of_device_is_compatible()</code> 函式（見下方「原始碼」區塊）會拿裝置節點的 <code>compatible</code> 字串列表，逐一跟驅動程式宣告的 <code>of_device_id</code> 表格比對：只要其中任何一個字串吻合，就依「吻合位置」給一個分數（越早、越精確的字串分數越高），外加 <code>type</code>、<code>name</code> 吻合的額外加分。真正負責「幫一個裝置節點，從驅動程式表格裡選出分數最高的那一個」的呼叫者，是同一個檔案裡的 <code>__of_match_node()</code>（第 1156～1176 行附近）——它會遍歷驅動程式宣告的整個 <code>of_device_id</code> 陣列，對每一條都呼叫一次 <code>__of_device_is_compatible()</code>，保留分數最高者；另外兩個真實呼叫點 <code>of_device_is_compatible()</code>（約第 396 行，提供給驅動程式自己在 <code>probe()</code> 裡再次確認用）與 <code>of_find_compatible_node()</code>（約第 1108 行，供核心在樹裡搜尋「有沒有任何節點相容於某字串」）則是這個比對函式在核心其他子系統裡被實際呼叫的例子。</p>\n<p>這套機制在開機流程裡的位置值得特別強調：字串比對打分這件事發生在<b>驅動程式的 <code>probe()</code> 真正被呼叫之前</b>——也就是硬體還沒有被「真正探測」，核心只是先純粹比對字串、算出一個分數、決定「接下來該試哪個驅動程式」。這跟今天另外兩個領域的主線呼應：不需要等到最終動作（探測硬體、寫回暫存器、合併完成）發生，核心已經在「必經的比對步驟」裡，順道把配對結果決定好了。</p>\n<p>邊界案例也值得提：如果一個節點完全沒有任何字串能跟任何已載入驅動程式的 <code>of_device_id</code> 表吻合，<code>__of_device_is_compatible()</code> 會對每個驅動都回傳 0 分，<code>__of_match_node()</code> 找不到任何 <code>best_match</code>，這個硬體節點就會停留在「已知存在、但無人接管」的狀態（可以在 <code>/sys/firmware/devicetree/base</code> 底下看到它，但 <code>/sys/class</code> 不會出現對應的裝置節點）——這也是嵌入式開發時最常見的除錯情境之一：遇到硬體明明接著、核心卻「沒反應」，十之八九是 compatible 字串打錯、或對應驅動程式沒被編譯進核心／沒被載入。另一個進階主題是 <b>Device Tree Overlay</b>：允許在開機後動態載入一小段 DTB 片段、疊加到既有的樹上（常用於像 Raspberry Pi 這類可插拔擴充板的場景），不需要重新開機就能讓核心認得新插上去的硬體。</p>\n<p>面試／實務關聯：如果應徵的職位牽涉嵌入式 Linux、BSP（Board Support Package）或裝置驅動開發，Device Tree 幾乎是必考的背景知識；常見追問包括「DTB 是誰傳給核心的？」（答案是 bootloader，例如 U-Boot，透過暫存器把 DTB 在記憶體中的位址傳給核心，核心早期啟動碼再呼叫 <code>early_init_dt_scan()</code> 之類的函式開始解析）、「Device Tree 跟 ACPI 的本質差異是什麼？」（DT 是純粹描述性的靜態資料，不包含可執行邏輯；ACPI 除了描述硬體，還內建一套 AML bytecode 直譯器，可以在開機與運行時執行供應商寫的程式邏輯，這也是為什麼 ACPI 在伺服器／PC 的電源管理場景更吃香，而嵌入式 SoC 幾乎全面採用更單純的 DT）、以及「同一個 compatible 字串出現在兩個不同驅動程式的表格裡會怎樣？」（答案就是前面提到的分數機制，核心並不保證「先註冊的驅動優先」，而是看哪個驅動的宣告跟節點字串吻合位置更精確）。</p>",
+      "derivation_html": "<p>原始碼裡這一行最值得拆解：<code>score = INT_MAX/2 - (index &lt;&lt; 2)</code>。<code>index</code> 是這個吻合字串在 <code>compatible</code> 陣列裡的位置（從 0 開始），<code>index &lt;&lt; 2</code> 等於 <code>index * 4</code>。為什麼是「每往後一個位置扣 4 分」而不是扣 1 分？因為後面還有兩個獨立的加分項目——<code>type</code> 吻合加 2 分、<code>name</code> 吻合加 1 分，兩者合計最多 3 分。如果「位置退一位只扣 1 分」，那麼一個排名較後面（較不精確）的 compatible 字串，只要同時吻合 <code>type</code> 跟 <code>name</code>（+3），分數就可能反超一個排名較前面（較精確）但沒有 <code>type</code>／<code>name</code> 資訊可比對的字串——這會違反「compatible 字串的精確度應該有最高話語權」這個設計原則。把扣分間距設成 4（大於 <code>type</code>+<code>name</code> 的加分上限 3），就保證了「只要 compatible 字串的精確度排名差一位，type／name 的加分永遠無法逆轉排名」，這是一個用簡單整數算術，確保優先順序規則不會被意外打破的典型例子。</p>\n<p>至於為什麼起始基準是 <code>INT_MAX/2</code> 而不是 0 或直接用 <code>INT_MAX</code>：用 <code>INT_MAX/2</code> 當基準，一方面保證在 <code>index</code> 合理範圍內（真實的 compatible 陣列幾乎不可能長到讓 <code>index &lt;&lt; 2</code> 逼近 <code>INT_MAX/2</code>）分數必然維持正值，不會意外變成負數或溢位；另一方面刻意不用滿版 <code>INT_MAX</code>，是為後續（例如多個比對結果要加總、或跟其他分數比較運算時）保留足夠的數值空間余裕，避免整數運算時貼著型別上限邊緣造成溢位風險——這是核心程式碼裡常見的、刻意不把數值用到極限邊界的保守寫法。</p>",
+      "source_label": "github.com/torvalds/linux（鏡像自 kernel.org，tag v7.3）· drivers/of/base.c · L355-L391",
+      "source_url": "https://github.com/torvalds/linux/blob/v7.3/drivers/of/base.c#L355-L391",
+      "source_code": "static int __of_device_is_compatible(const struct device_node *device,\n\t\t\t\t     const char *compat, const char *type, const char *name)\n{\n\tconst struct property *prop;\n\tconst char *cp;\n\tint index = 0, score = 0;\n\n\t/* Compatible match has highest priority */\n\tif (compat && compat[0]) {\n\t\tprop = __of_find_property(device, \"compatible\", NULL);\n\t\tfor (cp = of_prop_next_string(prop, NULL); cp;\n\t\t     cp = of_prop_next_string(prop, cp), index++) {\n\t\t\tif (of_compat_cmp(cp, compat, strlen(compat)) == 0) {\n\t\t\t\tscore = INT_MAX/2 - (index << 2);\n\t\t\t\tbreak;\n\t\t\t}\n\t\t}\n\t\tif (!score)\n\t\t\treturn 0;\n\t}\n\n\t/* Matching type is better than matching name */\n\tif (type && type[0]) {\n\t\tif (!__of_node_is_type(device, type))\n\t\t\treturn 0;\n\t\tscore += 2;\n\t}\n\n\t/* Matching name is a bit better than not */\n\tif (name && name[0]) {\n\t\tif (!of_node_name_eq(device, name))\n\t\t\treturn 0;\n\t\tscore++;\n\t}\n\n\treturn score;\n}",
+      "tip_html": "<p>這週 jserv 在 <a href=\"https://hackmd.io/@sysprog\" style=\"color:#2c7357;text-decoration:underline;\">hackmd.io/@sysprog</a> 上並沒有一篇專門以 Device Tree 為標題的筆記，查證後確認成大課程進度表第 13 週在這個主題底下附的原始連結，是 Thomas Petazzoni 的經典議程投影片《Device Tree for Dummies》與同一行搭配的錄影連結——這份投影片是嵌入式 Linux 社群長期公認最常被引用的 Device Tree 入門教材之一，因此直接沿用進度表原文附上的這組連結，不另外杜撰筆記或影片。</p>"
+    }
+  ],
+  "sources": [
+    {
+      "label": "LeetCode 題目彙整（wisdompeak/LeetCode）",
+      "url": "https://github.com/wisdompeak/LeetCode"
+    },
+    {
+      "label": "LeetCode 912. Sort an Array",
+      "url": "https://leetcode.com/problems/sort-an-array/"
+    },
+    {
+      "label": "LeetCode 315. Count of Smaller Numbers After Self",
+      "url": "https://leetcode.com/problems/count-of-smaller-numbers-after-self/"
+    },
+    {
+      "label": "LeetCode 493. Reverse Pairs",
+      "url": "https://leetcode.com/problems/reverse-pairs/"
+    },
+    {
+      "label": "LeetCode 327. Count of Range Sum",
+      "url": "https://leetcode.com/problems/count-of-range-sum/"
+    },
+    {
+      "label": "owlfox CS:APP 中文筆記",
+      "url": "https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw"
+    },
+    {
+      "label": "sysprog CS:APP 第四章筆記（Ch4 Processor Architecture）",
+      "url": "https://hackmd.io/@sysprog/CSAPP-ch4"
+    },
+    {
+      "label": "CS:APP3e 官方教科書網站",
+      "url": "https://csapp.cs.cmu.edu/3e/home.html"
+    },
+    {
+      "label": "CMU 15-213 (Fall 2015) 課程表核對：27 講正式課表內未排入 Y86-64 Pipelining 專屬講座",
+      "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/schedule.html"
+    },
+    {
+      "label": "成大 Linux 核心課程進度表 Week 13",
+      "url": "https://wiki.csie.ncku.edu.tw/linux/schedule"
+    },
+    {
+      "label": "Device Tree for Dummies（Thomas Petazzoni，投影片，成大課程表原始條目）",
+      "url": "http://events.static.linuxfound.org/sites/events/files/slides/petazzoni-device-tree-dummies.pdf"
+    },
+    {
+      "label": "Device Tree for Dummies（議程錄影，成大課程表原始條目）",
+      "url": "https://youtu.be/m_NyYEBxfn8"
+    },
+    {
+      "label": "Linux kernel 官方文件：Linux and the Devicetree",
+      "url": "https://docs.kernel.org/devicetree/usage-model.html"
+    },
+    {
+      "label": "Linux kernel source: __of_device_is_compatible（drivers/of/base.c）",
+      "url": "https://github.com/torvalds/linux/blob/v7.3/drivers/of/base.c#L355-L391"
+    },
+    {
+      "label": "arch/arm/boot/dts/rockchip/rk3066a-marsboard.dts（範例 .dts 真實原始檔）",
+      "url": "https://github.com/torvalds/linux/blob/v7.3/arch/arm/boot/dts/rockchip/rk3066a-marsboard.dts"
+    }
+  ]
+}
