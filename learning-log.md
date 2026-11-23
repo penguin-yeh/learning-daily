@@ -69,4 +69,5 @@
 主線: 三個領域今天都在示範同一招——用一套固定、系統化的編碼／命名規則馴服原本雜亂的異質狀況 | 2026-11-20 | 演算法: 差分陣列 Difference Array，區間加值的 O(1) 攤還技巧，全新分類（370/1109/1854/2251）| CS:APP: Ch.4 §4.5.3 Rearranging and Relabeling Signals | Linux: 進度表 Week 13 裝置驅動程式介面和模型（Driver Model：struct device／device_driver／bus_type，接續 11/19 的 CS:APP 第 10 章重點提示）
 主線: 三個領域今天都在示範同一招——借用現有、本來就存在的資源，省掉另外建一層東西的代價 | 2026-11-21 | 演算法: Morris Traversal，借用樹本身的空指標達成 O(1) 空間走訪，全新分類（94/230/99/114）| CS:APP: Ch.4 §4.5.4 Next PC Prediction | Linux: 如何避免為嵌入式 Linux 撰寫裝置驅動程式（Userspace I/O／UIO，接續 11/20 的裝置驅動程式介面和模型）
 2026-11-22 | 演算法: Suffix Array（後缀陣列）：倍增法建構 + LCP 陣列，全新分類（1044/1163/1754）| CS:APP: Ch.4 §4.5.5 Pipeline Hazards | Linux: 第13週 Debugging Embedded Devices using GDB（嵌入式系統的 GDB 除錯，接續 11/21 的 UIO）
+主線: 三個領域今天都在示範「順道完成」——不必等到流程終點才處理某件事，而是在既有的必經步驟裡「順路」就做完它（forwarding 不等寫回就借值、合併排序順便數逆序對、Device Tree 的 compatible 配對在探測硬體前先順道算出分數） | 2026-11-23 | 演算法: 分治法 Divide and Conquer，合併排序的分治應用——逆序對計數 Counting Inversions，全新分類（912/315/493/327）| CS:APP: Ch.4 §4.5.6 Avoiding Data Hazards by Forwarding | Linux: 第13週 Device Tree（裝置樹，嵌入式硬體描述機制與 compatible 字串配對，接續 11/22 的 GDB 除錯）
 <!-- LOG END -->
