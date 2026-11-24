@@ -349,7 +349,7 @@ def render(data: dict) -> str:
 
     return f"""<!DOCTYPE html>
 <html lang="zh-Hant">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · {esc(date)}</title></head>
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>每日東東 · {esc(date)}</title><link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32"><link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180"><link rel="manifest" href="site.webmanifest"></head>
 <body style="margin:0;padding:0;background-color:{COLORS['outer']};font-family:{FONT};">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:{COLORS['outer']};padding:28px 12px;">
     <tr>

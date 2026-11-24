@@ -13,6 +13,14 @@
 3. 不准：漸層、陰影、emoji 裝飾（除了下面指定的 📄 與 🔢）、圖片。
 4. 繁體中文。程式碼、組語、路徑與行號必須**逐字抄錄真實來源**，找不到就整組省略，不准編造。
 5. 深度優先：每個領域只講一個具體的窄子主題（見 `ROUTINE_PROMPT.md`），版面不要為了好看而加內容。
+6. 網站頁面的 `<head>` 在 `</title>` 之後必須加上本站 favicon 這四行；`scripts/render_email.py` 產生頁面時也要輸出。這是同站相對路徑，不是外部資源。舊的 icon 連結要換掉：
+
+```html
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="site.webmanifest">
+```
 
 ## 1. 設計 token
 
