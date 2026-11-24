@@ -1,0 +1,121 @@
+{
+  "date": "2026-11-24",
+  "is_review": false,
+  "algo": [
+    {
+      "topic": "二維樹狀陣列 2D Binary Indexed Tree／2D Fenwick Tree：矩陣區域和的查詢與更新，全新分類（304/308/1314/1292）",
+      "explanation_html": "<p>過去我們教過一維的 Fenwick Tree（樹狀陣列，9/9）、Segment Tree（線段樹，10/3）、Difference Array（差分陣列，11/20）——這些都是處理「一條線」上的動態區間問題。今天要做的是把 Fenwick Tree 的核心想法<b>從一維推廣到二維</b>，處理「一個矩陣上的某個矩形區域的總和」這種查詢，並且矩陣的值還可能隨時被更新。這正是 LeetCode 308「Range Sum Query 2D - Mutable」的核心考點，也是許多實務場景（例如即時更新的熱力圖、影像積分圖的動態版本）背後真正在用的結構。</p>\n<p>先把問題講清楚：給一個 <code>rows &times; cols</code> 的矩陣，要支援兩種操作——(1) <b>update(r, c, val)</b>：把某一格的值改掉；(2) <b>sumRegion(r1, c1, r2, c2)</b>：查詢從 <code>(r1,c1)</code> 到 <code>(r2,c2)</code> 這個矩形區域裡所有元素的總和。如果只需要查詢、矩陣內容完全不會變（LeetCode 304、1314、1292 都是這種「靜態」情境），最簡單的做法是預先算好一份<b>二維前綴和（2D Prefix Sum）</b>表：<code>pre[i][j]</code> 存「從左上角到 <code>(i,j)</code>」這塊矩形的總和，查詢時用容斥原理 <code>pre[r2][c2] - pre[r1-1][c2] - pre[r2][c1-1] + pre[r1-1][c1-1]</code> 一次 O(1) 算出，預處理 O(rows&times;cols)。但只要矩陣會被動態更新，這張表就整個失效了——改動一格，理論上下游所有 <code>pre[i][j]</code>（<code>i&ge;r, j&ge;c</code>）都要跟著變，若每次更新都整張表重算，單次更新要付出 O(rows&times;cols) 的代價，這就是我們今天要打敗的基準。</p>\n<p>暴力解法（完全不預處理）則是另一個極端：每次查詢都對矩形範圍內每一格做雙層迴圈加總，單次查詢 O(rows&times;cols)，但更新是 O(1)。三種做法擺在一起比較：暴力法（查詢 O(rows&times;cols)、更新 O(1)）、靜態前綴和（查詢 O(1)、更新 O(rows&times;cols)）、以及今天的 2D BIT（查詢與更新都是 O(log rows &middot; log cols)）——2D BIT 正是在「兩者都要快」這個需求下，用一棵同時支援動態更新又能快速查詢前綴和的樹狀結構，取代了「查詢快但更新慢」或「更新快但查詢慢」這兩個極端。</p>\n<p>要看懂二維版本，得先複習一維 Fenwick Tree 的精神：一維 BIT 的每個節點 <code>tree[i]</code> 並不是存第 <code>i</code> 格的原始值，而是存「以 <code>i</code> 為右端點、長度剛好等於 <code>lowbit(i)</code>（<code>i</code> 的二進位表示法中最低位的 1 所代表的值，例如 <code>lowbit(6)=lowbit(0b110)=2</code>）的一段區間和」。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2f5f9e;\">lowbit(x)</b>　取出整數 <code>x</code> 的二進位表示法中「最低位的 1」所代表的數值，運算式是 <code>x &amp; (-x)</code>（在二補數系統裡，<code>-x</code> 等於 <code>~x+1</code>，跟 <code>x</code> 做 AND 恰好只留下最低的那個 1 位元）。Fenwick Tree 的每一步移動都是加上或減去 <code>lowbit</code>，這也是為什麼它常被稱為「二進位索引樹」。</div>更新第 <code>i</code> 格時，只需要沿著 <code>i += lowbit(i)</code> 一路往上走，把沿途經過的所有節點都加上同一個差值；查詢「前 <code>i</code> 格的總和」時，則沿著 <code>i -= lowbit(i)</code> 一路往下走，把沿途節點的值加總。因為 <code>i</code> 的二進位表示法最多有 O(log n) 個 1，兩種操作都只需要 O(log n) 步。</p>\n<p>二維 BIT 就是把這套「沿 lowbit 跳躍」的邏輯，同時套用在列（row）與行（col）兩個維度上：<code>tree2d[i][j]</code> 存的是「一個右下角在 <code>(i,j)</code>、高度為 <code>lowbit(i)</code>、寬度為 <code>lowbit(j)</code> 的矩形區塊」的總和。<b>更新</b> <code>(r,c)</code> 時，外層沿 <code>i = r; i += lowbit(i)</code> 跳列，內層對每個 <code>i</code> 都沿 <code>j = c; j += lowbit(j)</code> 跳行，把 <code>tree2d[i][j]</code> 都加上差值；<b>查詢</b>「左上角到 <code>(r,c)</code> 的前綴和」時，外層沿 <code>i = r; i -= lowbit(i)</code>、內層沿 <code>j = c; j -= lowbit(j)</code>，把沿途節點加總。因為外層跑 O(log rows) 步、每一步內層又跑 O(log cols) 步，單次更新或查詢的總代價是 <b>O(log rows &middot; log cols)</b>。要查任意矩形 <code>(r1,c1)</code>~<code>(r2,c2)</code> 的和，一樣用容斥原理，呼叫四次「前綴和查詢」再加減組合即可，額外代價只是常數倍。</p>\n<p>走一次具體例子：一個 4&times;4、初始全為 0 的矩陣（BIT 陣列用 1-indexed，大小開 5&times;5）。執行 <code>update(2, 3, +5)</code>（把列 2、行 3 這格加 5）：列方向 <code>i=2 &rarr; 2+lowbit(2)=4 &rarr; 4+lowbit(4)=8</code>（超出範圍停止），行方向對 <code>i=2</code> 時 <code>j=3 &rarr; 3+lowbit(3)=4 &rarr; 4+lowbit(4)=8</code>（停止），對 <code>i=4</code> 時同樣 <code>j=3&rarr;4</code>。所以這次更新總共碰到 <code>tree2d[2][3]</code>、<code>tree2d[2][4]</code>、<code>tree2d[4][3]</code>、<code>tree2d[4][4]</code> 四個節點，各加 5。接著查詢「左上角到 <code>(3,4)</code> 的前綴和」：列方向 <code>i=3 &rarr; 3-lowbit(3)=2 &rarr; 2-lowbit(2)=0</code>（停止）；在 <code>i=3</code> 時 <code>j=4&rarr;4-lowbit(4)=0</code>，貢獻 <code>tree2d[3][4]=0</code>；在 <code>i=2</code> 時 <code>j=4&rarr;0</code>，貢獻 <code>tree2d[2][4]=5</code>。總和為 5——這正確反映了 <code>(2,3)</code> 這個更新落在 <code>(1,1)</code> 到 <code>(3,4)</code> 這個矩形範圍內，應該被算進去。</p>\n<p>邊界情形值得特別注意：(1) 2D BIT 必須用 <b>1-indexed</b>，因為 <code>lowbit(0)=0</code> 會讓迴圈條件 <code>i += lowbit(i)</code> 永遠卡在 0、無法前進，所以索引 0 被保留當作「空」的哨兵值，實作時記得把原始矩陣座標 <code>(row, col)</code> 轉成 <code>(row+1, col+1)</code>；(2) <code>update</code> 傳入的是<b>差值（delta）</b>而非絕對值——如果某一格原本是 <code>old</code>、要改成 <code>new</code>，呼叫時要傳 <code>new - old</code>，這是初學者最常忘記的地方；(3) 矩陣退化成一列或一行時，二維 BIT 自動退化回一維 BIT，邏輯完全相容，不需要特別處理；(4) 如果矩陣的列數或行數極大（例如座標範圍到 10&sup9;）又稀疏，直接開 <code>rows&times;cols</code> 的陣列會爆記憶體，這時需要搭配<b>座標壓縮</b>或改用以雜湊表／字典模擬的「稀疏 BIT」，只替實際出現過的座標建節點。</p>\n<p><b>變形模式一（靜態矩陣，退化用法）</b>：LeetCode 304「Range Sum Query 2D - Immutable」、1314「Matrix Block Sum」、1292「Maximum Side Length of a Square with Sum Less than or Equal to Threshold」這三題的矩陣都<b>不會被更新</b>，完全不需要 2D BIT 這麼「重」的結構——直接用前面提到的靜態二維前綴和表即可，查詢一樣 O(1)、但程式碼簡單得多，沒有 lowbit 跳躍的心智負擔。1314 是對每一格算以它為中心、邊長 <code>2k+1</code> 的區塊和，直接套用前綴和公式；1292 則是在前綴和之上，額外對「正方形邊長」做<b>二分搜尋答案</b>（因為邊長越大、和越大，具單調性，可以二分找最大可行邊長），是「前綴和 + 二分搜尋答案」兩個技巧的疊加應用。这提醒我們一個重要的設計原則：<b>先問清楚題目會不會更新，再決定要不要上 2D BIT</b>，不要看到「矩陣區域和」就反射性地想上樹狀結構。</p>\n<p><b>變形模式二（區間更新＋區間查詢）</b>：如果需求升級成「把整個矩形範圍的所有格子都加上某個值」（區間更新），而不只是單點更新，一維世界裡的標準解法是改用差分陣列搭配 BIT：對差分陣列做一次區間更新只需要兩個點修改。二維版本是同樣想法的推廣——對差分矩陣 <code>diff</code>，一次「把 <code>(r1,c1)</code>~<code>(r2,c2)</code> 整塊都加上 <code>delta</code>」，只需要對 <code>diff</code> 做四次單點更新：<code>diff[r1][c1] += delta</code>、<code>diff[r1][c2+1] -= delta</code>、<code>diff[r2+1][c1] -= delta</code>、<code>diff[r2+1][c2+1] += delta</code>，而查詢任一點 <code>(r,c)</code> 的「目前值」就等於對 <code>diff</code> 做一次二維前綴和查詢。如果同時還要支援「區間查詢總和」（而不只是單點查詢），則需要再多維護一到兩棵輔助 BIT（跟一維「區間加、區間查」需要兩棵 BIT 搭配係數項是同一套數學推導，只是每一步都從一維的加減乘法換成二維的四點展開），複雜度仍是 O(log rows &middot; log cols)，只是常數因子變大。</p>\n<p>面試官常見的追問：「為什麼不乾脆用 2D Segment Tree？」——2D Segment Tree 確實也能做到類似功能，但它的節點數與常數因子都明顯更大（本質上是「線段樹的線段樹」），實作複雜度在白板面試的時間壓力下通常不划算，2D BIT 用迴圈加 lowbit 運算就能寫完，是更實際的選擇；「矩陣很大但大部分是 0（稀疏矩陣），要怎麼省空間？」——答案就是前面提到的座標壓縮或雜湊表版 BIT；「能不能把 2D BIT 换成兩個獨立的一維 BIT（先對列、再對行各做一次）？」——不行，因為二維區域和不能簡單拆解成「列方向一維和」乘上「行方向一維和」，矩形區域和的容斥結構本質上需要同時處理兩個維度的巢狀跳躍，這也是這個資料結構「二維」兩個字真正的含義所在。</p>",
+      "derivation_html": "<p>先複習一維 Fenwick Tree 為什麼是 O(log n)：從索引 <code>i</code> 開始，每做一次 <code>i &plusmn; lowbit(i)</code>，至少會把 <code>i</code> 二進位表示法裡最低的那個 1 位元清掉或進位，而一個 <code>n</code> 以內的整數最多只有 O(log&sub2; n) 個二進位位元，所以這個跳躍過程最多執行 O(log&sub2; n) 次就會停止——這就是一維版本單次操作 O(log n) 的來源。</p>\n<p>二維版本是「外層跑列方向、內層對每個列座標都跑一次行方向」的巢狀迴圈，外層迴圈次數是 O(log&sub2; rows)，內層每次都要重新跑一次完整的 O(log&sub2; cols)，兩者是乘積關係，所以總複雜度是 <b>O(log&sub2; rows &middot; log&sub2; cols)</b>，而不是相加。拿一個典型規模來算：若 <code>rows = cols = 1000</code>，<code>log&sub2; 1000 &asymp; 9.97</code>，單次更新或查詢大約只需要 <code>10 &times; 10 = 100</code> 次基本加法運算；相較之下，靜態前綴和表在矩陣被更新後要整表重算，代價是 <code>rows &times; cols = 1,000,000</code> 次——兩者差了約一萬倍。這個數量級差距正是「只要有任何更新操作，就必須放棄 O(1) 查詢的靜態前綴和表，改用 2D BIT」這個設計取捨的量化理由。</p>",
+      "source_label": "自製 Python 參考實作（通用二維樹狀陣列邏輯，附逐步複雜度註解，非特定來源引用）",
+      "source_code": "class BIT2D:\n    # 1-indexed；rows, cols 為矩陣實際大小\n    def __init__(self, rows, cols):\n        self.rows, self.cols = rows, cols\n        self.tree = [[0] * (cols + 1) for _ in range(rows + 1)]\n\n    def update(self, r, c, delta):\n        # 單點更新：把 (r, c)（1-indexed）這格加上 delta，O(log rows * log cols)\n        i = r\n        while i <= self.rows:\n            j = c\n            while j <= self.cols:\n                self.tree[i][j] += delta\n                j += j & (-j)\n            i += i & (-i)\n\n    def _prefix_sum(self, r, c):\n        # 查詢「左上角到 (r, c)」矩形的總和，O(log rows * log cols)\n        s = 0\n        i = r\n        while i > 0:\n            j = c\n            while j > 0:\n                s += self.tree[i][j]\n                j -= j & (-j)\n            i -= i & (-i)\n        return s\n\n    def region_sum(self, r1, c1, r2, c2):\n        # 容斥原理：矩形 (r1,c1)~(r2,c2)（1-indexed，含端點）的總和\n        return (self._prefix_sum(r2, c2)\n                - self._prefix_sum(r1 - 1, c2)\n                - self._prefix_sum(r2, c1 - 1)\n                + self._prefix_sum(r1 - 1, c1 - 1))\n\n\n# 範例：4x4 全零矩陣，update(2,3,5) 後 region_sum(1,1,3,4) == 5\n",
+      "problems": [
+        {
+          "id": "304",
+          "title": "Range Sum Query 2D - Immutable",
+          "url": "https://leetcode.com/problems/range-sum-query-2d-immutable/",
+          "note": "矩陣固定不變，用靜態二維前綴和即可 O(1) 查詢，O(rows*cols) 預處理，不需要 2D BIT"
+        },
+        {
+          "id": "308",
+          "title": "Range Sum Query 2D - Mutable",
+          "url": "https://leetcode.com/problems/range-sum-query-2d-mutable/",
+          "note": "今天的核心考點：同時支援 update 與 sumRegion，2D BIT 單次操作 O(log rows * log cols)"
+        },
+        {
+          "id": "1314",
+          "title": "Matrix Block Sum",
+          "url": "https://leetcode.com/problems/matrix-block-sum/",
+          "note": "矩陣不變，對每格求 (2k+1)x(2k+1) 區塊和，靜態二維前綴和一次 O(rows*cols) 解完"
+        },
+        {
+          "id": "1292",
+          "title": "Maximum Side Length of a Square with Sum Less than or Equal to Threshold",
+          "url": "https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/",
+          "note": "靜態二維前綴和 + 二分搜尋答案（邊長具單調性），O(rows*cols*log(min(rows,cols)))"
+        }
+      ],
+      "tip_html": "<p>判斷要不要上 2D BIT，先問一個問題就好：「矩陣的內容會不會被更新？」不會更新（304/1314/1292）就用更簡單的靜態二維前綴和，O(1) 查詢已經是最優；只有像 308 這種「資料會變動，又要頻繁查詢範圍和」的情境，才值得付出 2D BIT 的實作複雜度去換取 O(log rows &middot; log cols) 的更新代價。這跟之前教過的「差分陣列只負責區間加值」一樣，都是「先看清楚操作組合，再選對應的資料結構」這個原則的具體案例。</p>"
+    }
+  ],
+  "csapp": [
+    {
+      "chapter": "Ch.4",
+      "section": "4.5.7 Load/Use Data Hazards",
+      "explanation_html": "<p>昨天（§4.5.6）教完 Forwarding：只要一個暫存器的新值已經在管線裡的某個階段算出來，即使還沒真正走到 Write-back 正式寫回，也可以靠一條額外線路「轉送」給正在 Decode 階段、急著要讀這個值的後續指令。但昨天的內容結尾特別留了一個伏筆：如果 producer 是一條 <b>load</b> 指令（<code>mrmovq</code> 或 <code>popq</code>），而緊接著下一條指令立刻就要用它 load 回來的值，forwarding 這招會失效。今天這一節（§4.5.7）要正式處理這個被留白的特例——<b>Load/Use Data Hazard（載入使用資料危障）</b>，以及為什麼它需要跟 forwarding 不一樣的解法。</p>\n<p>先精確定義這個情境：當一條 load 指令（目的地暫存器欄位在 PIPE 裡稱為 <code>dstM</code>，因為它的值來自 Memory 階段）剛好走到 <b>Execute</b> 階段的同一個 cycle，緊接著下一條指令（中間完全沒有其他指令間隔）剛好走到 <b>Decode</b> 階段，而且這條指令要讀的 <code>srcA</code> 或 <code>srcB</code> 正好就是前一條 load 指令要寫入的那個暫存器——這個組合就叫做 load/use hazard。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#b0561a;\">dstM（Memory 目的暫存器）</b>　PIPE 用來特別標記「這條指令的目的暫存器，其值要等到 Memory 階段讀取記憶體後才會產生」的欄位，只有 load 類指令（<code>mrmovq</code>、<code>popq</code>）會設定它；跟 ALU 運算指令的目的暫存器欄位 <code>dstE</code> 是分開追蹤的。</div></p>\n<p>關鍵問題是：為什麼昨天教的 forwarding 清單解決不了這個特例？回想昨天整理的優先順序清單，第一條就是 <code>e_valE</code>——「此刻正在 Execute 階段、剛算出來的 ALU 結果」。但 load 指令在 Execute 階段<b>根本沒有 ALU 結果可以轉送</b>：它在 Execute 階段只是計算要去記憶體讀取的「有效位址（effective address）」，真正從記憶體讀出來的 <code>valM</code>，要等到下一個 cycle、它走到 <b>Memory</b> 階段才會真的存在。換句話說，這不是「forwarding 線路沒接對」的問題，而是「consumer 需要的那個值，在 producer 目前所在的那個 cycle，根本還沒被算出來」——任何轉送機制都沒辦法轉送一個尚未存在的值，這是純粹的時序問題，不是資料路徑的問題。</p>\n<p>解法是把 forwarding 跟<b>插入一個 cycle 的 stall（停頓）</b>結合起來：管線控制邏輯偵測到 load/use hazard 時，讓 Fetch 與 Decode 階段都多停留一個 cycle（重複處理同一條指令，不往前推進），同時在 Execute 階段插入一個 <b>bubble（空泡，等效於插入一條 nop）</b>，讓這個 cycle 不會有任何指令真正進入 Execute 做計算。等到下一個 cycle，producer（load 指令）已經走到 Memory 階段、<code>valM</code> 真正被算出來了，consumer 也剛好還停在 Decode——這時候再靠昨天清單裡的第二條 <code>m_valM</code>（「此刻正在 Memory 階段、剛從記憶體讀出來的 load 結果」）把值轉送過去，consumer 才真正往前走進 Execute。整個解法的本質是：<b>先用 1 個 cycle 的 stall「爭取時間」，讓 producer 多往前走一步，直到它進入一個 forwarding 清單裡本來就涵蓋得到的狀態，再套用原本就有的 forwarding 機制</b>。</p>\n<p>PIPE 的真實控制邏輯用 HCL 寫成一個訊號，叫 <code>F_stall</code>，用來判斷是否要讓 Fetch／Decode 停住。真實條件（見下方「原始碼」區塊）是：<code>E_icode in { IMRMOVQ, IPOPQ } &amp;&amp; E_dstM in { d_srcA, d_srcB }</code>——白話翻譯：「此刻正在 Execute 階段的指令是不是 load 類（<code>mrmovq</code> 或 <code>popq</code>），而且它要寫入的暫存器，剛好就是此刻正在 Decode 階段的指令要讀的 <code>srcA</code> 或 <code>srcB</code>」。值得注意的是，真實的 <code>F_stall</code> 其實是用 <code>||</code>（或）連接兩個條件，第二個條件（<code>IRET in { D_icode, E_icode, M_icode }</code>）跟 load/use 完全無關，是處理 <code>ret</code> 指令還在管線裡流動時、必須讓 Fetch 暫停抓取下一條指令的另一個獨立理由（這是控制危障，不是資料危障）——兩個邏輯上不相關的 stall 原因，剛好共用同一個訊號名稱，這也是閱讀真實硬體控制邏輯時常見的「一個訊號身兼多職」的情況，不能看到訊號名稱就假設它只對應單一原因。</p>\n<p>用一個具體例子走一遍時序：<code>mrmovq 0(%rbx), %rax</code> 緊接著 <code>addq %rax, %rdx</code>。在某個 cycle，<code>mrmovq</code> 剛好在 Execute（此刻它只算出有效位址，<code>%rax</code> 的值還不存在），<code>addq</code> 剛好在 Decode、正要讀 <code>%rax</code>。此時 <code>F_stall</code> 條件成立：Fetch 停住（不抓新指令）、Decode 停住（<code>addq</code> 原地多留一個 cycle）、Execute 被插入一個 bubble（這個 cycle 不會有指令真正執行 ALU 運算）。下一個 cycle，<code>mrmovq</code> 推進到 Memory，<code>valM</code> 被算出來；<code>addq</code> 仍停在 Decode，但現在可以透過 <code>m_valM</code> 這個轉送來源正確拿到剛讀出來的值；再下一個 cycle，<code>addq</code> 才正式進入 Execute，用剛剛轉送到的值做加法。整個過程比起「完全沒有 forwarding、死等 write-back」要快得多，但仍然比「無 hazard、完全不停頓」的情況多付出剛好 1 個 cycle 的代價。</p>\n<p>邊界情形：如果 consumer 不是緊接在 load 後面、而是中間隔了至少一條其他指令（例如 <code>mrmovq %rax, ...</code> 之後先執行一條跟 <code>%rax</code> 無關的指令，第三條才用 <code>%rax</code>），這時候當 consumer 走到 Decode，producer 早就已經推進到 Memory 甚至 Write-back 階段了，直接落在昨天教的 forwarding 清單正常涵蓋的範圍內，完全不需要額外停頓——這也再次印證昨天的推導：load/use hazard 之所以特殊，純粹是因為它剛好對應到「0 條指令間隔、但 producer 是 load」這個在轉送清單裡原本不存在對應來源的組合，只要間隔拉開到 1 條指令，問題就自動消失。</p>\n<p>這一節在面試／實務上呼應的，是真實處理器裡非常知名的 <b>load-use latency（載入使用延遲）</b>：現代 CPU 的 L1 Cache 命中延遲通常是好幾個 cycle（遠多於 PIPE 這個教學模型的 1 個 cycle），這也是為什麼編譯器的<b>指令排程（instruction scheduling）</b>會刻意把跟 load 結果無關、但本來就要執行的其他指令，插在 load 跟它的使用者中間——只要插入的獨立指令數量夠蓋過這段延遲，CPU 就完全不需要真的停頓，等於把這個「必然的等待」隱藏進「反正都要做的其他工作」裡，不浪費任何一個 cycle。常見的面試追問包括：「為什麼不能用分支預測那種『先猜後驗證』的技巧來消除這個 stall？」（值預測確實是真實研究與部分商用處理器探索過的方向，但需要額外的驗證與回滾機制，成本遠高於簡單插入 1 個 bubble，PIPE 這種教學管線並未採用）、「如果完全不做這個 stall 會發生什麼？」（consumer 會落回 forwarding 清單的最後一條預設選項，直接從暫存器檔案讀到過期的舊值，造成程式邏輯錯誤且難以察覺，因為它不會讓程式當掉，只會算出錯誤答案）、以及「這個 stall 跟分支預測失敗要清空管線比起來，代價差在哪？」（load/use 只需要 1 個 bubble、浪費 1 個 cycle，分支預測失敗則要整條清空已經錯誤抓進來的所有指令，代價通常是好幾個 cycle，這也是為什麼兩者在真實處理器設計裡會用完全不同等級的硬體資源去優化）。</p>",
+      "derivation_html": "<p>回顧昨天的推導：PIPE 是 F/D/E/M/W 五級管線，producer 跟 consumer 之間的「指令間隔」只可能是 0、1、2 三種，分別對應 producer 在 consumer 做 Decode 的那個 cycle，落在 Execute（<code>e_valE</code>，但只對 ALU 指令有效）、Memory（<code>m_valM</code> / <code>M_valE</code>）、或 Write-back（<code>W_valE</code> / <code>W_valM</code>）。load/use hazard 正是「0 條間隔、但 producer 是 load」這個組合——在這個組合裡，<code>e_valE</code> 這個本來對應 0 間隔的轉送來源，對 load 指令完全不適用（load 在 Execute 階段沒有 ALU 結果），所以 0 間隔這一格，對 load 類指令來說是轉送清單裡的「空格」。</p>\n<p>插入剛好 <b>1 個 cycle</b> 的 bubble，效果等同於讓 consumer 在 Decode 多停留一輪，而 producer 照常往前推進一步——這個動作把「0 條間隔」的組合，轉換成「1 條間隔」的組合，而 1 條間隔對 load 指令剛好對應到 <code>m_valM</code>（load 在 Memory 階段讀出來的值），這正是清單裡存在、合法的轉送來源。所以 stall 的 cycle 數不是憑經驗取的，而是直接由「0 間隔到 1 間隔，中間剛好差 1」這個組合推導出來：差距是多少，就要停多少個 cycle，兩者完全對應，不多也不少。</p>\n<p>換成量化的效能語言：假設管線沒有任何危障時的理想 CPI（每指令平均週期數）是 1.0，而程式裡有比例 <code>p</code> 的指令屬於「緊接在 load 後面、且直接使用其結果」的 load/use 情況，每次觸發固定多付出 1 個 cycle，則實際 CPI 會變成 <code>CPI = 1 + p &times; 1 = 1 + p</code>。這也是為什麼編譯器的指令排程要盡量把 <code>p</code> 壓低——排程排得越好、load 跟 use 之間能塞進越多其他有用的指令，<code>p</code> 就越接近 0，CPI 就越逼近理想值 1；排得越差（例如完全不排程、原始碼寫法剛好 load 完就立刻用），<code>p</code> 就越高，管線因為這一種危障造成的效能損失就越大。</p>",
+      "source_label": "CS:APP3e 官方模擬器原始碼（csapp.cs.cmu.edu/3e/sim.tar）· sim/pipe/pipe-full.hcl · L322-L327",
+      "source_url": "https://csapp.cs.cmu.edu/3e/sim.tar",
+      "source_code": "bool F_stall =\n\t# Conditions for a load/use hazard\n\tE_icode in { IMRMOVQ, IPOPQ } &&\n\t E_dstM in { d_srcA, d_srcB } ||\n\t# Stalling at fetch while ret passes through pipeline\n\tIRET in { D_icode, E_icode, M_icode };",
+      "tip_html": "<p>查證時特別再次核對了 CMU 15-213（Introduction to Computer Systems）在 Fall 2015、Spring 2015、乃至更早的 Fall 2009 等多個學期的正式課程表，結果跟昨天查到的結論一致：這些學期的正式課堂錄影清單裡，從頭到尾都沒有一堂專門講 Processor Architecture／Y86-64／管線化的課——CS:APP 第 4 章在 15-213 的教學安排裡，向來只配合 Architecture Lab（學生自己動手把 PIPE 擴充成 PIPE+）的講義與習題，不是課堂錄影內容。因此今天同樣沒有附上 CMU 15-213 的講座影片連結，改附官方模擬器原始碼 <code>sim.tar</code>（今天引用的 <code>pipe-full.hcl</code> 就來自其中）與教科書官網，作為可以直接核對、真實存在的替代來源。</p>"
+    }
+  ],
+  "linux": [
+    {
+      "topic": "Linux Kernel Timer 機制：jiffies 計數、HZ 設定與 timer_list 的到期回呼管理",
+      "explanation_html": "<p>接續上週的 Device Tree（核心怎麼「知道」板子上有哪些硬體）與再往前的 GDB 除錯、UIO——這些主題解決的都是「硬體已經被認出來、驅動程式已經接管之後」的問題。今天要處理另一個幾乎每個驅動、每個子系統都離不開的基礎建設：<b>核心怎麼追蹤時間的流逝，並且在未來某個時間點，自動執行一段程式碼？</b>這正是成大進度表第 13 週緊接在 Device Tree 之後的下一個主題——<b>Linux Timer 機制</b>。</p>\n<p>核心追蹤時間的最底層單位是 <b>jiffies</b>：一個從開機那一刻起、只會往上加的全域整數計數器，每次「計時器中斷（timer interrupt，也就是一次 tick）」發生時就加 1。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">jiffies</b>　核心從開機算起的全域 tick 計數器，每次計時器中斷遞增 1；它不是「現在幾點幾分」這種牆上時間，而是純粹的硬體中斷次數累計，要換算成人類看得懂的時間，需要另外配合 <code>timekeeping</code> 子系統與開機時刻校正。</div>每秒鐘發生幾次 tick，由編譯期常數 <code>HZ</code> 決定——例如 <code>HZ=250</code> 代表每 4 毫秒一次 tick，<code>HZ=1000</code> 代表每 1 毫秒一次；<code>HZ</code> 設得越高，核心能偵測到的時間精度越細，但處理 tick 中斷本身的 CPU 開銷也越高，這是嵌入式與伺服器環境常常要依實際需求去調整的一個經典 trade-off。</p>\n<p>要讓核心「在未來某個時間點執行一段程式碼」，用的是 <code>struct timer_list</code> 這個結構（見下方「原始碼」區塊）：最關鍵的兩個欄位是 <code>expires</code>——一個絕對的 jiffies 數值，代表「到了這個 tick 數就該觸發」；以及 <code>function</code>——到期時要呼叫的回呼函式，而且從 Linux 4.15 左右開始，這個函式的簽章統一改成只傳入 <code>struct timer_list *</code> 自己這個指標，驅動程式若想拿回自己真正的裝置結構，要靠 <b>container_of</b> 這個巨集從 <code>timer_list</code> 指標反推回外層結構的位址。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">container_of</b>　已經在更早之前教過的核心慣用手法：已知一個內嵌欄位（這裡是 <code>struct timer_list</code>）的位址，加上它在外層結構中的 offset，反推回外層結構本體的位址，讓同一個回呼函式簽章可以服務任何「內嵌了 timer_list」的裝置結構，不需要額外傳遞不透明的 <code>void *</code> context。</div>初始化靠 <code>timer_setup()</code> 巨集，真正把它掛進核心排程、或是「改期重新掛」則靠 <code>add_timer()</code> / <code>mod_timer()</code>。</p>\n<p>核心不會笨到每次 tick 都對「所有已掛起的 timer」做一次線性掃描——那在同時有成千上萬個 timer（例如繁忙伺服器上每條 TCP 連線各自的重傳計時器）的場景下，光是逐一檢查「到期了沒」的開銷就會壓垮系統。真實作法是用一種稱為 <b>timer wheel（計時器輪）</b>的分層雜湊結構：把 timer 按照「還剩多少 tick 到期」分門別類放進不同的桶子裡，越快到期的 timer 被放在精度越細的層級，越晚到期的則先放在粗略的層級、等快到期時再逐步「降級」搬到精確層級。<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">Timer Wheel（計時器輪）</b>　把大量 timer 依照到期時間遠近分桶存放的分層雜湊結構，讓「插入一個新 timer」與「檢查這個 tick 有沒有 timer 到期」都接近 O(1) 攤銷成本，而不必對全部 timer 做線性掃描。</div>這讓插入與到期檢查都接近 O(1) 攤銷成本，是能同時服務大量計時器的關鍵設計。</p>\n<p>來看一個真實、完整的使用範例：核心原始碼 <code>drivers/watchdog/mtx-1_wdt.c</code> 裡，裝置結構內嵌了一個 <code>struct timer_list timer;</code>（第 52 行），初始化時呼叫 <code>timer_setup(&amp;mtx1_wdt_device.timer, mtx1_wdt_trigger, 0)</code>（第 210 行）；而在回呼函式 <code>mtx1_wdt_trigger()</code> 本身裡面，又呼叫了一次 <code>mod_timer(&amp;mtx1_wdt_device.timer, jiffies + MTX1_WDT_INTERVAL)</code>（第 71 行）——也就是「每次 timer 一觸發，第一件事就是把自己重新掛回未來」。這正是核心裡處理「週期性」行為的標準慣例：<code>struct timer_list</code> 本質上永遠是<b>一次性（one-shot）</b>的，核心並不提供一個「每隔 N 個 tick 自動重複觸發」的內建原語，所有看起來「週期性」的 timer，都是靠回呼函式自己在執行到一半時手動呼叫 <code>mod_timer()</code> 重新排程，才「模擬」出週期行為。</p>\n<p>邊界情形值得特別留意：(1) timer 回呼函式執行在 <b>softirq context</b>（而不是一般的 process context），這代表它<b>不能睡眠</b>——不能呼叫可能阻塞的函式、不能用一般的 mutex，只能用專為中斷情境設計的鎖；(2) <code>jiffies</code> 是固定寬度的整數，一定會溢位繞回（wraparound）——這一點在「數學推導」區塊用數字具體算給你看；(3) 正因為會溢位繞回，比較兩個 jiffies 值的先後，<b>絕對不能直接寫 <code>if (jiffies > timeout)</code></b>，必須呼叫核心提供的 <code>time_after()</code> / <code>time_before()</code> 之類的巨集，它們用訊號運算的方式正確處理繞回後的比較，這是撰寫驅動程式時最容易忘記、也最容易造成「系統執行很久之後才突然出現的詭異 bug」的經典陷阱。</p>\n<p>這個主題也呼應了我們 8 月底教過的另一個 Linux 定點數主題（Load Average 的 EWMA 定點數實作）：<code>jiffies</code> 本身從頭到尾都只是一個普通的 <code>unsigned long</code> 整數，核心追蹤時間流逝這件最基礎的工作，完全不涉及任何浮點數運算——這跟核心在效能關鍵路徑上一貫「能用整數運算就絕不用浮點數」的設計哲學完全一致。</p>\n<p>面試／實務上的常見追問：「<code>jiffies</code> 為什麼不能直接當作牆上時間（wall clock）用？」——答案是 <code>jiffies</code> 只反映「開機以來經過幾次 tick」，要換算成真正的日曆時間，需要另一個獨立的 <code>timekeeping</code> 子系統配合開機時刻與 NTP 校正，兩者是分開維護、服務不同需求的子系統；「這裡教的低精度 jiffies-based timer，跟核心另一套 <code>hrtimer</code>（高精度計時器）差在哪？」——<code>hrtimer</code> 用紅黑樹依絕對到期時間排序，精度可以做到遠低於一個 tick 間隔（次微秒級），用於 POSIX timers、高精度 sleep 等場景；jiffies-based timer 的精度被綁死在 <code>HZ</code> 的 tick 間隔上，兩者是核心裡並存、服務不同精度需求的兩套系統；「為什麼 timer 回呼不能呼叫會睡眠的函式？」——因為 softirq context 底下沒有一個「正常的 process」可以被排程器切換走再換回來，在這裡睡眠沒有對應的喚醒機制，輕則行為不可預期，重則直接讓核心整個卡死或 panic，這是新手撰寫核心驅動最常踩的其中一個坑。</p>",
+      "derivation_html": "<p><code>jiffies</code> 本質是一個固定寬度的整數計數器（常見是 32 或 64 位元），一定會在某個時間點溢位、從最大值繞回 0，這是推導「多久會繞回」最直接的數學問題：繞回週期 = <code>2&sup3;&sup2; &divide; HZ</code> 秒。以常見的 <code>HZ = 250</code> 來算：<code>2&sup3;&sup2; = 4,294,967,296</code>，除以 250 約等於 <code>17,179,869</code> 秒，再除以 <code>86,400</code>（一天的秒數），大約是 <b>198.8 天</b>；如果 <code>HZ = 1000</code>（tick 更密集），同樣的位元數撐不了那麼久，繞回週期縮短成約 <b>49.7 天</b>——這也是為什麼教材裡常提到「32 位元 jiffies 大約 50 天左右就會繞一圈」這個數字的真正來源：<code>HZ</code> 設得越高，同樣的計數空間被更快地用完。</p>\n<p>既然一定會繞回，比較「現在是不是已經超過某個 timeout」就不能直接用 <code>a > b</code>，核心的作法是 <code>time_after(a, b)</code> 定義成類似 <code>(long)(b) - (long)(a) &lt; 0</code>——也就是先做一次無號整數相減（相減本身在繞回時也會自動「繞」出正確的差值，這是無號整數運算的模運算特性），再把結果<b>重新詮釋成有號數</b>去看正負號。這個技巧之所以正確，有一個關鍵前提：只要 <code>a</code> 與 <code>b</code> 之間「實際」的時間差距小於計數範圍的一半（對 32 位元來說是 <code>2&sup3;&sup1;</code> 個 tick），把差值重新詮釋成有號數得到的正負號，就一定跟「實際先後順序」一致；換算成時間，在 <code>HZ=1000</code> 時大約是 <b>24.8 天</b>以內的時間差都能正確比較。實務上沒有任何一個 timeout 會被排程到以「超過十幾天」為單位去跟目前時間比較，所以這個條件在真實系統裡永遠成立——這正是一個用「只檢查高位元的正負號」這個簡單整數技巧，正確解決「模運算計數器比較大小」這個看似棘手問題的經典範例。</p>",
+      "source_label": "github.com/torvalds/linux（master 分支，查核日期 2026-11-24）· include/linux/timer_types.h · L8-L21",
+      "source_url": "https://github.com/torvalds/linux/blob/master/include/linux/timer_types.h#L8-L21",
+      "source_code": "struct timer_list {\n\t/*\n\t * All fields that change during normal runtime grouped to the\n\t * same cacheline\n\t */\n\tstruct hlist_node\tentry;\n\tunsigned long\t\texpires;\n\tvoid\t\t\t(*function)(struct timer_list *);\n\tu32\t\t\tflags;\n\n#ifdef CONFIG_LOCKDEP\n\tstruct lockdep_map\tlockdep_map;\n#endif\n};",
+      "tip_html": "<p>jserv 在 <a href=\"https://hackmd.io/@sysprog/linux-timer\" style=\"color:#2c7357;text-decoration:underline;\">hackmd.io/@sysprog/linux-timer</a>（《Linux 核心設計: Timer 及其管理機制》）這篇筆記，內容確實涵蓋 timer 中斷處理、jiffies、POSIX clock、timekeeping、timer resolution 與 deferred scheduling 等今天談到的範圍，筆記內也內嵌了一段對應的直播錄影連結。由於環境限制，這裡沒辦法對 YouTube 頁面的標題文字做完全獨立的二次核對，只能確認這段影片連結是直接取自已經核實內容相符的那篇筆記內部，屬於高信心但非完全獨立驗證的候選來源，如實標註在此，不誇大成「已完全核實」。</p>"
+    }
+  ],
+  "sources": [
+    {
+      "label": "LeetCode 題目彙整（wisdompeak/LeetCode）",
+      "url": "https://github.com/wisdompeak/LeetCode"
+    },
+    {
+      "label": "LeetCode 304. Range Sum Query 2D - Immutable",
+      "url": "https://leetcode.com/problems/range-sum-query-2d-immutable/"
+    },
+    {
+      "label": "LeetCode 308. Range Sum Query 2D - Mutable",
+      "url": "https://leetcode.com/problems/range-sum-query-2d-mutable/"
+    },
+    {
+      "label": "LeetCode 1314. Matrix Block Sum",
+      "url": "https://leetcode.com/problems/matrix-block-sum/"
+    },
+    {
+      "label": "LeetCode 1292. Maximum Side Length of a Square with Sum Less than or Equal to Threshold",
+      "url": "https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/"
+    },
+    {
+      "label": "owlfox CS:APP 中文筆記",
+      "url": "https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw"
+    },
+    {
+      "label": "CS:APP3e 官方教科書網站",
+      "url": "https://csapp.cs.cmu.edu/3e/home.html"
+    },
+    {
+      "label": "CS:APP3e 模擬器原始碼（sim.tar，含 pipe-full.hcl）",
+      "url": "https://csapp.cs.cmu.edu/3e/sim.tar"
+    },
+    {
+      "label": "CMU 15-213 (Fall 2015) 課程表核對：確認無 Y86-64／Pipelining 專屬講座",
+      "url": "https://www.cs.cmu.edu/afs/cs/academic/class/15213-f15/www/schedule.html"
+    },
+    {
+      "label": "成大 Linux 核心課程進度表 Week 13",
+      "url": "https://wiki.csie.ncku.edu.tw/linux/schedule"
+    },
+    {
+      "label": "jserv Linux 核心課程筆記：Timer 及其管理機制",
+      "url": "https://hackmd.io/@sysprog/linux-timer"
+    },
+    {
+      "label": "jserv Linux 核心課程直播錄影（候選，取自上述筆記內嵌連結）：Timer 及其管理機制",
+      "url": "https://youtu.be/oGoSNLwEVt0"
+    },
+    {
+      "label": "Linux kernel source: struct timer_list（include/linux/timer_types.h）",
+      "url": "https://github.com/torvalds/linux/blob/master/include/linux/timer_types.h"
+    },
+    {
+      "label": "Linux kernel source: timer_setup()/mod_timer() 使用範例（drivers/watchdog/mtx-1_wdt.c）",
+      "url": "https://github.com/torvalds/linux/blob/master/drivers/watchdog/mtx-1_wdt.c"
+    }
+  ]
+}
