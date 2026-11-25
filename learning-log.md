@@ -71,4 +71,5 @@
 2026-11-22 | 演算法: Suffix Array（後缀陣列）：倍增法建構 + LCP 陣列，全新分類（1044/1163/1754）| CS:APP: Ch.4 §4.5.5 Pipeline Hazards | Linux: 第13週 Debugging Embedded Devices using GDB（嵌入式系統的 GDB 除錯，接續 11/21 的 UIO）
 主線: 三個領域今天都在示範「順道完成」——不必等到流程終點才處理某件事，而是在既有的必經步驟裡「順路」就做完它（forwarding 不等寫回就借值、合併排序順便數逆序對、Device Tree 的 compatible 配對在探測硬體前先順道算出分數） | 2026-11-23 | 演算法: 分治法 Divide and Conquer，合併排序的分治應用——逆序對計數 Counting Inversions，全新分類（912/315/493/327）| CS:APP: Ch.4 §4.5.6 Avoiding Data Hazards by Forwarding | Linux: 第13週 Device Tree（裝置樹，嵌入式硬體描述機制與 compatible 字串配對，接續 11/22 的 GDB 除錯）
 2026-11-24 | 演算法: 二維樹狀陣列 2D Binary Indexed Tree／2D Fenwick Tree，矩陣區域和查詢與更新，全新分類（304/308/1314/1292）| CS:APP: Ch.4 §4.5.7 Load/Use Data Hazards | Linux: 第13週 Timer 及其管理機制（jiffies／HZ／timer_list，接續 11/23 的 Device Tree）
+主線: 先樂觀地往前推進，只在真的需要精確答案或發現猜錯時，才回頭做一次性的修正或整合 | 2026-11-25 | 演算法: Kadane's Algorithm 動態規劃，最大子陣列和及其乘積/環狀/刪一個元素三種變形，全新分類（53/152/918/1186）| CS:APP: Ch.4 §4.5.8 Control Hazards | Linux: 第13週 Linux 核心設計 Scalability 議題：per-CPU 計數器 percpu_counter 的 sloppy counter 實作（接續 11/24 的 Timer 及其管理機制）
 <!-- LOG END -->

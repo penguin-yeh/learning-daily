@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-25",
+  "is_review": false,
+  "theme": "三個領域今天都在示範同一招——先樂觀地、各自往前推進，只有在真的需要精確答案、或發現猜錯了的那一刻，才回頭做一次性的修正或整合（Kadane 不回頭重算整段、只在加上新元素反而更差時才放棄前綴；PIPE 預測分支會跳、算錯了才回頭 squash 掉多抓的兩條指令；per-CPU 計數器平時只寫本地備用數，只有真的要讀總和時才去跟中央值對齊）",
+  "algo": [
+    {
+      "topic": "Kadane's Algorithm 動態規劃：最大子陣列和及其乘積、環狀、刪一個元素三種變形（53/152/918/1186）",
+      "explanation_html": "<p>今天挑一個在面試裡出現率極高、但很多人只會背「答案是 Kadane's Algorithm」卻講不清楚為什麼的題目：<b>最大子陣列和（Maximum Subarray Sum）</b>。先把題目定義清楚：給一個整數陣列（可以有負數），找出其中「連續」一段子陣列，使得這段的總和最大，回傳這個最大總和。注意「連續」是關鍵字——如果允許不連續，這題就退化成「挑所有正數加起來」，一點意思都沒有。</p>\n\n<p>先看暴力解法，因為面試官幾乎一定會從這裡問起。最直覺的寫法是列舉所有的起點 <code>i</code> 與終點 <code>j</code>（<code>i &lt;= j</code>），對每一組都重新把 <code>nums[i..j]</code> 加總一遍：這是三層迴圈（兩層列舉 i, j，一層加總），時間複雜度 O(n³)。稍微聰明一點，先用<b>前綴和</b>陣列 <code>prefix[k] = nums[0]+...+nums[k-1]</code> 預處理一次 O(n)，之後任意一段 <code>sum(i,j) = prefix[j+1]-prefix[i]</code> 只要 O(1)，於是列舉 i, j 兩層迴圈變成 O(n²)。這兩種暴力解法空間都只要 O(n)（前綴和陣列）或 O(1)（三層迴圈版本），但時間複雜度是面試中第一個會被追問「能不能再快」的地方。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2f5f9e;\">狀態轉移（DP Transition）</b>　把問題拆成「以第 i 個元素結尾的最大子陣列和是多少」這個子問題，寫成遞迴關係，再從小問題的答案推出大問題的答案，這一步就叫狀態轉移；是動態規劃的核心動作。</div>\n\n<p>Kadane's Algorithm 的想法，是把問題重新定義成一個動態規劃狀態：<code>dp[i]</code> = 「以第 <code>i</code> 個元素結尾」的最大子陣列和（不是「前 i 個元素中」的最大值，這個差異很重要）。轉移式非常簡單：<code>dp[i] = max(nums[i], dp[i-1] + nums[i])</code>。意思是：如果把 <code>nums[i]</code> 接在前一段最優子陣列後面比單獨自己一個元素還差，就該把前面全部丟掉，重新從 <code>nums[i]</code> 自己開始算。全域答案則是 <code>max(dp[0], dp[1], ..., dp[n-1])</code>，在實作時用一個變數邊算邊更新全域最大值即可。</p>\n\n<p>因為 <code>dp[i]</code> 只依賴 <code>dp[i-1]</code>，不需要依賴更早之前的任何狀態，所以完全不需要開一個長度 n 的陣列存整個 dp 序列——只要用兩個變數（目前位置的 <code>curMax</code>、全域的 <code>globalMax</code>）邊走邊更新，單一個 for 迴圈跑完就結束。這就是為什麼 Kadane's Algorithm 是 O(n) 時間、O(1) 額外空間：整個暴力解法鏈條（O(n³) → 前綴和 O(n²) → Kadane O(n)）其實是同一個問題在「要不要重複計算」與「要不要記住中間結果」這兩個軸上反覆優化的典型範例。</p>\n\n<p>Edge case 是這題最容易在面試中失分的地方。LeetCode 53 明確要求子陣列至少包含一個元素，所以當整個陣列全部是負數時，答案<b>不是</b> 0（0 代表選了空集合，題目不允許），而是「陣列中最大的那個負數」——這正好也是 Kadane 遞迴式自然得到的結果，因為 <code>dp[i] = max(nums[i], dp[i-1]+nums[i])</code> 永遠至少會保留 <code>nums[i]</code> 自己。很多人會在初始化 <code>globalMax</code> 時貪圖方便寫成 0，這就是一個隱藏的 bug：一旦陣列全負，就會錯誤回傳 0。正確做法是把 <code>globalMax</code> 初始化成 <code>nums[0]</code>（或負無窮大後第一輪就會被 <code>dp[0]=nums[0]</code> 蓋掉）。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2f5f9e;\">分治法的 max crossing subarray</b>　CLRS《演算法導論》介紹的另一種解法：把陣列從中點切成兩半，答案只有三種可能——完全落在左半、完全落在右半、或「跨越中點」。前兩種遞迴處理，跨越中點的情況則從中點分別往左、往右貪心延伸算出最大值，merge 這一步是 O(n)，整體遞迴式 T(n)=2T(n/2)+O(n)，解出來是 O(n log n)。</div>\n\n<p>比 Kadane 慢的分治解法為什麼還值得學？因為它的「跨越中點」merge 步驟和 Merge Sort 的合併步驟長得幾乎一樣，是練習分治思維遷移的好素材；更重要的是，分治版本天然可以平行化（左右兩半可以丟到不同的 CPU 核心或不同機器上各自算），這跟 Kadane 的「必須依序、不能跳著算」正好形成對比，是個很好的「時間最優 vs. 可平行化」取捨案例，面試官如果追問「資料量太大放不進記憶體，或者有多台機器，你會怎麼改這個演算法」，分治版本就是答案的起點（類似 MapReduce 的 map-merge 結構）。</p>\n\n<p>這題的變形出得特別多，今天額外挑兩個最常被拿來追問的方向，都是在 Kadane 的「單一狀態」之上多加一點狀態：第一個方向是把加法換成乘法（LeetCode 152 Maximum Product Subarray）。乘法的麻烦在於負負得正——目前位置的最小乘積，乘上一個負數後反而可能變成最大乘積，所以不能只維護 <code>curMax</code>，必須同時維護 <code>curMax</code> 與 <code>curMin</code> 兩個狀態，每一步都用 <code>nums[i]</code>、<code>curMax*nums[i]</code>、<code>curMin*nums[i]</code> 三者重新算出新的 <code>curMax</code> 與 <code>curMin</code>。這是「單狀態 DP 升級成多狀態 DP」最乾淨的教學範例之一。</p>\n\n<p>第二個方向是把陣列變成環狀（LeetCode 918 Maximum Sum Circular Subarray，陣列頭尾相接）。這題的關鍵拆解是：答案只有兩種可能——子陣列「不跨越」頭尾邊界（直接套用一般 Kadane），或者子陣列「跨越」頭尾邊界。跨越邊界的情況，等價於「總和 − 陣列中間一段連續的最小子陣列和」（把頭尾兩段加起來，就等於扣掉中間沒被選到的那一段），而「最小子陣列和」可以用同一套 Kadane 的邏輯、把 <code>max</code> 換成 <code>min</code> 算出來，一樣是 O(n)。有一個陷阱：如果陣列全部是負數，「跨越」這個情況會退化成「扣掉整個陣列」等於選了空集合，這在題目規則下不合法，必須特別排除（這時答案就只能取一般 Kadane 算出的「不跨越」結果，也就是陣列中最大的那個負數）。第三個方向是 LeetCode 1186（Maximum Subarray Sum with One Deletion，允許刪掉最多一個元素），做法是維護兩個 DP 狀態：<code>noDelete[i]</code>（以 i 結尾、沒用過刪除權的最大和）與 <code>oneDelete[i]</code>（以 i 結尾、已經用掉刪除權的最大和），轉移時 <code>oneDelete[i] = max(oneDelete[i-1] + nums[i], noDelete[i-1])</code>（意思是：繼續沿用已刪過的狀態並接上目前元素，或者在這個位置才第一次刪掉 <code>nums[i]</code> 本身），這跟上面乘法版本的「雙狀態」思路是同一招。</p>\n\n<p>面試官常見的追問，整理成四類：(1)「如果要回傳子陣列的起訖 index，不只是總和，要怎麼改？」——答案是额外記錄「目前這段從哪個 index 開始」，每次 <code>dp[i]</code> 重新從 <code>nums[i]</code> 起算時就把起點更新成 i。(2)「如果資料是串流（streaming），只能看過去不能回頭，能不能線上算？」——Kadane 天生就是線上演算法，一次只看一個新元素，完全不需要回頭。(3)「如果允許子陣列可以是空的，答案會不會變？」——允許空集合時答案下限變成 0，這跟 LeetCode 53 的規則不同，要先跟面試官確認清楚題目邊界。(4)「資料大到放不進單機記憶體怎麼辦？」——回到前面提到的分治解法，天然支援把陣列切片分散計算再合併。</p>",
+      "derivation_html": "<p>把三種解法放在同一條時間軸上看會更清楚優化的方向：三層迴圈列舉所有 <code>(i,j)</code> 並重新加總是 O(n³)（n² 組區間 × 每組 O(n) 加總）；先用前綴和陣列把「任意一段的總和」降到 O(1) 查詢，省掉重複加總，變成 O(n²)；Kadane 的關鍵洞察是「其實根本不需要列舉所有 <code>(i,j)</code>」——對每一個右端點 <code>j</code>，最優的左端點只有一種可能（就是 <code>dp[j-1]</code> 對應的那個左端點，或者放棄前面重新從 <code>j</code> 開始），所以把 O(n) 種左端點的列舉，壓縮成 O(1) 的「要不要延續」的二元選擇，整體就從 O(n²) 降到 O(n)，這是這題複雜度能一路降到線性的根本原因，而不是單純換個寫法。</p>\n\n<p>918 題「跨越邊界」那一半的推導：假設陣列總和是 <code>total</code>，陣列中「總和最小」的連續子陣列是 <code>minSub</code>（用 Kadane 的 min 版本一次算出），那麼「跨越頭尾邊界」能拿到的最大總和就是 <code>total − minSub</code>——因為陣列是環狀的，頭尾相接的一段，等價於「整個陣列減去中間沒被選到、且總和最小的那一段」，扣掉的越小，剩下的（也就是選到的頭尾段）越大，所以要扣掉 <code>minSub</code> 而不是任意一段。</p>",
+      "tip_html": "<p>今天讀完後，建議自己先不要看任何程式碼，純手刻一次基本版 Kadane（只用 <code>curMax</code>、<code>globalMax</code> 兩個變數），刻完後故意餵一個全負數陣列（例如 <code>[-3,-1,-8,-2]</code>）進去，確認你的 <code>globalMax</code> 初始值設對、沒有誤回傳 0；接著再手刻 918 題的「total − min 子陣列」版本，驗證全負陣列時你有沒有正確排除掉「跨越邊界退化成空集合」這個陷阱。</p>",
+      "problems": [
+        {
+          "id": "53",
+          "title": "Maximum Subarray",
+          "url": "https://leetcode.com/problems/maximum-subarray/",
+          "note": "基本版 Kadane's Algorithm，暴力 O(n^2)/O(n^3) → Kadane O(n) 時間 O(1) 空間"
+        },
+        {
+          "id": "152",
+          "title": "Maximum Product Subarray",
+          "url": "https://leetcode.com/problems/maximum-product-subarray/",
+          "note": "加法換乘法，需同時維護以當前位置結尾的最大與最小乘積兩個狀態"
+        },
+        {
+          "id": "918",
+          "title": "Maximum Sum Circular Subarray",
+          "url": "https://leetcode.com/problems/maximum-sum-circular-subarray/",
+          "note": "環狀陣列，拆成「不跨界」一般 Kadane 與「跨界」total−min 子陣列兩種情況取較大值"
+        },
+        {
+          "id": "1186",
+          "title": "Maximum Subarray Sum with One Deletion",
+          "url": "https://leetcode.com/problems/maximum-subarray-sum-with-one-deletion/",
+          "note": "雙狀態 DP：以 i 結尾「未刪除」與「已刪除一個元素」兩個狀態各自轉移"
+        }
+      ]
+    }
+  ],
+  "csapp": [
+    {
+      "chapter": "Ch.4",
+      "section": "4.5.8 Control Hazards",
+      "explanation_html": "<p>前兩天（11/23、11/24）已經把 PIPE 管線化 Y86-64 處理器會遇到的第一大類問題——<b>data hazard</b>——講完了，分別是透過 forwarding 解決大部分資料相依（4.5.6），以及用一個額外的 stall cycle 處理 load 完的值還沒準備好、但下一條指令馬上要用的 load/use hazard（4.5.7）。今天銜接到 4.5.8 節，是管線化處理器要面對的第二大類、也是通常代價更高的問題：<b>control hazard</b>——發生在那些會「改變下一步該抓哪一條指令」的指令，也就是條件跳轉（<code>jXX</code>）與 <code>ret</code>。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#b0561a;\">Next PC Prediction</b>　4.5.4 節定義的策略：Fetch 階段必須在每個 cycle 都決定「下一個 PC 是什麼」，但有些指令（條件跳轉、ret）的真正目的地要等到後面的 stage 才能確定。PIPE 的策略是先大膽猜一個值讓 fetch 持續往前跑，猜錯了再回頭修正——這就是一種簡化版的分支預測。</div>\n\n<p>PIPE 對條件跳轉採用的猜測策略非常單純粗暴：<b>一律預測會跳（predict taken）</b>。原因是 Fetch 階段此時完全不知道條件碼（condition code）的真實值——條件碼要等到該指令進入 Execute 階段，ALU 根據運算結果算出 ZF／SF／OF 之後才知道，而 Fetch 階段比 Execute 階段早了兩個 cycle 執行。與其讓 Fetch 乾等，PIPE 選擇樂觀地假設「這個跳轉會成立」，直接把跳轉目標位址當作下一個要抓的指令位址，讓管線持續往前跑，不浪費任何 cycle——如果猜對了，完全零代價；如果猜錯了，才需要善後。</p>\n\n<p>善後的機制叫做<b>squash</b>：當這條 <code>jXX</code> 指令走到 Execute 階段，ALU 把真正的條件碼算出來、PIPE 的控制邏輯發現「預測跳、但實際不該跳」（或反過來），就會判定這是一次 mispredicted branch。這時，Fetch 階段已經<b>多抓了兩條不該存在的指令</b>——分別正停在 Decode 階段和 Execute 階段的下一個 cycle 位置（也就是緊跟在這條跳轉指令後面被誤抓的那兩條）。PIPE 的作法是把這兩條指令的效果抹除，變成形同沒發生過的 bubble（不讓它們寫回任何暫存器或記憶體），同時把 Fetch 導向正確的位址——這個正確的「萬一沒跳該去哪裡」的位址，其實一直都算好了：就是這條跳轉指令自己的下一條指令位址（在 HCL 控制邏輯裡沿用 <code>valA</code> 這個訊號一路往下傳遞）。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#b0561a;\">Bubble（氣泡）</b>　管線中被插入的「空白」cycle，效果等同於塞進一個 nop：讓某個 stage 在那一個 cycle 不做任何有效工作、不修改任何架構狀態，純粹用來墊住時間，等待後面真正有意義的指令接上。</div>\n\n<p><code>ret</code> 指令造成的 hazard 性質完全不同，甚至不該叫「預測錯誤」——因為 Fetch 階段<b>根本沒有任何資訊可以拿來猜</b>。<code>ret</code> 要跳回的位址，是從堆疊（stack）裡讀出來的一個值，跟 load 指令一樣，必須等到該指令進入 Memory 階段、真正對記憶體發出讀取之後才能拿到。所以 PIPE 的設計是：只要 <code>ret</code> 還停留在 Decode、Execute、Memory 這三個階段中的任何一個，Fetch 就持續原地插入 bubble（不去抓任何新指令），一路等到 <code>ret</code> 本身走進 Write-back 階段，透過 <code>ret</code> 攜帶的返回位址（<code>valM</code>）才真正知道下一步該去哪裡抓指令。這個等待總共耗掉 <b>3 個 cycle</b，比 mispredicted branch 的 2 個 cycle 還多付出一個 cycle 的代價。</p>\n\n<p>把這兩種 hazard 跟前一天教的 load/use hazard 放在一起比較，會看到一個很一致的規律：代價（浪費的 cycle 數）跟「正確資訊實際出現在管線的哪一個 stage、離 Fetch 有多遠」直接成正比。Load/use hazard 只需要 stall 1 個 cycle，因為 load 出來的值在 Memory 階段就有了，離它要被用到的下一條指令的 Execute 階段只差 1 個 stage；mispredicted branch 浪費 2 個 cycle，因為條件碼要等到 Execute 階段（第 3 個 stage）才確定；<code>ret</code> 浪費 3 個 cycle，因為返回位址要等 Memory 階段讀出來、再經過 Write-back 才能真正被 Fetch 拿去用，等待的 stage 數量最多。這不是三個各自孤立的規則，而是同一個「管線深度 × 資訊出現位置」邏輯的三個不同案例。</p>\n\n<p>這一整套「先猜、猜錯了再善後」的機制，跟真實 CPU 的差距主要在猜測的精準度，而不是機制本身：x86 等現代處理器用的是基於歷史統計的分支預測器（branch history table）搭配 Branch Target Buffer（BTB），準確率可以到 95% 以上，遠比 PIPE 的「一律預測跳」聰明；但代價是真實 CPU 的管線深度遠超過 5 個 stage，一旦真的 mispredict，要清空、重新填滿的 cycle 數可能是十幾甚至二十幾個 cycle——這也是為什麼熱路徑（hot path）程式碼常常刻意避開分支、改用 <code>cmov</code>（conditional move）這類無分支（branchless）指令：本質上是把一個 control hazard 換成一個 data hazard，用 forwarding 處理，不需要猜測也不需要 squash。</p>\n\n<p>這個主題在面試裡經常是「你了解 CPU／系統底層嗎」的試探性問題，常見追問包括：「為什麼分支預測對效能很重要？」「mispredict 的代價大概是多少、怎麼量化？」「為什麼 <code>ret</code>／函式指標呼叫比一般的條件跳轉更難預測、代價更高？」以及「寫程式時有什麼手法可以減少 branch misprediction？」（例如用查表、位元運算、<code>__builtin_expect</code> 這類 profile-guided 的提示取代深層巢狀 if-else）。能從 PIPE 這個簡化模型講到真實 CPU 的差異，是展現「理解原理、不只是背答案」的好機會。</p>",
+      "derivation_html": "<p>2 個 bubble 和 3 個 bubble 這兩個數字，可以直接從管線的 5 個 stage（F→D→E→M→W）裡「正確資訊出現在第幾個 stage」反推出來，不需要死記：條件跳轉的真假要等到 Execute（第 3 個 stage）才知道；當它走到 Execute 時，管線裡已經有兩條基於錯誤預測被多抓進來的指令，分別正停在 Decode 與 Fetch——這兩條就是要被 squash 的對象，於是浪費 2 個 cycle。<code>ret</code> 的返回位址要到 Memory（第 4 個 stage）才被讀出來，但 PIPE 的控制邏輯選擇保守地等到該值真正通過 Write-back（第 5 個 stage）、確定不會再被取消之後，才讓 Fetch 使用它，所以從 <code>ret</code> 進入 Decode 開始算，一共要在 Decode、Execute、Memory 這 3 個 stage 都插入 bubble，耗掉 3 個 cycle。兩者的共同規律是：<b>浪費的 cycle 數，大致等於「正確資訊可用的那個 stage」與「Fetch 階段」之間相隔的 stage 數</b>——資訊出現得越晚（越接近管線尾端），代價就越高，這跟 4.5.7 節 load/use hazard 只需 1 個 cycle（資訊在 Memory 階段就夠用，只差 Execute 一個 stage）是同一套邏輯的不同代價等級。</p>",
+      "tip_html": "<p>老實說一句：這次有仔細搜尋 CMU 15-213 Fall 2015 的官方課程進度表（<code>cs.cmu.edu/afs/cs/academic/class/15213-f15/www/schedule.html</code>），確認那個學期的 27 講完全沒有任何一講標題涵蓋 Processor Architecture／Y86-64 Pipelining——這個主題在那個年度的 15-213 已經被移出正式課堂，只留在教材與作業裡，所以今天誠實地沒有附上對應的 CMU 2015 Fall 影片連結，也沒有找到其他學期可信、可核對標題的公開影片，不要憑空附一個看起來像真的連結。想要有動態畫面可以看的話，建議改用下面附的 Y86-64 線上模擬器：自己貼一段含有 <code>jle</code> 與 <code>ret</code> 的 Y86-64 組合語言進去，單步執行，實際看著管線圖裡哪兩三個 stage 被插入 bubble、PC 什麼時候被修正，比看影片更直接。</p>"
+    }
+  ],
+  "linux": [
+    {
+      "topic": "Linux 核心設計 Scalability 議題：用 per-CPU 計數器（percpu_counter）實作 sloppy counter 化解 cache coherence 瓶頸",
+      "explanation_html": "<p>接續 11/24 的 Timer 管理機制，今天依照成大課程進度表第 13 週清單的順序，往下走到下一項：<b>Linux 核心設計：Scalability（可擴展性）議題</b>（jserv 2019 年的課程筆記）。先把「scalability」定義清楚：一個系統如果「加倍硬體資源，效能也跟著成比例提升」，才稱得上是可擴展的（scalable）；但多核處理器的現實往往不是這樣——核心數加倍，吞吐量常常遠遠不到兩倍，問題出在處理器核之間彼此交換資料本身就要耗費運算時間與記憶體頻寬，这個現象被稱為 multiprocessor effect。</p>\n\n<p>這個效應的根源在硬體層級，跟你有沒有用 lock 無關。當一個處理器核寫入某條 cache line，cache coherence 協定必須先讓所有其他核上的副本失效（invalidate）；而另一個核要讀取剛被別人寫過的那條 cache line，則得等待原持有者把資料交出來。同一條 cache line 的修改，因此會被硬體序列化——即使你用的是最小操作（atomic instruction）像 <code>lock add</code>，一樣逃不過這個序列化，因為問題不在軟體邏輯，而在「這條 cache line 只有一份，誰都得排隊」這個物理限制。這也是為什麼「共享一個計數器讓所有核心一起遞增」這種寫法，核心數越多反而越慢。</p>\n\n<p>這個議題不是紙上談兵：MIT CSAIL 的 Silas Boyd-Wickizer 等人在 OSDI 2010 發表〈An Analysis of Linux Scalability to Many Cores〉，在一台 48 核的機器（8 個 6 核 AMD Opteron 8431）上，用 Exim、memcached、Apache、PostgreSQL、gmake、Psearchy、Metis 七個應用程式組成的 MOSBENCH 做實驗（檔案系統統一用 tmpfs，排除磁碟干擾）。最驚人的數字是 PostgreSQL：核心時間（kernel time）佔比在單核時只有 1.5%，但在 48 核時飆升到 <b>82%</b>——意味著大部分運算資源都花在核心內部的鎖競爭與 cache 同步上，而不是真正的查詢工作。作者最終找出 16 個瓶頸並修正，一共改了約 3000 行程式碼。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">Cache coherence 與 cache line 失效</b>　多核處理器為了讓每個核心看到的記憶體內容一致，會用協定（例如 MESI）追蹤每條 cache line 的狀態；一旦某個核心寫入，其他核心上同一條 line 的副本就要被標記失效，之後要用時得重新從別處取得最新版本——這個協調過程本身要花時間，是多核擴展性的硬體層瓶頸來源。</div>\n\n<p>論文對這類瓶頸提出的核心解法叫 <b>sloppy counter</b>：把一個邏輯上的計數器，拆成「一個共享的中央計數器」加上「每個處理器核各自持有的一份備用參考數」。遞增時，優先從本地備用數裡扣，只有本地備用數不夠用才去動中央計數器；遞減時，優先把歸還的參考加回本地備用數，只有本地備用數累積超過某個門檻，才把多出的部分同時從本地與中央扣除。整個設計維持一個不變式：<b>中央計數器 = 所有處理器核的備用數總和 + 真正在使用中的參考數</b>。效果是：絕大多數的遞增／遞減操作只碰觸自己核心的本地 cache line，真正需要協調全部核心、取得精確總和的情況非常少見，把「頻繁」的操作留在本地、把「稀少」的操作才送上昂貴的全域協調。</p>\n\n<p>Sloppy counter 本身沒有直接進到 Linux 核心，但同一個想法在核心裡有好幾種具體化身，差別在於「什麼時候、用多少代價去換精確的總和」：<code>percpu_counter</code> 用於 ext4 可用的 cluster／inode 數、已承諾的虛擬記憶體量（<code>vm_committed_as</code>）等統計場景；<code>struct mount</code> 裡的 <code>mnt_pcp</code> 是手動刻的 per-CPU 參考計數，只在掛載點被卸載、或檢查是否還有人在用時才去全域加總；<code>percpu_ref</code> 則用於生命週期以「關閉」結束的物件（例如 cgroup 的 <code>css</code>），一旦呼叫 <code>percpu_ref_kill()</code> 就切換成單一的 atomic 計數，不再分散。三者的共同點：平時都只寫本地，只有在真正需要答案的那個時刻，才付出協調全部核心的代價。</p>\n\n<p>聚焦到 <code>percpu_counter</code> 的更新路徑 <code>percpu_counter_add_batch()</code>（<code>lib/percpu_counter.c</code>，有 <code>CONFIG_HAVE_CMPXCHG_LOCAL</code> 的版本）：先用 <code>this_cpu_read()</code> 讀出目前這個核心的本地值，如果加上這次要變動的量之後絕對值還沒超過 <code>batch</code> 門檻，就用<b>不帶 lock prefix 的本地 cmpxchg</b>（<code>this_cpu_try_cmpxchg()</code>）直接更新本地變數——這個操作只碰自己的 cache line，不需要跟其他核心協調；只有超過 <code>batch</code> 門檻，才透過 <code>raw_spin_lock_irqsave()</code> 取得全域鎖，把本地累積的值併入中央的 <code>fbc->count</code>，再把本地值清掉重算的那一份扣掉。程式碼註解特別強調「判斷要不要走慢路徑」跟「實際更新」必須是同一個原子操作，否則中斷有可能夾在中間插進來，讓本地值在不知不覺間超過 <code>batch</code>，甚至溢位——這正是為什麼快路徑要用 <code>do { } while (!this_cpu_try_cmpxchg(...))</code> 這種「讀取、判斷、嘗試原子替換，失敗就重讀重判斷」的重試迴圈，而不是簡單的「讀取再寫入」兩步驟。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">this_cpu_try_cmpxchg()（本地 cmpxchg）</b>　x86 的 cmpxchg 指令本來是用來實作 lock-free 演算法的原子比較並交換；this_cpu 系列函式刻意不加 lock prefix，讓它只保證「對目前這個 CPU 的本地變數」而言是原子的（防中斷），但不需要跟其他核心協調，因此遠比帶 lock 的版本便宜。</div>\n\n<p>真實子系統裡能找到具體的使用案例：ext4 用 <code>percpu_counter</code> 追蹤可用的 cluster 數與 inode 數（<code>fs/ext4/super.c</code> 裡的 <code>s_freeclusters_counter</code>、<code>s_freeinodes_counter</code>），每次配置／釋放空間都要更新這個計數，如果用單一全域變數，在大量平行建立/刪除檔案時會嚴重卡在這條 cache line 上；記憶體 overcommit 的判斷用全域的 <code>vm_committed_as</code>（<code>mm/util.c</code>），每個行程配置虛擬記憶體都會碰到它；每個行程的 RSS（實際佔用實體記憶體量）統計則放在 <code>mm_struct</code> 裡的 <code>rss_stat[NR_MM_COUNTERS]</code>（<code>include/linux/mm_types.h</code>），因為多執行緒程式的所有 thread 都共用同一個 <code>mm_struct</code>，若不分攤到每個核心，光是更新 RSS 統計就會變成多執行緒程式的效能瓶頸。對照組是前面提過的 <code>mnt_pcp</code>（<code>fs/namespace.c</code>）：它完全不透過 <code>percpu_counter</code> 這層包裝，自己手刻一個 per-CPU 的 struct（裡面是 <code>mnt_gets</code>／<code>mnt_puts</code>／<code>mnt_writers</code> 幾個欄位），平時只對自己核心的欄位做 <code>this_cpu_inc()</code>，只有卸載掛載點前才用 <code>mount_lock</code> 保護、逐一加總所有核心的值——是同一套 sloppy counter 思路的「手工特化版」。</p>\n\n<p>這個機制有它的限制，是面試追問常問到的地方：<code>percpu_counter_read()</code> 只讀中央值 <code>fbc->count</code>，不會去加總各核心的本地殘留，所以讀到的值可能跟真實值有誤差，誤差上限大約是 <code>batch × 線上 CPU 數</code>（因為最壞情況下，每個 CPU 都累積了接近 <code>batch</code> 卻還沒併回中央的量）；要拿到真正精確的總和要呼叫 <code>percpu_counter_sum()</code>，它會取鎖、逐一走訪每個核心的本地值加總，代價遠高於 <code>read()</code>，所以只在真的需要精確值（例如判斷磁碟空間是否真的用盡）時才呼叫。另外，CPU 熱插拔（hotplug）下線時，那個核心殘留在本地的值不能憑空消失，核心用 <code>percpu_counter_cpu_dead()</code> 搭配一個全域的 <code>percpu_counters</code> 連結串列，在 CPU 真正離線前把它的殘留值併回中央計數器。</p>\n\n<p>這套「平時各自為政、只在少見時刻才對齊真相」的設計哲學，完全不是 Linux 核心的專利：Java 的 <code>LongAdder</code>（相對於 <code>AtomicLong</code>）、各種語言執行環境裡「分片計數器（sharded counter）」的實作、甚至分散式系統裡的 CRDT（Conflict-free Replicated Data Type）計數器，本質上都在做同一件事——用「近似但快」換掉「精確但慢」，只在真正需要精確答案的瞬間才付出同步的代價。面試被問到「如何設計一個高併發場景下的計數器」時，percpu_counter／sloppy counter 這套思路就是一個很扎實的參考答案，而且能順便展示你理解背後的硬體原因（cache coherence），不只是背一個資料結構名詞。</p>",
+      "derivation_html": "<p><code>batch</code> 的預設值不是隨便挑的常數，而是在 <code>compute_batch_value()</code> 裡依照「目前上線的 CPU 數」動態算出來：<code>percpu_counter_batch = max(32, nr_online_cpus * 2)</code>。這個公式背後是一個直接的取捨：<code>batch</code> 越大，代表每個核心可以累積越多本地變動才需要去搶一次中央鎖，走慢路徑的頻率越低，對 scalability 越友善；但 <code>percpu_counter_read()</code> 的誤差上限正好是 <code>batch × 線上 CPU 數</code>，<code>batch</code> 越大、CPU 數越多，这個誤差上限也跟著線性變大。具體代入數字：如果系統有 64 個核心，<code>batch = max(32, 128) = 128</code>，最壞情況下 <code>read()</code> 讀到的值可能偏離真實值到 <code>128 × 64 = 8192</code>——這就是為什麼像 ext4 的「可用空間是否足夠」這類需要保守判斷的場景，寧可多付一點 <code>percpu_counter_sum()</code> 的代價，也不能只信任 <code>read()</code> 的近似值。</p>",
+      "source_label": "lib/percpu_counter.c · L93-L113（percpu_counter_add_batch，CONFIG_HAVE_CMPXCHG_LOCAL 版本，Linux v6.18）",
+      "source_url": "https://github.com/torvalds/linux/blob/v6.18/lib/percpu_counter.c#L93-L113",
+      "source_code": "void percpu_counter_add_batch(struct percpu_counter *fbc, s64 amount, s32 batch)\n{\n\ts64 count;\n\tunsigned long flags;\n\n\tcount = this_cpu_read(*fbc->counters);\n\tdo {\n\t\tif (unlikely(abs(count + amount) >= batch)) {\n\t\t\traw_spin_lock_irqsave(&fbc->lock, flags);\n\t\t\t/*\n\t\t\t * Note: by now we might have migrated to another CPU\n\t\t\t * or the value might have changed.\n\t\t\t */\n\t\t\tcount = __this_cpu_read(*fbc->counters);\n\t\t\tfbc->count += count + amount;\n\t\t\t__this_cpu_sub(*fbc->counters, count);\n\t\t\traw_spin_unlock_irqrestore(&fbc->lock, flags);\n\t\t\treturn;\n\t\t}\n\t} while (!this_cpu_try_cmpxchg(*fbc->counters, &count, count + amount));\n}",
+      "tip_html": "<p>今天附上的 jserv 直播錄影裡，同樣用 <code>percpu_counter_add_batch()</code> 這個函式作為 sloppy counter 在 Linux 核心裡的具體案例（連結到 v6.18 的同一段程式碼），可以對照今天的講解互相驗證。動手做：自己 clone 一份 kernel 原始碼，執行 <code>grep -rn \"percpu_counter_init\\|PERCPU_COUNTER_BATCH\" fs/ext4/ mm/</code>，找出 ext4 和記憶體管理子系統裡實際初始化這些計數器的地方，讀懂它們各自選擇的 batch 策略和用途，會比單看今天這段程式碼更有感覺。</p>"
+    }
+  ],
+  "sources": [
+    {
+      "label": "LeetCode 題目彙整",
+      "url": "https://github.com/wisdompeak/LeetCode"
+    },
+    {
+      "label": "owlfox CS:APP 中文筆記",
+      "url": "https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw"
+    },
+    {
+      "label": "CS:APP 第4章重點提示與練習（hackmd sysprog）",
+      "url": "https://hackmd.io/@sysprog/CSAPP-ch4"
+    },
+    {
+      "label": "UT Austin CS429 Pipeline Hazards 投影片",
+      "url": "https://www.cs.utexas.edu/~byoung/cs429/slides16-pipeline3.pdf"
+    },
+    {
+      "label": "Y86-64 線上模擬器",
+      "url": "https://boginw.github.io/js-y86-64/"
+    },
+    {
+      "label": "jserv Linux 核心課程筆記：Scalability 議題",
+      "url": "https://hackmd.io/@sysprog/linux-scalability"
+    },
+    {
+      "label": "jserv Linux 核心課程影片：Scalability 議題直播錄影",
+      "url": "https://youtu.be/oTf6ZIWeYYA"
+    },
+    {
+      "label": "An Analysis of Linux Scalability to Many Cores（OSDI'10）",
+      "url": "https://www.usenix.org/legacy/event/osdi10/tech/full_papers/Boyd-Wickizer.pdf"
+    },
+    {
+      "label": "成大 Linux 核心課程進度表",
+      "url": "https://wiki.csie.ncku.edu.tw/linux/schedule"
+    },
+    {
+      "label": "Linux 核心原始碼 lib/percpu_counter.c（v6.18）",
+      "url": "https://github.com/torvalds/linux/blob/v6.18/lib/percpu_counter.c#L93-L113"
+    }
+  ]
+}
