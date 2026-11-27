@@ -73,4 +73,5 @@
 2026-11-24 | 演算法: 二維樹狀陣列 2D Binary Indexed Tree／2D Fenwick Tree，矩陣區域和查詢與更新，全新分類（304/308/1314/1292）| CS:APP: Ch.4 §4.5.7 Load/Use Data Hazards | Linux: 第13週 Timer 及其管理機制（jiffies／HZ／timer_list，接續 11/23 的 Device Tree）
 主線: 先樂觀地往前推進，只在真的需要精確答案或發現猜錯時，才回頭做一次性的修正或整合 | 2026-11-25 | 演算法: Kadane's Algorithm 動態規劃，最大子陣列和及其乘積/環狀/刪一個元素三種變形，全新分類（53/152/918/1186）| CS:APP: Ch.4 §4.5.8 Control Hazards | Linux: 第13週 Linux 核心設計 Scalability 議題：per-CPU 計數器 percpu_counter 的 sloppy counter 實作（接續 11/24 的 Timer 及其管理機制）
 2026-11-26 | 演算法: 矩陣快速幂 Matrix Exponentiation，加速線性遞迴（費波那契/泰波那契/鋪磁磚），全新分類（509/1137/790/552）| CS:APP: Ch.4 §4.5.9 Exception Handling | Linux: 第13週 Skip List（跳躍串列）與機率平衡資料結構，Btrfs extent_map 的 skiplist 實作案例（接續 11/25 的 per-CPU 計數器 Scalability 議題）
+主線: 三個領域今天都在示範善用已知的結構限制省掉原本必要的額外成本 | 2026-11-27 | 演算法: 二維矩陣的二分搜尋技巧，全域排序 1D 搜尋／階梯式搜尋／值域二分搜尋三種變形，全新分類（74/240/378/1428）| CS:APP: Ch.4 §4.5.10 PIPE Stage Implementations | Linux: 第13週 Linux 核心通用佇列 kfifo（Generic FIFO Queue），SPSC 無鎖設計與環狀緩衝區位元遮罩技巧（接續 11/26 的 Skip List，為「linked list, Queues, Maps, Binary Trees」項目中尚未深入的 Queues 一塊）
 <!-- LOG END -->
