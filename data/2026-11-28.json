@@ -1,0 +1,111 @@
+{
+  "date": "2026-11-28",
+  "is_review": false,
+  "algo": [
+    {
+      "topic": "進階主題：Union-Find（併查集）的按秩合併、路徑壓縮與攤銷複雜度 α(n)",
+      "explanation_html": "<p>今天把視角切回<b>併查集 Union-Find（Disjoint-Set）</b>這個資料結構本身的「引擎蓋底下」。過去三次遇到它——09/01 的基礎題、09/27 Kruskal 最小生成樹、09/30 二分圖判定——都是把它當成一個現成的黑盒工具在用：呼叫 <code>find(x)</code>、呼叫 <code>union(x,y)</code>，相信它很快就好。今天要補的是「為什麼它很快」：它靠的是<b>按秩合併（Union by Rank）</b>與<b>路徑壓縮（Path Compression）</b>這兩個獨立的優化，合起來能把平均每次操作的成本壓到幾乎是常數。Union-Find 要解決的問題本質是維護一個集合的動態分割：給定 n 個元素，支援「查詢 x 屬於哪一組」與「把 x 所在的組跟 y 所在的組合併」兩種操作，背後對應的是數學上的<b>等價關係</b>（反身、對稱、傳遞）。</p>\n\n<p><b>最原始的兩種實作先打底。</b>Quick-Find：用一個陣列 <code>id[]</code> 直接記錄每個元素所屬的組別編號，<code>find(x)</code> 是 O(1)，但 <code>union(x,y)</code> 要把整個 x 組的所有元素逐一改成 y 組的編號，最差 O(n)。Quick-Union：改成樹狀結構，每個元素存一個指向父節點的指標，<code>union(x,y)</code> 只需要把 x 所在樹的根指向 y 所在樹的根，變成 O(1)（不計 find 根節點的時間）；但如果每次都隨意把某棵樹接到另一棵樹下面，最壞情況下會接成一條長度 n 的鏈，<code>find(x)</code> 退化成 O(n)——這正是兩個優化要分別解決的問題。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2f5f9e;\">等價關係 Equivalence Relation</b>　一個二元關係同時滿足反身性（x 跟自己同一組）、對稱性（x 跟 y 同組則 y 跟 x 同組）、傳遞性（x 跟 y 同組、y 跟 z 同組則 x 跟 z 同組），才能用 Union-Find 來維護。這也是為什麼 Union-Find 不能直接套用在「有向可達性」這種不對稱的關係上。</div>\n\n<p><b>按秩合併</b>解決的是「樹長歪」的問題：每個根節點額外記一個 <code>rank</code>（可以理解成樹高的上界估計），合併兩棵樹時，讓 rank 較小的樹的根指向 rank 較大的樹的根；只有當兩棵樹 rank 相等時，合併後的新根 rank 才會 +1。這個規則保證了樹高的成長被嚴格控制住，證明見下方數學推導——結論是不做任何其他優化，單靠按秩合併就能把 <code>find</code> 壓到 O(log n)。<b>路徑壓縮</b>解決的是另一個問題：即使樹高是 O(log n)，重複查詢同一批元素時，每次都要重新爬一次那條路徑很浪費——path compression 在 <code>find(x)</code> 真正找到根之後，把路徑上所有經過的節點<b>直接</b>改成指向根，讓下一次查詢這些節點時變成 O(1)。兩個優化各自都已經很有效，合起來使用時，攤還下來的複雜度會更進一步逼近常數，詳見下方推導。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2f5f9e;\">攤銷分析 Amortized Analysis</b>　不去看單一次操作最差要花多少時間，而是看連續做 m 次操作的「總時間」除以 m，得到的平均成本。路徑壓縮正是「有些 find 操作比較貴（真的要爬一條長路徑並順手壓平），但壓平之後後面一大批 find 都變得非常便宜」，攤銷分析能把這種「先苦後甘」的效果量化出來，而不是只看最壞單次的 O(log n)。</div>\n\n<p><b>具體例子走一遍 LeetCode 1061</b>（Lexicographically Smallest Equivalent String）：給兩條等長字串 s1、s2，對應位置上的字元視為等價，再給一條 baseStr，要求把 baseStr 的每個字元換成它所在等價類裡「字典序最小」的字元。這題的 union 策略跟教科書的「按秩合併」不同，而是刻意客製化成「較小的字元當 root」：合併兩個字元所在的組時，永遠讓字母序較小的那個字元成為新的根，這樣每個等價類的根天然就是整個類別裡最小的字元，查詢時只需要 <code>find(c)</code> 一次就直接拿到答案。這說明 union 的合併規則本身可以依照題目需求自由設計，「按秩合併」只是其中一種為了保證樹高平衡而選的規則，不是唯一解。</p>\n\n<p><b>Edge case 盤點：</b>對同一對元素重複呼叫 <code>union(x,y)</code> 必須是安全的（第二次呼叫時兩者已經同根，直接 no-op，不能因為多呼叫而破壞結構）；<code>union(x,x)</code> 自環同理要是安全的 no-op；查詢一個從未出現過的元素時，若用 dict 動態建節點（lazy init）要確保它第一次被查到時正確地初始化成「自己的根是自己、rank 為 0」；路徑壓縮之後，<code>rank</code> 欄位記錄的已經不再是樹的「真實高度」（因為路徑被壓平了，實際高度只會更低），但它仍然是高度的一個有效上界，不影響前述的複雜度證明，這是初學者常見的誤解點——以為壓縮後 rank 就失真了所以要重新計算，其實完全不需要。</p>\n\n<p><b>跟暴力解法的完整比較：</b>如果不用 Union-Find，要維護「圖是否連通」這種動態連通性問題，暴力做法是每次加一條邊之後，重新對整張圖跑一次 BFS/DFS 判斷連通分量，單次代價 O(V+E)，如果有 m 次加邊操作，總成本是 O(m·(V+E))。換成 Union-Find，m 次 union/find 操作的總成本只要 O((V+m)·α(V))，在 LeetCode 2316（Count Unreachable Pairs of Nodes，n、edges 規模可達 10^5）這種題目裡，暴力解法會直接超時，Union-Find 版本則輕鬆在時間限制內跑完——這正是「資料結構選擇」在面試中被嚴格計分的典型場景。</p>\n\n<p><b>至少兩種常見變形模式：</b>(1) <b>加權並查集（Weighted/Union-Find with Relation）</b>：題目給的不是單純的「同組」關係，而是帶數值的關係，例如 LeetCode 399 Evaluate Division 給 <code>a/b=2.0</code> 這種比例關係，這時每個節點要額外維護一個「到目前父節點的比例」，合併與路徑壓縮時都要連帶做比例的乘法修正，查詢 <code>find(x)</code> 的同時把路徑上的比例累乘起來。(2) <b>可撤銷並查集（Union-Find with Rollback）</b>：某些題目（例如邊會隨時間被刪除、需要離線按時間軸分治處理的動態連通性問題）要求能撤銷最後一次 union，這種情況下<b>只能用按秩合併、不能做路徑壓縮</b>（路徑壓縮一旦發生，原本的父子關係資訊就遺失了，沒辦法撤銷），改成把每一次指標修改記錄到一個堆疊上，撤銷時直接還原指標即可，複雜度退回到 O(log n) 但換到了「可以撐一個可逆的歷史」。</p>\n\n<p><b>面試官常見追問：</b>「如果要支援刪除某個元素、把它從目前的組裡移出去，Union-Find 能做到嗎？」——標準結構做不到，刪除需要換成更複雜的結構（例如把每個元素存成雙向鏈結串列節點並維護組大小，刪除時重建代表元）。「多執行緒環境下，多個 thread 同時呼叫 union/find 要怎麼保證正確性？」——常見答案是整個結構包一層全域鎖，或是對效能敏感的場景改用無鎖的 CAS 操作逐步推進 <code>find</code> 路徑，但要非常小心路徑壓縮寫入與其他執行緒讀取之間的資料競爭。「能不能枚舉某個集合裡的所有元素、或快速取得集合大小？」——需要額外在根節點維護一個 <code>size[]</code> 陣列（這在合併時方便決定由誰當新根，是「按大小合併」而非「按秩合併」的常見變體，效果同樣是 O(log n) 樹高上界），但要枚舉所有成員仍需要額外的鏈結串列或反向索引，Union-Find 本身不直接支援。</p>",
+      "derivation_html": "<p><b>只用按秩合併（不做路徑壓縮）為什麼能保證 O(log n)：</b>關鍵引理是「一棵根節點 rank 為 r 的樹，至少包含 2^r 個節點」。用對 union 操作次數做歸納證明：rank 為 0 的樹是單一節點，節點數 2^0=1，成立。按秩合併的規則是「只有當兩棵樹的 rank 相等時，合併後的新根 rank 才會變成 r+1」，所以要產生一棵 rank 為 r+1 的樹，一定是兩棵 rank 至少為 r 的樹合併而成；由歸納假設，這兩棵樹各自至少有 2^r 個節點，合併後至少有 2^r+2^r=2^(r+1) 個節點，引理成立。</p>\n\n<p>反過來看：若整個結構總共有 n 個節點，任何一棵樹的根 rank 最多是多少？由引理，rank 為 r 的樹至少要有 2^r 個節點，而總節點數不能超過 n，所以 2^r ≤ n，解得 <code>r ≤ log2(n)</code>。因為 <code>find(x)</code> 需要沿父指標往上走，走的步數不會超過「x 所在樹的高度」，而高度又被 rank 嚴格限制在 O(log n) 以內，所以即使完全不做路徑壓縮，單靠按秩合併，<code>find</code> 的最壞情況也已經是 O(log n)，而不是未優化 quick-union 的 O(n)。</p>\n\n<p><b>加上路徑壓縮之後為什麼能逼近常數：</b>完整證明（Tarjan, 1975）要用到攤銷分析裡的位能法（potential method），把節點依照目前子樹大小分成一層一層的「分組」（block），分組的切法正是模仿反阿克曼函數 α(n) 的遞迴定義，證明過程相當技巧化，這裡只給出結論與直覺：定義 <code>log*(n)</code>（迭代對數）為「對 n 連續取 log2 幾次之後，結果會 ≤ 1」所需要的次數——例如 <code>log*(65536)=4</code>（65536→16→4→2→1），<code>log*(2^65536)=5</code>。這個函數成長得極其緩慢；而反阿克曼函數 α(n) 又比 log*(n) 成長得更慢，實務上可以證明 <code>α(n) ≤ 4</code> 對所有「n 小於 2 疊 65536 層的 2 的塔」都成立——這個數字已經遠遠超過宇宙中原子數量的估計值，所以在任何實際會遇到的輸入規模下，<code>α(n)</code> 可以直接當成一個不超過 4～5 的極小常數，m 次操作總成本 O(m·α(n)) 在工程上等同於 O(m)。</p>",
+      "problems": [
+        {
+          "id": "1061",
+          "title": "Lexicographically Smallest Equivalent String",
+          "url": "https://leetcode.com/problems/lexicographically-smallest-equivalent-string/",
+          "note": "自訂 union 策略：合併時永遠讓字母序較小的字元當根，查詢只需一次 find，時間 O(n+26·α(26))、空間 O(26)"
+        },
+        {
+          "id": "721",
+          "title": "Accounts Merge",
+          "url": "https://leetcode.com/problems/accounts-merge/",
+          "note": "以 email 字串建節點做 union-find 合併帳戶，之後對每組做排序整理輸出，時間 O(N log N)（N 為 email 總數）"
+        },
+        {
+          "id": "1101",
+          "title": "The Earliest Moment When Everyone Become Friends",
+          "url": "https://leetcode.com/problems/the-earliest-moment-when-everyone-become-friends/",
+          "note": "按時間排序後逐一 union，當連通分量數降到 1 時的那個 timestamp 即為答案，時間 O(E log E + E·α(V))"
+        },
+        {
+          "id": "2316",
+          "title": "Count Unreachable Pairs of Nodes in an Undirected Graph",
+          "url": "https://leetcode.com/problems/count-unreachable-pairs-of-nodes-in-an-undirected-graph/",
+          "note": "union-find 統計各連通分量大小，不可達對數 = C(n,2) 減去各分量內部可達對數之和，時間 O(V+E·α(V))"
+        }
+      ],
+      "tip_html": "<p>若面試官追問「假如邊會隨時間被刪除，你的 Union-Find 還能用嗎？」——標準版本不能直接支援刪除，但可以改用<b>可撤銷並查集</b>（只用按秩合併、不做路徑壓縮，把每次指標修改記錄到一個堆疊上，需要撤銷時依序還原），再搭配「按時間軸的離線分治」把一段時間內的刪除操作轉換成分治遞迴裡的「區間覆蓋」問題處理，這是比基礎 Union-Find 更進一步、常出現在進階圖論面試題裡的延伸考法，也是 09/27 教過的 Kruskal MST 之所以能在 O(E log E) 內完成的底層原因——它靠的正是這裡分析的攤還複雜度幾乎為常數的 union/find。</p>"
+    }
+  ],
+  "csapp": [
+    {
+      "chapter": "Ch.4",
+      "section": "4.5.11 Pipeline Control Logic",
+      "explanation_html": "<p>接續 11/27 教完的 <b>4.5.10 PIPE Stage Implementations</b>（把前面每一節各自設計出的機制，整合寫成每個 pipeline stage 完整的 HCL 邏輯），今天走到 4.5 節（Pipelined Y86-64 Implementations）的壓軸：<b>4.5.11 Pipeline Control Logic</b>。4.5.10 做的事情是「假設沒有任何 hazard，PIPE 處理器平時該怎麼運作」；4.5.11 要補的正好是反過來的另一半：當 4.5.5～4.5.9 節各自分析過的 load/use hazard、mispredicted branch、ret 指令、exception 真的發生時，要用什麼<b>組合邏輯</b>去偵測這些狀況，並且正確地讓對應的 pipeline register「保持原值（stall）」或「清空成一個無害的空指令（insert bubble）」。</p>\n\n<p><b>核心機制：</b>PIPE 處理器的四個 pipeline register（F、D、E、M，分別介於 Fetch/Decode/Execute/Memory/Write-back 之間）每一個輸入端都接著一個多工器，由一組訊號決定這個暫存器下個 cycle 要「正常更新成下一階段算出的新值」、「保持現在的值不變（stall）」，還是「被覆寫成一個固定的空指令狀態（bubble）」。書裡把這些訊號取名為 <code>F_stall</code>、<code>D_stall</code>、<code>D_bubble</code>、<code>E_bubble</code>、<code>M_bubble</code>——注意大部分 register 只有 bubble 訊號、沒有獨立的 stall 訊號，因為多數情況下「作廢一條指令」只需要讓它變成空指令往下流就好；只有 F 跟 D 這兩個比較早期的 register，才會遇到「這條指令還不能繼續往前走、但也不能被作廢，必須原地等待」的情況，所以才需要額外的 stall 訊號。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#b0561a;\">管線泡泡 Bubble</b>　把某個 pipeline register 的輸出，用多工器切換成固定的一組「空指令」狀態值（而不是正常從上一階段算出來的值），讓這個「假指令」隨著管線往下流動，但它不會寫入任何暫存器或記憶體，等同於讓這個 cycle 對程式的最終結果完全不產生任何影響，常用來作廢掉一條被誤抓進來、或是還沒輪到它的指令。</div>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#b0561a;\">管線停滯 Stall</b>　讓某個 pipeline register 這個 cycle「保持原來的值不更新」，也就是讓同一條指令原地多停留一個 cycle、不往下一階段推進。跟 bubble 不同的地方在於：stall 保留的是「一條還需要被處理的真正指令」，bubble 清空的則是「一條確定要被丟棄的指令」。</div>\n\n<p><b>逐條拆解各類 hazard 怎麼映射成控制訊號：</b>(1) <b>load/use hazard</b>（4.5.7 節分析過）：Decode 階段的指令需要用到一個暫存器，而這個暫存器剛好是「目前還在 Execute 階段的 load 指令」要寫回的目標——這個值要等到下個 cycle load 走到 Memory 階段才真正從記憶體讀出來，Execute 階段的 forwarding 完全沒有這個值可以轉發。解法是讓 <code>F_stall</code>、<code>D_stall</code> 同時成立（Fetch 跟 Decode 這個 cycle 都停住不動），並讓 <code>D_bubble</code> 成立，往 Execute 階段送一個 bubble，空出一個 cycle 讓那條 load 指令獨自走到 Memory 把值讀出來。(2) <b>mispredicted branch</b>（4.5.8 節分析過）：PIPE 對分支一律預測「會跳」提前抓後續指令，等到 Execute 階段才真正算出條件碼、知道猜對或猜錯；猜錯時，已經多抓進 Fetch/Decode 兩個 cycle 的指令必須整批作廢，對應的是 <code>D_bubble</code> 與 <code>E_bubble</code> 同時成立，把這兩個已經走錯路的指令清空成 bubble。(3) <code>ret</code> <b>指令</b>（4.5.4 節 Next PC Prediction 提到過）：return address 要等 <code>ret</code> 真正走到接近 Memory/Write-back 階段才確定下一個 PC，所以只要 <code>ret</code> 還停留在 D、E、M 任何一個階段，<code>F_stall</code> 就必須持續成立，讓 Fetch 原地等待，直到 <code>ret</code> 完全流出管線。(4) <b>exception</b>（4.5.9 節分析過）：任何階段一旦標記某條指令發生例外，這條指令以及它後面已經進入管線、但其實應該排在它之後處理的指令，都不能讓副作用（寫暫存器、寫記憶體）真的生效。</p>\n\n<p><b>具體例子：</b>考慮序列「<code>mrmovq (%rax),%rbx</code>」緊接著「<code>addq %rbx,%rcx</code>」。當 <code>mrmovq</code>（一個 load）走到 Execute 階段、<code>addq</code> 正要進入 Decode 階段時，控制邏輯偵測到 Decode 階段的 <code>addq</code> 需要 <code>%rbx</code>，而 <code>%rbx</code> 正是 Execute 階段那條 load 指令即將產生、但「這個 cycle 根本還沒讀出來」的值。於是這個 cycle：<code>F_stall</code> 讓 Fetch 重新抓同一條 <code>addq</code>（不前進）、<code>D_stall</code> 讓 <code>addq</code> 留在 Decode 原地（不前進）、<code>D_bubble</code> 把 Execute 階段這個 cycle 填上一個空指令。下個 cycle，<code>mrmovq</code> 從 Execute 走到 Memory 真正把值讀出來，透過 4.5.6 節的 forwarding 邏輯把這個記憶體值直接送給正要進入 Execute 的 <code>addq</code>，整個 hazard 只付出了一個 cycle 的代價，不需要把指令送回去重新抓取。</p>\n\n<p><b>Edge case：多個 hazard 同時成立時的優先權仲裁。</b>假設一個 <code>mispredicted branch</code> 剛好緊接著一個 <code>load/use hazard</code>，控制邏輯必須明確定義誰的訊號優先：教科書給的優先順序是 <b>exception 最高、其次是 mispredicted branch、再其次是 load/use hazard、最後是 ret</b>，原因是 exception 處理錯了會直接影響程式正確性甚至安全性，必須無條件優先；mispredicted branch 不處理好會讓錯誤路徑的指令的副作用真的發生，後果同樣是結果錯誤；而 load/use 跟 ret 單純只是「多花一個 cycle 等待」，不處理好最多只是效能受損而不是結果錯誤，優先度自然較低。另一個邊界情況：當兩種 hazard 的訊號都該成立時（例如同一個 cycle 同時偵測到 ret 還沒流出、又出現 load/use hazard），各自的 bubble/stall 條件要用<b>邏輯 OR</b> 合併而不是互斥選擇一種，否則會漏掉其中一種保護，讓某個不該被作廢或不該往前推進的指令錯誤地流過了管線。</p>\n\n<p><b>與面試/實務的關聯：</b>這種「讀取當前系統狀態、依照一張明確的優先權表仲裁出互斥控制訊號」的設計模式，不只出現在 CPU 的 pipeline control，中斷控制器的優先權編碼（interrupt priority encoding）、作業系統裡 pending signal 的遮罩與遞送順序、甚至分散式系統裡多個事件同時觸發時該先處理哪一個，都是同構的問題。系統設計或底層面試被問到「如果多個互斥條件可能同時成立，你會怎麼設計狀態機避免 undefined behavior」時，PIPE 這張 hazard 優先權表就是一個具體、可以直接拿來舉例說明的真實工程案例：先把每一種條件各自獨立分析清楚（如 4.5.5～4.5.9 節），再用一張明確定義好優先順序的表把它們組裝起來，而不是寄望「反正很少同時發生」就跳過仲裁邏輯。</p>\n\n<p><b>銜接前後章節：</b>4.5.11 是 4.5 節（Pipelined Y86-64 Implementations）的最後一節，做完後緊接著 4.6 Summary 會把整個第四章（Y86-64 指令集、SEQ 循序實作、PIPE 管線化實作）做一次總結。這一節也呼應了 4.5.5 節（Pipeline Hazards）當初列出的三大類 hazard（資料、控制、結構），到這裡才真正把三類 hazard 各自分析出的 bubble/stall 條件組裝成一份完整、可以直接對應到 HCL 控制邏輯的規格——這正是整個 PIPE 設計從「紙上的分段概念」變成「真正能被合成出硬體」之前的最後一道整合關卡。</p>",
+      "tip_html": "<p>誠實說明：這一節對應的 CMU 15-213 課堂講次，在 2015 Fall 這個學期完全沒有開課——查核該學期官方課程進度表後發現，整學期的講次安排裡沒有任何一講涵蓋 Y86-64 / SEQ / PIPE（第 4 章）的內容，推測是當學期把第 4 章處理器設計的部分留給學生自學、課堂時間挪給其他主題，因此找不到可信的 2015 Fall（或其他學期公開可查的）對應錄影，沒有把猜測的影片連結放進 sources，改附上 CMU 官方技術報告（正式描述 SEQ/PIPE 規格）與該學期課程進度表本身作為查核依據。</p>"
+    }
+  ],
+  "linux": [
+    {
+      "topic": "紅黑樹的進階應用：Augmented Interval Tree（區間樹），lib 標頭 interval_tree_generic.h 與 vm_area_struct 的位址區間索引",
+      "explanation_html": "<p>依照成大 Linux 核心課程進度表第 13 週的清單第 20 項「<b>Linux: linked list, Queues, Maps, Binary Trees</b>」繼續往下挖——11/26 已經補完這個項目裡的 Maps（Skip List）、11/27 補完 Queues（kfifo），linked list 則早在 09/06（hlist 雜湊表鏈結串列）就深入教過，依照「深度優先、今天只挑一個具體機制講清楚」的原則，今天把範圍收窄到這個項目最後剩下的一塊：<b>Binary Trees</b>。但不是回頭重講 09/10 已經教過的紅黑樹插入旋轉規則，而是往前一步，講紅黑樹的<b>進階用法</b>——怎麼在既有的 rbtree 上「加料」，讓它不只能回答單一 key 的 O(log n) 查找，還能回答「區間重疊」這種更複雜的查詢，這正是核心裡 <b>Augmented Interval Tree（區間樹）</b>的真實實作：<code>include/linux/interval_tree_generic.h</code>。</p>\n\n<p><b>核心概念：</b>一般紅黑樹的每個節點只存一個排序用的 key，查找只能回答「這個 key 存在嗎」、「比它小的 key 有幾個」這類單點問題。但很多真實系統問題要處理的是「區間」而不是單點：例如「<code>[vaddr, vaddr+len)</code> 這塊虛擬位址範圍，有沒有跟行程現有的哪個 VMA 重疊」、「某個檔案 offset 落在哪一段 extent 裡」。Augmented rbtree 的做法是在既有 rbtree 結構之上，額外在每個節點存一個欄位（<code>interval_tree_generic.h</code> 裡透過 <code>ITSUBTREE</code> 這個名稱參數代入），紀錄「這個節點本身、連同它整個子樹裡所有區間的 right endpoint 最大值」。有了這個欄位，從根節點往下查詢時，只要發現某個子樹的這個欄位小於查詢區間的下界，就能直接整個跳過那一側子樹，不必真的逐一檢查裡面每個節點。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">Augmented Tree 增強樹</b>　在一個既有的平衡二元搜尋樹（如紅黑樹）架構上，每個節點額外附加一個「可以從子節點的值推導出來」的衍生欄位（例如子樹大小、子樹內的最大/最小值），讓樹在維持原有 O(log n) 查找能力之外，還能額外支援一種跟這個衍生欄位相關的進階查詢，但代價是插入、刪除、旋轉時都要連帶更新這個衍生欄位。</div>\n\n<p><b>逐步拆解程式碼：</b>這份標頭檔用一個巨集 <code>INTERVAL_TREE_DEFINE</code> 一次性生成一整組函式（<code>_insert</code>、<code>_remove</code>、<code>_iter_first</code>、<code>_iter_next</code>），好處是同一套邏輯可以套用在核心裡任何「本身帶有 start/last 欄位」的 struct 上，不需要每個使用場景各寫一份。插入函式 <code>_insert</code> 走標準 BST 插入邏輯——從根往下比較 <code>ITSTART(node)</code> 決定往左子樹或右子樹走；但多做了一件事：每經過一個祖先節點 <code>parent</code>，就順手把 <code>parent-&gt;ITSUBTREE</code> 更新成 <code>max(現有值, last)</code>，確保新節點插入之後，所有被經過的祖先節點的增強欄位仍然正確反映它們子樹裡的真實狀態。真正維持紅黑樹平衡性質的旋轉操作，則交給 <code>RB_DECLARE_CALLBACKS_MAX</code> 巨集生成的 callback，在 <code>rb_insert_augmented_cached</code>／<code>rb_erase_augmented</code> 觸發旋轉時，自動重新計算被旋轉影響到的節點的增強欄位——這一層「旋轉完要連帶修正增強欄位」的 callback 機制，正是 09/10 教基本 rbtree 旋轉規則時完全不需要處理的額外複雜度，也是今天這個主題真正「進階」的地方。</p>\n\n<p><b>具體例子：</b>核心記憶體管理子系統長期用這種 augmented rbtree 依照虛擬位址區間，索引一個行程所有的 VMA（<code>vm_area_struct</code>）。當 page fault 發生、核心拿到一個 faulting address 時，要做的事情本質上就是一個「哪一個已註冊的位址區間包含這個點」的 overlap 查詢；較舊版本核心用 rbtree 依 <code>vm_start</code> 排序，再搭配額外的 interval tree／prio tree 結構處理反向映射查詢（哪些 VMA 可能跟某個檔案區間重疊，用於 page cache 回收時找出所有映射到該檔案的 VMA）。較新版本核心（6.1 之後）進一步把管理單一行程 VMA 的 <code>mm_rb</code> 換成了 maple tree，但 <code>interval_tree_generic.h</code> 這份通用 augmented rbtree API 至今仍是核心裡跨子系統使用的基礎設施，例如裝置驅動管理 PCI BAR 位址區間、<code>resource</code> tree 管理 I/O port 範圍，都是靠它。</p>\n\n<p><b>Edge case 盤點：</b>(1) 區間相鄰但不重疊的邊界語意完全交由呼叫端決定——如果 <code>ITLAST</code> 定義成「閉區間的最後一個點」（<code>last = end - 1</code>），<code>[0,10)</code> 跟 <code>[10,20)</code> 就不會被誤判成重疊，這個「要不要減一」的細節若呼叫端沒處理好，是一個常見的 off-by-one bug 來源。(2) 如果刪除節點時不小心呼叫了一般的 <code>rb_erase()</code> 而不是 <code>rb_erase_augmented()</code>，紅黑樹的平衡結構本身不會壞（不會當機），但增強欄位會停留在過期的值，導致之後的 overlap 查詢可能「悄悄跳過」一個原本應該命中的子樹——這是一種不會當機、卻會讓查詢結果默默出錯的隱性 bug，正是增強資料結構最容易被誤用的地方，kernel 文件也特別點名警告過這一點。(3) 插入一個完全被某子樹既有範圍覆蓋的新區間時，從根到插入點路徑上，某些祖先的增強欄位可能本來就已經夠大、不需要真的更新——程式碼寫成無條件取 <code>max</code>，所以即使不需要更新也不會算錯，只是多做了一次比較，不影響正確性。</p>\n\n<div style=\"margin:10px 0;padding:10px 14px;border:1px dashed #e2ddd0;border-radius:4px;font-size:13px;line-height:1.6;color:#7a766b;\"><b style=\"color:#2c7357;\">Overlap Query 區間重疊查詢</b>　給定一個查詢區間 [lo, hi]，要找出資料結構裡所有「跟這個區間有交集」的既有區間，而不是單點的存在性查詢。傳統排序陣列可以靠二分搜尋找到第一個候選起點，但資料一旦會動態插入/刪除，就需要像 augmented interval tree 這種支援動態修改又能維持 O(log n) 查詢的結構。</div>\n\n<p><b>與面試/實務的關聯：</b>這其實是許多「augmented binary search tree」進階面試題的真實落地版本。像 LeetCode 759 Employee Free Time、Meeting Rooms 系列、各種「區間排程」變形題，如果資料是一次性給定、不會再變動，用排序加掃描線（10/05 教過的 sweep line）通常更簡單直接；但只要題目改成「區間會動態插入／刪除，而且每次操作後都要能快速回答 overlap 查詢」，就輪到 augmented rbtree／interval tree 真正該出場的場景。面試官常見的追問正是「如果區間是動態變化的，你原本的掃描線解法還能用嗎？」——candidate 能不能意識到這時候要換成 augmented tree 這種支援動態修改的結構，往往是進階輪面試裡的加分關鍵。</p>\n\n<p><b>複雜度與設計取捨：</b>augmented rbtree 的插入／刪除維持 O(log n)（多付出的是常數項的增強欄位回溯更新，不改變漸進複雜度），overlap 查詢也是 O(log n) 起（實際列出所有重疊區間還要另外加上命中數量），跟「靜態排序＋掃描線」的 O(n log n) 建置、O(log n) 單次查詢但完全不支援動態插入刪除相比，augmented rbtree 用一點點常數開銷跟程式碼複雜度，換到了「資料真的會隨時間變動」這種現實系統（核心記憶體管理正是如此——VMA 隨著 <code>mmap</code>／<code>munmap</code> 隨時在變）必須要有的動態能力，這也是為什麼這套通用 API 會被寫成核心的共用基礎設施，而不是每個子系統各自重新發明一套。</p>",
+      "derivation_html": "<p>加了增強欄位之後，為什麼複雜度沒有變差？紅黑樹的平衡不變量（任意路徑上黑節點數相同、不能有兩個連續紅節點）完全沒有被改動，所以樹高仍然維持 09/10 教過的 <code>O(log n)</code> 上界；唯一多付出的成本，是插入／旋轉過程中，每經過或影響到一個節點，都要多花 <code>O(1)</code> 的時間重新計算一次 <code>max</code>——而插入／旋轉本身原本就只會接觸到 <code>O(log n)</code> 個節點，所以總成本從 <code>O(log n)</code> 變成 <code>O(log n)</code>（漸進複雜度不變，只是常數項略微變大），這正是「augmented」這種設計模式之所以在工程上很划算的原因：用常數倍數的額外開銷，換到一整類新的查詢能力。</p>",
+      "source_label": "Linux kernel source · include/linux/interval_tree_generic.h（Michel Lespinasse, 2012；INTERVAL_TREE_DEFINE 巨集，_insert 片段）",
+      "source_url": "https://tangled.org/tjh.dev/kernel/blob/v6.9/include/linux/interval_tree_generic.h",
+      "source_code": "/* SPDX-License-Identifier: GPL-2.0-or-later */\n/*\n  Interval Trees\n  (C) 2012  Michel Lespinasse <walken@google.com>\n\n\n  include/linux/interval_tree_generic.h\n*/\n\n#define INTERVAL_TREE_DEFINE(ITSTRUCT, ITRB, ITTYPE, ITSUBTREE,             \\\n                             ITSTART, ITLAST, ITSTATIC, ITPREFIX)           \\\n                                                                           \\\n/* Callbacks for augmented rbtree insert and remove */                     \\\n                                                                           \\\nRB_DECLARE_CALLBACKS_MAX(static, ITPREFIX ## _augment,                     \\\n                         ITSTRUCT, ITRB, ITTYPE, ITSUBTREE, ITLAST)         \\\n                                                                           \\\n/* Insert / remove interval nodes from the tree */                         \\\n                                                                           \\\nITSTATIC void ITPREFIX ## _insert(ITSTRUCT *node,                          \\\n                                  struct rb_root_cached *root)             \\\n{                                                                          \\\n       struct rb_node **link = &root->rb_root.rb_node, *rb_parent = NULL;   \\\n       ITTYPE start = ITSTART(node), last = ITLAST(node);                  \\\n       ITSTRUCT *parent;                                                   \\\n       bool leftmost = true;                                               \\\n                                                                           \\\n       while (*link) {                                                    \\\n               rb_parent = *link;                                         \\\n               parent = rb_entry(rb_parent, ITSTRUCT, ITRB);               \\\n               if (parent->ITSUBTREE < last)                              \\\n                       parent->ITSUBTREE = last;                          \\\n               if (start < ITSTART(parent))                               \\\n                       link = &parent->ITRB.rb_left;                      \\\n               else {                                                     \\\n                       link = &parent->ITRB.rb_right;                     \\\n                       leftmost = false;                                  \\\n               }                                                          \\\n       }                                                                  \\\n                                                                          \\\n       node->ITSUBTREE = last;                                            \\\n       rb_link_node(&node->ITRB, rb_parent, link);                        \\\n       rb_insert_augmented_cached(&node->ITRB, root,                      \\\n                                  leftmost, &ITPREFIX ## _augment);       \\",
+      "tip_html": "<p>誠實說明：搜尋 <code>hackmd.io/@sysprog</code> 並沒有找到一篇專門針對「augmented rbtree / interval tree」的獨立筆記，最接近的是既有的 rbtree 背景筆記（涵蓋紅黑樹歷史與基本性質，09/10 用過的同一份）；YouTube 上也沒有找到 jserv 課程社群針對這個子主題單獨錄製的影片。因此這裡改附上該週課程進度表第 20 項的原始錄影與課堂共筆連結，以及核心官方 rbtree 文件作為查核依據，不編造不存在的專門筆記連結。</p>"
+    }
+  ],
+  "sources": [
+    {
+      "label": "LeetCode 題目彙整",
+      "url": "https://github.com/wisdompeak/LeetCode"
+    },
+    {
+      "label": "Stanford CS166 Union-Find 講義（按秩合併／路徑壓縮分析）",
+      "url": "https://web.stanford.edu/class/archive/cs/cs166/cs166.1146/lectures/16/Small16.pdf"
+    },
+    {
+      "label": "Simpler Analyses of Union-Find（arXiv 2308.09021，攤銷複雜度簡化證明）",
+      "url": "https://ar5iv.labs.arxiv.org/html/2308.09021"
+    },
+    {
+      "label": "owlfox CS:APP 中文筆記",
+      "url": "https://hackmd.io/@owlfox/csapptw/%2FQXOhm8FgRqmSbhGlK52Dlw"
+    },
+    {
+      "label": "CS:APP 第4章重點提示與練習（hackmd sysprog）",
+      "url": "https://hackmd.io/@sysprog/CSAPP-ch4"
+    },
+    {
+      "label": "CMU 15-213 (Fall 2015) 課程進度表（查核：該學期未排 Y86-64/PIPE 章節講次）",
+      "url": "https://www.cs.cmu.edu/afs/cs.cmu.edu/academic/class/15213-f15/www/schedule.html"
+    },
+    {
+      "label": "CMU 技術報告：Formal Verification of Pipelined Y86-64 Microprocessors（SEQ/PIPE 正式規格）",
+      "url": "https://www.cs.cmu.edu/~bryant/pubdir/CMU-CS-18-122.pdf"
+    },
+    {
+      "label": "成大 Linux 核心課程進度表",
+      "url": "https://wiki.csie.ncku.edu.tw/linux/schedule"
+    },
+    {
+      "label": "第13週 第20項課堂錄影：linked list, Queues, Maps, Binary Trees",
+      "url": "https://youtu.be/7ZQNb7Fu_A4"
+    },
+    {
+      "label": "第13週 第20項課堂共筆",
+      "url": "https://docs.google.com/document/d/1n31QMPyvdAkS2uxM5AyKu_DD3uRu6-zoRukAitDwPvA/edit"
+    },
+    {
+      "label": "jserv 課程社群筆記：Linux 核心 rbtree 背景",
+      "url": "https://hackmd.io/@sysprog/linux-rbtree"
+    },
+    {
+      "label": "Linux kernel 官方文件：rbtree（含 augmented rbtree 說明）",
+      "url": "https://www.kernel.org/doc/html/latest/core-api/rbtree.html"
+    },
+    {
+      "label": "Linux kernel source · include/linux/interval_tree_generic.h",
+      "url": "https://tangled.org/tjh.dev/kernel/blob/v6.9/include/linux/interval_tree_generic.h"
+    }
+  ]
+}
